@@ -1,0 +1,15 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`basic conversion 1`] = `
+Object {
+  "display": "'none'",
+  "margin": "10",
+}
+`;
+
+exports[`vendor prefixes 1`] = `
+Object {
+  "WebkitTextSizeAdjust": "'100%'",
+  "msTextSizeAdjust": "'100%'",
+}
+`;

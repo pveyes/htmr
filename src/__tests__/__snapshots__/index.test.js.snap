@@ -1,0 +1,43 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`convert correctly 1`] = `
+<p
+  id="test"
+>
+  This is cool
+</p>
+`;
+
+exports[`custom component 1`] = `
+<p
+  className="css-x243s"
+  data-custom="true"
+>
+  Custom component
+</p>
+`;
+
+exports[`multi children 1`] = `
+<div
+  className="wrapper"
+>
+  <p
+    style={
+      Object {
+        "margin": "0",
+      }
+    }
+  >
+    Multi
+  </p>
+  <p
+    style={
+      Object {
+        "display": "'none'",
+      }
+    }
+  >
+    Component
+  </p>
+</div>
+`;

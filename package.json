@@ -1,0 +1,62 @@
+{
+  "name": "htmr",
+  "version": "0.1.0",
+  "description": "Convert html string to react element",
+  "main": "lib/index.js",
+  "files": [
+    "lib/index.js"
+  ],
+  "scripts": {
+    "prepublish": "npm run build",
+    "build": "rollup -c",
+    "precommit": "lint-staged",
+    "fmt": "prettier --write --single-quote --trailing-comma es5 \"src/**/*.js\"",
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pveyes/htmr.git"
+  },
+  "keywords": [
+    "html",
+    "to",
+    "react",
+    "html",
+    "react",
+    "convert",
+    "mapping"
+  ],
+  "author": "Fatih Kalifa <fatihkalifa@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/pveyes/htmr/issues"
+  },
+  "homepage": "https://github.com/pveyes/htmr#readme",
+  "dependencies": {
+    "posthtml-parser": "^0.2.1",
+    "react": "^15.6.1"
+  },
+  "devDependencies": {
+    "babel-plugin-transform-object-rest-spread": "^6.23.0",
+    "babel-preset-env": "^1.6.0",
+    "babel-preset-react": "^6.24.1",
+    "husky": "^0.14.3",
+    "jest": "^20.0.4",
+    "lint-staged": "^4.0.3",
+    "prettier": "^1.5.3",
+    "react-test-renderer": "^15.6.1",
+    "rollup": "^0.47.2",
+    "rollup-plugin-babel": "^3.0.1"
+  },
+  "jest": {
+    "transform": {
+      "^.+\\.js$": "<rootDir>/preprocessor.js"
+    }
+  },
+  "lint-staged": {
+    "*.js": [
+      "prettier --write --single-quote --trailing-comma es5",
+      "git add"
+    ]
+  }
+}
