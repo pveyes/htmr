@@ -1,6 +1,6 @@
 {
   "name": "htmr",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Convert html string to react element",
   "main": "lib/index.js",
   "files": [
