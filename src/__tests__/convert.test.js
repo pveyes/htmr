@@ -29,6 +29,7 @@ describe('universal API', () => {
 
   test('multi element', () => {
     const html = `
+      <!-- comment should be ignored-->
       <p style="margin: 0px">Multi</p>
       <p style="display: none">Component</p>
     `;

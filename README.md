@@ -3,7 +3,7 @@
 > Simple and lightweight HTML to react component converter
 
 Convert HTML string to React component using simple API that works universally in
-server and browser in a small package (1kB minified gzipped)
+server and browser in a small package (< 2kB minified gzipped)
 
 ## Install
 
@@ -83,6 +83,10 @@ class Component extends React.Component {
   }
 }
 ```
+
+## Trade Off
+ - Some SVG attributes are not supported due to attribute mapping contributes to big bundle size
+ - Inline event attribute (on-xxx="") are not supported due to unnecessary complexity
 
 ## License
 

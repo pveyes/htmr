@@ -169,7 +169,7 @@ babel-code-frame@^6.22.0:
     esutils "^2.0.2"
     js-tokens "^3.0.0"
 
-babel-core@^6.0.0, babel-core@^6.24.1:
+babel-core@^6.0.0, babel-core@^6.24.1, babel-core@^6.25.0:
   version "6.25.0"
   resolved "https://registry.npmjs.org/babel-core/-/babel-core-6.25.0.tgz#7dd42b0463c742e9d5296deb3ec67a9322dad729"
   dependencies:
@@ -346,6 +346,14 @@ babel-plugin-istanbul@^4.0.0:
 babel-plugin-jest-hoist@^20.0.3:
   version "20.0.3"
   resolved "https://registry.npmjs.org/babel-plugin-jest-hoist/-/babel-plugin-jest-hoist-20.0.3.tgz#afedc853bd3f8dc3548ea671fbe69d03cc2c1767"
+
+babel-plugin-preval@^1.4.3:
+  version "1.4.3"
+  resolved "https://registry.npmjs.org/babel-plugin-preval/-/babel-plugin-preval-1.4.3.tgz#aa6a1341a38b70d8bf341b3ae98c8f6ec707ecb0"
+  dependencies:
+    babel-core "^6.25.0"
+    babylon "^6.17.4"
+    require-from-string "^1.2.1"
 
 babel-plugin-syntax-async-functions@^6.8.0:
   version "6.13.0"
@@ -2725,7 +2733,7 @@ require-directory@^2.1.1:
   version "2.1.1"
   resolved "https://registry.npmjs.org/require-directory/-/require-directory-2.1.1.tgz#8c64ad5fd30dab1c976e2344ffe7f792a6a6df42"
 
-require-from-string@^1.1.0:
+require-from-string@^1.1.0, require-from-string@^1.2.1:
   version "1.2.1"
   resolved "https://registry.npmjs.org/require-from-string/-/require-from-string-1.2.1.tgz#529c9ccef27380adfec9a2f965b649bbee636418"
 
@@ -2776,12 +2784,6 @@ rollup-plugin-commonjs@^8.1.0:
     estree-walker "^0.3.0"
     magic-string "^0.19.0"
     resolve "^1.1.7"
-    rollup-pluginutils "^2.0.1"
-
-rollup-plugin-json@^2.3.0:
-  version "2.3.0"
-  resolved "https://registry.npmjs.org/rollup-plugin-json/-/rollup-plugin-json-2.3.0.tgz#3c07a452c1b5391be28006fbfff3644056ce0add"
-  dependencies:
     rollup-pluginutils "^2.0.1"
 
 rollup-plugin-node-resolve@^3.0.0:
