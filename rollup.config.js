@@ -41,6 +41,6 @@ export default [
       uglify(),
     ],
     external: ['react'],
-    dest: 'lib/htmr.umd.min.js',
+    dest: 'lib/htmr.min.js',
   },
 ];
