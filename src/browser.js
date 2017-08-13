@@ -1,9 +1,10 @@
 /* eslint-env browser */
-// https://developer.mozilla.org/en-US/docs/Web/API/Node.nodeType
+// Based on https://github.com/reactjs/react-magic/blob/master/src/htmltojsx.js
 import React from 'react';
 import mapAttribute from './mapAttribute';
 import type { NodeMap } from './types';
 
+// https://developer.mozilla.org/en-US/docs/Web/API/Node.nodeType
 const NodeTypes = {
   ELEMENT: 1,
   TEXT: 3,
