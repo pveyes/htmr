@@ -4,14 +4,19 @@
   "description": "Convert html string to react element",
   "main": "lib/index.js",
   "files": [
-    "lib/index.js"
+    "lib"
   ],
+  "browser": "lib/htmr.min.js",
   "scripts": {
     "prepublish": "npm run build",
     "build": "rollup -c",
     "precommit": "lint-staged",
     "fmt": "prettier --write --single-quote --trailing-comma es5 \"src/**/*.js\"",
-    "test": "jest"
+    "size": "bundlesize",
+    "test": "npm-run-all -p test:coverage test:size",
+    "test:coverage": "jest --coverage --no-cache --ci --runInBand",
+    "test:watch": "jest --watch --no-cache",
+    "test:size": "npm-run-all clean build size"
   },
   "repository": {
     "type": "git",
@@ -33,26 +38,40 @@
   },
   "homepage": "https://github.com/pveyes/htmr#readme",
   "dependencies": {
-    "posthtml-parser": "^0.2.1",
+    "posthtml-parser": "^0.2.1"
+  },
+  "peerDependencies": {
     "react": "^15.6.1"
   },
   "devDependencies": {
     "babel-plugin-transform-object-rest-spread": "^6.23.0",
     "babel-preset-env": "^1.6.0",
     "babel-preset-react": "^6.24.1",
+    "bundlesize": "^0.13.2",
     "husky": "^0.14.3",
     "jest": "^20.0.4",
     "lint-staged": "^4.0.3",
+    "npm-run-all": "^4.0.2",
     "prettier": "^1.5.3",
     "react-test-renderer": "^15.6.1",
     "rollup": "^0.47.2",
-    "rollup-plugin-babel": "^3.0.1"
+    "rollup-plugin-babel": "^3.0.1",
+    "rollup-plugin-commonjs": "^8.1.0",
+    "rollup-plugin-json": "^2.3.0",
+    "rollup-plugin-node-resolve": "^3.0.0",
+    "rollup-plugin-uglify": "^2.0.1"
   },
   "jest": {
     "transform": {
       "^.+\\.js$": "<rootDir>/preprocessor.js"
     }
   },
+  "bundlesize": [
+    {
+      "path": "./lib/htmr.min.js",
+      "maxSize": "1 kB"
+    }
+  ],
   "lint-staged": {
     "*.js": [
       "prettier --write --single-quote --trailing-comma es5",
