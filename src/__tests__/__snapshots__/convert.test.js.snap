@@ -1,0 +1,107 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`browser convert correctly 1`] = `
+<p
+  id="test"
+>
+  This is cool
+</p>
+`;
+
+exports[`browser custom component 1`] = `
+<p
+  className="css-x243s"
+  data-custom="true"
+>
+  Custom component
+</p>
+`;
+
+exports[`browser multi children 1`] = `
+<div
+  className="wrapper"
+>
+  <p
+    style={
+      Object {
+        "margin": "0",
+      }
+    }
+  >
+    Multi
+  </p>
+  <p
+    style={
+      Object {
+        "display": "'none'",
+      }
+    }
+  >
+    Component
+  </p>
+</div>
+`;
+
+exports[`browser self closing component 1`] = `
+<div>
+  <img
+    src="https://www.google.com/logo.png"
+  />
+  <iframe
+    src="https://www.youtube.com/embed/I2-_iLzmkVw"
+  />
+</div>
+`;
+
+exports[`server convert correctly 1`] = `
+<p
+  id="test"
+>
+  This is cool
+</p>
+`;
+
+exports[`server custom component 1`] = `
+<p
+  className="css-x243s"
+  data-custom="true"
+>
+  Custom component
+</p>
+`;
+
+exports[`server multi children 1`] = `
+<div
+  className="wrapper"
+>
+  <p
+    style={
+      Object {
+        "margin": "0",
+      }
+    }
+  >
+    Multi
+  </p>
+  <p
+    style={
+      Object {
+        "display": "'none'",
+      }
+    }
+  >
+    Component
+  </p>
+</div>
+`;
+
+exports[`server self closing component 1`] = `
+<div>
+  <img
+    src="https://www.google.com/logo.png"
+  />
+  <iframe
+    src="https://www.youtube.com/embed/I2-_iLzmkVw"
+  />
+</div>
+`;

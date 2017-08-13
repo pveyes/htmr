@@ -1,5 +1,5 @@
 // @flow
-// Heavily based on https://github.com/reactjs/react-magic/blob/master/src/htmltojsx.js
+// Based on https://github.com/reactjs/react-magic/blob/master/src/htmltojsx.js
 export type Style = {
   [key: string]: number | string,
 };

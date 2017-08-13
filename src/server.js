@@ -1,7 +1,9 @@
 // @flow
-import React from 'react';
 import parse from 'posthtml-parser';
+import React from 'react';
 import mapAttribute from './mapAttribute';
+
+import type { NodeMap } from './types';
 
 type Node = {
   tag: string,
@@ -9,10 +11,6 @@ type Node = {
     [key: string]: string,
   },
   content: Array<string | Node>,
-};
-
-type NodeMap = {
-  [key: string]: React$Element,
 };
 
 function transform(node: Node, key: number, nodeMap: NodeMap): $ReactElement {
@@ -49,7 +47,7 @@ function transform(node: Node, key: number, nodeMap: NodeMap): $ReactElement {
   return React.createElement(Component, props, children);
 }
 
-function toReactElement(html: string, nodeMap: NodeMap = {}) {
+function convertServer(html: string, nodeMap: NodeMap = {}) {
   const ast = parse(html);
   const components = ast
     .map((node, index) => transform(node, index, nodeMap))
@@ -62,4 +60,4 @@ function toReactElement(html: string, nodeMap: NodeMap = {}) {
   return components[0];
 }
 
-module.exports = toReactElement;
+module.exports = convertServer;
