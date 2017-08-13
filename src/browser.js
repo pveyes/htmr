@@ -18,16 +18,10 @@ function escape(str) {
 }
 
 function transform(node, nodeMap: NodeMap, key: ?number) {
-  switch (node.nodeType) {
-    case NodeTypes.COMMENT:
-      return null;
-    case NodeTypes.TEXT: {
-      if (node.textContent.trim() === '') {
-        return null;
-      }
-      return escape(node.textContent);
-    }
-    default:
+  if (node.nodeType === NodeTypes.COMMENT) {
+    return null;
+  } else if (node.nodeType === NodeTypes.TEXT) {
+    return node.textContent.trim() === '' ? null : escape(node.textContent);
   }
 
   // element
@@ -43,11 +37,11 @@ function transform(node, nodeMap: NodeMap, key: ?number) {
 
   const props = Object.assign(mapAttribute(attrs), { key });
 
-  const children = Array.from(node.childNodes).map((childNode, index) => {
-    const childKey = key === null ? index : `${key}.${index}`;
-
-    return transform(childNode, nodeMap, childKey);
-  });
+  const children = [];
+  for (let i = 0; i < node.childNodes.length; i++) {
+    const childKey = key === null ? i : `${key}.${i}`;
+    children.push(transform(node.childNodes[i], nodeMap, childKey));
+  }
 
   return React.createElement(Component, props, children);
 }
@@ -56,12 +50,16 @@ function convertBrowser(html: string, nodeMap: NodeMap = {}) {
   const container = document.createElement('div');
   container.innerHTML = html.trim();
 
-  const childNodes = Array.from(container.childNodes).filter(node => {
-    return (
+  const childNodes = [];
+  for (let i = 0; i < container.childNodes.length; i++) {
+    const node = container.childNodes[i];
+    if (
       node.nodeType === NodeTypes.ELEMENT ||
       (node.nodeType === NodeTypes.TEXT && node.textContent.trim() !== '')
-    );
-  });
+    ) {
+      childNodes.push(node);
+    }
+  }
 
   let result;
 

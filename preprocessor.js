@@ -8,7 +8,7 @@ module.exports = {
     return babel.transform(src, {
       babelrc: false,
       presets: ['env', 'react'],
-      plugins: ['transform-object-rest-spread'],
+      plugins: ['preval', 'transform-object-rest-spread'],
     });
   },
 };

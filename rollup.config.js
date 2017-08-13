@@ -1,5 +1,4 @@
 import babel from 'rollup-plugin-babel';
-import json from 'rollup-plugin-json';
 import resolve from 'rollup-plugin-node-resolve';
 import commonjs from 'rollup-plugin-commonjs';
 import uglify from 'rollup-plugin-uglify';
@@ -20,12 +19,11 @@ export default [
   // umd
   {
     entry: 'src/browser.js',
-    format: 'iife',
+    format: 'umd',
     globals: {
       react: 'React',
     },
     plugins: [
-      json(),
       resolve({
         jsnext: false,
         main: true,

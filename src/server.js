@@ -14,10 +14,13 @@ type Node = {
 };
 
 function transform(node: Node, key: number, nodeMap: NodeMap): $ReactElement {
-  if (typeof node === 'string' && node.trim() === '') {
+  if (typeof node === 'string') {
     // newline and space will be parsed as 'node' in posthtml-parser,
-    // we can ignore it
-    return null;
+    // we can ignore it along with comment node
+    const text = node.trim();
+    if (text === '' || /^<!--.*-->/.test(text)) {
+      return null;
+    }
   }
 
   // string literal for children should not be processed
