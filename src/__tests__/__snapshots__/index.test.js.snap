@@ -41,3 +41,14 @@ exports[`multi children 1`] = `
   </p>
 </div>
 `;
+
+exports[`self closing component 1`] = `
+<div>
+  <img
+    src="https://www.google.com/logo.png"
+  />
+  <iframe
+    src="https://www.youtube.com/embed/I2-_iLzmkVw"
+  />
+</div>
+`;

@@ -11,6 +11,19 @@ test('convert correctly', () => {
   expect(tree).toMatchSnapshot();
 });
 
+test('self closing component', () => {
+  const html = `
+    <div>
+      <img src="https://www.google.com/logo.png" />
+      <iframe src="https://www.youtube.com/embed/I2-_iLzmkVw"></iframe>
+    </div>
+  `;
+
+  const content = toReactElement(html);
+  const tree = renderer.create(content);
+  expect(tree).toMatchSnapshot();
+});
+
 test('custom component', () => {
   const html = '<p data-custom="true">Custom component</p>';
 

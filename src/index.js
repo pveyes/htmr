@@ -36,26 +36,24 @@ function transform(node: Node, key: number, nodeMap: NodeMap): $ReactElement {
     { key }
   );
 
-  const children = content.map((child, index) => {
-    const childKey = `${key}.${index}`;
-    return transform(child, childKey, nodeMap);
-  });
+  // self closing component doesn't have children
+  const children =
+    content === undefined
+      ? null
+      : content.map((child, index) => {
+          const childKey = `${key}.${index}`;
+          return transform(child, childKey, nodeMap);
+        });
 
-  if (nodeMap[tag]) {
-    const Component = nodeMap[tag];
-    return (
-      <Component {...props}>
-        {children}
-      </Component>
-    );
-  }
-
-  return React.createElement(tag, props, children);
+  const Component = nodeMap[tag] || tag;
+  return React.createElement(Component, props, children);
 }
 
 function toReactElement(html: string, nodeMap: NodeMap = {}) {
   const ast = parse(html);
-  const components = ast.map((node, index) => transform(node, index, nodeMap));
+  const components = ast
+    .map((node, index) => transform(node, index, nodeMap))
+    .filter(node => node !== null);
 
   if (components.length > 1) {
     return components;
