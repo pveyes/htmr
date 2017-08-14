@@ -2,7 +2,7 @@
 // Based on https://github.com/reactjs/react-magic/blob/master/src/htmltojsx.js
 import React from 'react';
 import mapAttribute from './mapAttribute';
-import type { NodeMap } from './types';
+import type { NodeMap, ConvertedComponent } from './types';
 
 // https://developer.mozilla.org/en-US/docs/Web/API/Node.nodeType
 const NodeTypes = {
@@ -46,7 +46,10 @@ function transform(node, nodeMap: NodeMap, key: ?number) {
   return React.createElement(Component, props, children);
 }
 
-function convertBrowser(html: string, nodeMap: NodeMap = {}) {
+function convertBrowser(
+  html: string,
+  nodeMap: NodeMap = {}
+): ConvertedComponent {
   const container = document.createElement('div');
   container.innerHTML = html.trim();
 

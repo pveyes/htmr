@@ -3,17 +3,24 @@ import parse from 'posthtml-parser';
 import React from 'react';
 import mapAttribute from './mapAttribute';
 
-import type { NodeMap } from './types';
+import type { NodeMap, ConvertedComponent } from './types';
 
-type Node = {
+// eslint-disable-next-line no-use-before-define
+type Node = ElementNode | TextNode;
+
+type TextNode = string;
+
+type ElementNode = {
   tag: string,
   attrs: {
     [key: string]: string,
   },
-  content: Array<string | Node>,
+  content: Array<Node>,
 };
 
-function transform(node: Node, key: number, nodeMap: NodeMap): $ReactElement {
+type Element = React$Element<*> | string;
+
+function transform(node: Node, key: string, nodeMap: NodeMap): ?Element {
   if (typeof node === 'string') {
     // newline and space will be parsed as 'node' in posthtml-parser,
     // we can ignore it along with comment node
@@ -31,6 +38,7 @@ function transform(node: Node, key: number, nodeMap: NodeMap): $ReactElement {
   const { tag, attrs, content } = node;
 
   const props = Object.assign(
+    {},
     mapAttribute(attrs),
     // always set key because it's possible the html source contains
     // multiple elements
@@ -50,10 +58,13 @@ function transform(node: Node, key: number, nodeMap: NodeMap): $ReactElement {
   return React.createElement(Component, props, children);
 }
 
-function convertServer(html: string, nodeMap: NodeMap = {}) {
+function convertServer(
+  html: string,
+  nodeMap: NodeMap = {}
+): ConvertedComponent {
   const ast = parse(html);
   const components = ast
-    .map((node, index) => transform(node, index, nodeMap))
+    .map((node, index) => transform(node, index.toString(), nodeMap))
     .filter(node => node !== null);
 
   if (components.length > 1) {
