@@ -2,13 +2,13 @@
 /* global preval */
 import convertStyle from './convertStyle';
 
-export type Attributes = {
+type Attributes = {
   [key: string]: string,
 };
 
 // only includes attribute that needs mapping
 // credits: https://github.com/noraesae/react-attr-converter/blob/master/index.js
-const attributeMap = preval`
+const attributeMap: Object = preval`
   const map = JSON.parse(
     require('fs').readFileSync(
       require('path').resolve(
@@ -28,7 +28,6 @@ const attributeMap = preval`
       return result;
     }, {});
 
-  attributeMap.dname = __dirname;
   module.exports = attributeMap;
 `;
 
