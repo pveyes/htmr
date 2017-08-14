@@ -49,10 +49,12 @@ function transform(node: Node, key: string, nodeMap: NodeMap): ?Element {
   const children =
     content === undefined
       ? null
-      : content.map((child, index) => {
-          const childKey = `${key}.${index}`;
-          return transform(child, childKey, nodeMap);
-        });
+      : content
+          .map((child, index) => {
+            const childKey = `${key}.${index}`;
+            return transform(child, childKey, nodeMap);
+          })
+          .filter(child => child !== null);
 
   const Component = nodeMap[tag] || tag;
   return React.createElement(Component, props, children);

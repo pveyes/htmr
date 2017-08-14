@@ -37,10 +37,18 @@ function transform(node, nodeMap: NodeMap, key: ?number) {
 
   const props = Object.assign(mapAttribute(attrs), { key });
 
-  const children = [];
+  let children = [];
   for (let i = 0; i < node.childNodes.length; i++) {
     const childKey = key === null ? i : `${key}.${i}`;
-    children.push(transform(node.childNodes[i], nodeMap, childKey));
+    const component = transform(node.childNodes[i], nodeMap, childKey);
+    if (component !== null) {
+      children.push(component);
+    }
+  }
+
+  // self closing tag shouldn't have children
+  if (children.length === 0) {
+    children = null;
   }
 
   return React.createElement(Component, props, children);
@@ -55,24 +63,14 @@ function convertBrowser(
 
   const childNodes = [];
   for (let i = 0; i < container.childNodes.length; i++) {
-    const node = container.childNodes[i];
-    if (
-      node.nodeType === NodeTypes.ELEMENT ||
-      (node.nodeType === NodeTypes.TEXT && node.textContent.trim() !== '')
-    ) {
-      childNodes.push(node);
-    }
+    childNodes.push(container.childNodes[i]);
   }
 
-  let result;
-
-  if (childNodes.length === 1) {
-    result = transform(childNodes[0], nodeMap, null);
-  } else {
-    result = childNodes.map((childNode, index) => {
+  const result = childNodes
+    .map((childNode, index) => {
       return transform(childNode, nodeMap, index);
-    });
-  }
+    })
+    .filter(result => result !== null);
 
   if (result.length === 1) {
     return result[0];

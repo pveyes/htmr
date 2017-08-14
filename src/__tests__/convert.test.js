@@ -48,34 +48,44 @@ describe('universal API', () => {
   });
 });
 
+// delete all key property on the given object
+function deleteKey(obj) {
+  delete obj.key;
+
+  if (obj.props && obj.props.children) {
+    obj.props.children.forEach(child => {
+      deleteKey(child);
+    });
+  }
+}
+
+// Compare component object without comparing instance and key
+// key props is not reused in React client rehydration, so we can
+// ignore it
+function jsonc(obj) {
+  const result = JSON.parse(JSON.stringify(obj));
+  deleteKey(result);
+  return result;
+}
+
 function serverBrowserCompare(html, nodeMap, useWrapper) {
-  const htmlServer = convertServer(html);
-  const htmlBrowser = convertBrowser(html);
+  let htmlServer = convertServer(html);
+  let htmlBrowser = convertBrowser(html);
 
   if (useWrapper) {
-    expect(
-      renderer
-        .create(
-          <div>
-            {htmlServer}
-          </div>
-        )
-        .toJSON()
-    ).toEqual(
-      renderer
-        .create(
-          <div>
-            {htmlBrowser}
-          </div>
-        )
-        .toJSON()
+    htmlServer = (
+      <div>
+        {htmlServer}
+      </div>
     );
-    return;
+    htmlBrowser = (
+      <div>
+        {htmlBrowser}
+      </div>
+    );
   }
 
-  expect(renderer.create(htmlServer).toJSON()).toEqual(
-    renderer.create(htmlBrowser).toJSON()
-  );
+  expect(jsonc(htmlBrowser)).toEqual(jsonc(htmlServer));
 }
 
 function suite(converter) {
