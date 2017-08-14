@@ -35,7 +35,8 @@ function transform(node, nodeMap: NodeMap, key: ?number) {
     attrs[key] = value;
   }
 
-  const props = Object.assign(mapAttribute(attrs), { key });
+  attrs.key = key;
+  const props = mapAttribute(attrs);
 
   let children = [];
   for (let i = 0; i < node.childNodes.length; i++) {

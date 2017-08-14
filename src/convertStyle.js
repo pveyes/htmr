@@ -35,10 +35,10 @@ export default function convertStyle(styleStr: string): Style {
       return declaration !== '';
     })
     .forEach(declaration => {
-      const [property, value] = declaration.split(':');
+      const rules = declaration.split(':');
 
-      const prop = convertProperty(property.trim());
-      const val = convertValue(value.trim());
+      const prop = convertProperty(rules[0].trim());
+      const val = convertValue(rules[1].trim());
       style[prop] = val;
     });
 
