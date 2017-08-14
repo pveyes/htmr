@@ -100,7 +100,7 @@ function suite(converter) {
   test('self closing component', () => {
     const html = `
       <div>
-        <img src="https://www.google.com/logo.png">
+        <img src="https://www.google.com/logo.png" />
         <iframe src="https://www.youtube.com/embed/I2-_iLzmkVw"></iframe>
       </div>
     `;
