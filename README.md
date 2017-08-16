@@ -85,8 +85,7 @@ class Component extends React.Component {
 ```
 
 ## Trade Off
- - Some SVG attributes are not supported due to attribute mapping contributes to big bundle size
- - Inline event attribute (on-xxx="") are not supported due to unnecessary complexity
+Inline event attributes (`onclick=""` etc) are not supported due to unnecessary complexity
 
 ## License
 

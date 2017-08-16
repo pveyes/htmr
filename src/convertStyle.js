@@ -1,5 +1,7 @@
 // @flow
 // Based on https://github.com/reactjs/react-magic/blob/master/src/htmltojsx.js
+import { hypenColonToCamelCase } from './utils';
+
 export type Style = {
   [key: string]: number | string,
 };
@@ -10,10 +12,7 @@ function convertProperty(prop: string): string {
     prop = prop.substr(1);
   }
 
-  // convert hypen to camel case
-  return prop.replace(/-(.)/g, (match, chr) => {
-    return chr.toUpperCase();
-  });
+  return hypenColonToCamelCase(prop);
 }
 
 function convertValue(value: string): number | string {
