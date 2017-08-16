@@ -1,7 +1,7 @@
 {
   "name": "htmr",
   "version": "0.3.1",
-  "description": "Convert html string to react element",
+  "description": "Simple and lightweight (< 2kB) HTML to React converter that works in server and browser",
   "main": "lib/index.js",
   "files": [
     "lib"
@@ -25,11 +25,15 @@
     "url": "git+https://github.com/pveyes/htmr.git"
   },
   "keywords": [
+    "html-to-react",
     "html",
     "to",
     "react",
-    "html",
-    "react",
+    "simple",
+    "lightweight",
+    "universal",
+    "server",
+    "browser",
     "convert",
     "mapping"
   ],

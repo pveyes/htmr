@@ -33,7 +33,7 @@ class Component extends React.Component {
 ### Custom component
 
 You can also map element to custom component, for example component with predefined
-styles such as emotion / styled-components.
+styles such as [emotion](https://github.com/tkh44/emotion) / [styled-components](https://github.com/styled-components/styled-components).
 
 ```js
 import React from 'react';
@@ -57,6 +57,10 @@ class Component extends React.Component {
   }
 }
 ```
+
+You can also use component mapping to achieve more things, like [attaching event
+handler](https://gist.github.com/pveyes/be1da04bdbf57d6e487daf4b596af7cd#file-eventhandler-js), [map component by its HTML attribute](https://gist.github.com/pveyes/be1da04bdbf57d6e487daf4b596af7cd#file-mapcomponentbyattribute-js), and much more. This is a simple
+yet powerful API.
 
 ### Multiple children
 
@@ -84,8 +88,33 @@ class Component extends React.Component {
 }
 ```
 
+## Use Cases
+
+This library was initially built to provides easy component mapping between HTML
+string and React component. It's mainly used in my blog to render custom component
+from HTML string returned from blog API. This library **prioritize file size and simple
+API** over full HTML conversion coverage and other features like flexible node traversal.
+
+That's why I've decided to not implement some features (see **Trade Off** section
+below). If you feel like you need more features that's not possible using this library,
+you can check out some related projects below.
+
+## Related projects
+
+HTML to react element:
+
+ - [html-to-react](https://github.com/aknuds1/html-to-react)
+ - [react-html-parser](https://github.com/wrakky/react-html-parser)
+ - [html-react-parser](https://github.com/remarkablemark/html-react-parser)
+ - [react-render-html](https://github.com/noraesae/react-render-html)
+
+HTML (page) to react component (file/string):
+
+ - [roman01la/html-to-react-components](https://github.com/roman01la/html-to-react-components)
+ - [react-magic](https://github.com/reactjs/react-magic)
+
 ## Trade Off
-Inline event attributes (`onclick=""` etc) are not supported due to unnecessary complexity
+ - Inline event attributes (`onclick=""` etc) are not supported due to unnecessary complexity
 
 ## License
 
