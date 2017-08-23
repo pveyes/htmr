@@ -36,6 +36,14 @@ describe('universal API', () => {
     serverBrowserCompare(html, {}, true);
   });
 
+  test('element inside text node', () => {
+    const html = `
+      what are <strong>you</strong> doing?
+    `;
+
+    serverBrowserCompare(html, {}, true);
+  });
+
   test('custom component', () => {
     const html = '<p data-custom="true">Custom component</p>';
     const Paragraph = ({ children, ...props }) =>
@@ -132,6 +140,20 @@ function suite(converter) {
     `;
     const content = converter(html);
 
+    const tree = renderer.create(
+      <div className="wrapper">
+        {content}
+      </div>
+    );
+
+    expect(tree).toMatchSnapshot();
+  });
+
+  test('element inside text node', () => {
+    const html = `
+      what are <strong>you</strong> doing?
+    `;
+    const content = converter(html);
     const tree = renderer.create(
       <div className="wrapper">
         {content}

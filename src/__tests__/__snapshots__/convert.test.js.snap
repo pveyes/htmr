@@ -17,6 +17,18 @@ exports[`browser custom component 1`] = `
 </p>
 `;
 
+exports[`browser element inside text node 1`] = `
+<div
+  className="wrapper"
+>
+  what are 
+  <strong>
+    you
+  </strong>
+   doing?
+</div>
+`;
+
 exports[`browser multi children 1`] = `
 <div
   className="wrapper"
@@ -68,6 +80,18 @@ exports[`server custom component 1`] = `
 >
   Custom component
 </p>
+`;
+
+exports[`server element inside text node 1`] = `
+<div
+  className="wrapper"
+>
+  what are 
+  <strong>
+    you
+  </strong>
+   doing?
+</div>
 `;
 
 exports[`server multi children 1`] = `

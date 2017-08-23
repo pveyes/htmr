@@ -64,7 +64,7 @@ function convertServer(
   html: string,
   nodeMap: NodeMap = {}
 ): ConvertedComponent {
-  const ast = parse(html);
+  const ast = parse(html.trim());
   const components = ast
     .map((node, index) => transform(node, index.toString(), nodeMap))
     .filter(node => node !== null);
