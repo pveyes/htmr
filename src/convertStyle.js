@@ -28,6 +28,7 @@ export default function convertStyle(styleStr: string): Style {
   const style = {};
 
   styleStr
+    .replace(/&quot;/g, '"')
     .split(';')
     .filter(style => {
       const declaration = style.trim();

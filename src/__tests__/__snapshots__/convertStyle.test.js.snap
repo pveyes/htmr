@@ -7,6 +7,12 @@ Object {
 }
 `;
 
+exports[`html entities 1`] = `
+Object {
+  "fontFamily": "'Consolas, \\"Liberation Mono\\", Menlo, Courier, monospace'",
+}
+`;
+
 exports[`vendor prefixes 1`] = `
 Object {
   "WebkitTextSizeAdjust": "'100%'",
