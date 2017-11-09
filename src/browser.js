@@ -12,16 +12,19 @@ const NodeTypes = {
 };
 
 const tempEl = document.createElement('div');
-function escape(str) {
-  tempEl.textContent = str;
-  return tempEl.innerHTML;
+function unescape(str) {
+  // Here we use innerHTML to unescape html entities.
+  // This is okay because we use the returned value as react children
+  // not dangerouslySetInnerHTML
+  tempEl.innerHTML = str;
+  return tempEl.textContent;
 }
 
 function transform(node, nodeMap: NodeMap, key: ?number) {
   if (node.nodeType === NodeTypes.COMMENT) {
     return null;
   } else if (node.nodeType === NodeTypes.TEXT) {
-    return node.textContent.trim() === '' ? null : escape(node.textContent);
+    return node.textContent.trim() === '' ? null : unescape(node.textContent);
   }
 
   // element
