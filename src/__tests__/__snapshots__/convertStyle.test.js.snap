@@ -2,20 +2,21 @@
 
 exports[`basic conversion 1`] = `
 Object {
-  "display": "'none'",
+  "display": "none",
   "margin": "10",
+  "padding": "0 10px",
 }
 `;
 
 exports[`html entities 1`] = `
 Object {
-  "fontFamily": "'Consolas, \\"Liberation Mono\\", Menlo, Courier, monospace'",
+  "fontFamily": "Consolas, \\"Liberation Mono\\", Menlo, Courier, monospace",
 }
 `;
 
 exports[`vendor prefixes 1`] = `
 Object {
-  "WebkitTextSizeAdjust": "'100%'",
-  "msTextSizeAdjust": "'100%'",
+  "WebkitTextSizeAdjust": "100%",
+  "msTextSizeAdjust": "100%",
 }
 `;

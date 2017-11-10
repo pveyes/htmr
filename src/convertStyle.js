@@ -21,7 +21,7 @@ function convertValue(value: string): number | string {
     return value.slice(0, value.length - 2);
   }
 
-  return `'${value.replace(/'/g, '"')}'`;
+  return value.replace(/'/g, '"');
 }
 
 export default function convertStyle(styleStr: string): Style {

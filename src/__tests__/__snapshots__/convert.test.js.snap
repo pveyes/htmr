@@ -45,7 +45,7 @@ exports[`browser multi children 1`] = `
   <p
     style={
       Object {
-        "display": "'none'",
+        "display": "none",
       }
     }
   >
@@ -110,7 +110,7 @@ exports[`server multi children 1`] = `
   <p
     style={
       Object {
-        "display": "'none'",
+        "display": "none",
       }
     }
   >

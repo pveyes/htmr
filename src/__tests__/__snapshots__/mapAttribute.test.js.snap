@@ -5,7 +5,7 @@ Object {
   "className": "col-md-4",
   "htmlFor": "nameInput",
   "style": Object {
-    "margin": "'0 auto'",
+    "margin": "0 auto",
   },
 }
 `;

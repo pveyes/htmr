@@ -2,7 +2,7 @@
 import convertStyle from '../convertStyle';
 
 test('basic conversion', () => {
-  const style = 'display: none; margin: 10px';
+  const style = 'display: none; margin: 10px; padding: 0 10px';
   expect(convertStyle(style)).toMatchSnapshot();
 });
 
