@@ -10,14 +10,6 @@ describe('server', () => {
 
 describe('browser', () => {
   suite(convertBrowser);
-
-  // This is special test case for browser because in browser
-  // we should use unescaped html entities.
-  test('unescape html entities', () => {
-    const encoded = convertBrowser('<div>one &amp; two with <script></div>');
-    const decoded = convertBrowser('<div>one & two with <script></div>');
-    expect(encoded).toEqual(decoded);
-  });
 });
 
 describe('universal API', () => {
@@ -50,6 +42,11 @@ describe('universal API', () => {
     `;
 
     serverBrowserCompare(html, {}, true);
+  });
+
+  test('unescape html entities', () => {
+    const html = '&amp; and &';
+    serverBrowserCompare(html);
   });
 
   test('custom component', () => {
@@ -107,6 +104,14 @@ function serverBrowserCompare(html, nodeMap, useWrapper) {
 function suite(converter) {
   test('convert correctly', () => {
     const html = '<p id="test">This is cool</p>';
+    const content = converter(html);
+
+    const tree = renderer.create(content);
+    expect(tree).toMatchSnapshot();
+  });
+
+  test('unescape html entities', () => {
+    const html = '<div class="entities">&amp; and &</div>';
     const content = converter(html);
 
     const tree = renderer.create(content);

@@ -1,6 +1,7 @@
 // @flow
 import parse from 'posthtml-parser';
 import React from 'react';
+import { AllHtmlEntities as HtmlEntity } from 'html-entities';
 import mapAttribute from './mapAttribute';
 
 import type { NodeMap, ConvertedComponent } from './types';
@@ -30,9 +31,8 @@ function transform(node: Node, key: string, nodeMap: NodeMap): ?Element {
     }
   }
 
-  // string literal for children should not be processed
   if (typeof node === 'string') {
-    return node;
+    return HtmlEntity.decode(node);
   }
 
   const { tag, attrs, content } = node;

@@ -65,6 +65,14 @@ exports[`browser self closing component 1`] = `
 </div>
 `;
 
+exports[`browser unescape html entities 1`] = `
+<div
+  className="entities"
+>
+  & and &
+</div>
+`;
+
 exports[`server convert correctly 1`] = `
 <p
   id="test"
@@ -127,5 +135,13 @@ exports[`server self closing component 1`] = `
   <iframe
     src="https://www.youtube.com/embed/I2-_iLzmkVw"
   />
+</div>
+`;
+
+exports[`server unescape html entities 1`] = `
+<div
+  className="entities"
+>
+  & and &
 </div>
 `;
