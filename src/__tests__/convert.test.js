@@ -10,6 +10,14 @@ describe('server', () => {
 
 describe('browser', () => {
   suite(convertBrowser);
+
+  // This is special test case for browser because in browser
+  // we should use unescaped html entities.
+  test('unescape html entities', () => {
+    const encoded = convertBrowser('<div>one &amp; two with <script></div>');
+    const decoded = convertBrowser('<div>one & two with <script></div>');
+    expect(encoded).toEqual(decoded);
+  });
 });
 
 describe('universal API', () => {
