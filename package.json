@@ -86,6 +86,10 @@
     "*.js": [
       "prettier --write --single-quote --trailing-comma es5",
       "git add"
+    ],
+    "*.md": [
+      "prettier --write",
+      "git add"
     ]
   }
 }
