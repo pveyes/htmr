@@ -29,6 +29,18 @@ exports[`browser element inside text node 1`] = `
 </div>
 `;
 
+exports[`browser ignore comment 1`] = `
+<div>
+  no comment
+</div>
+`;
+
+exports[`browser ignore multiline html comment 1`] = `
+<div>
+  no multiline comment
+</div>
+`;
+
 exports[`browser multi children 1`] = `
 <div
   className="wrapper"
@@ -99,6 +111,18 @@ exports[`server element inside text node 1`] = `
     you
   </strong>
    doing?
+</div>
+`;
+
+exports[`server ignore comment 1`] = `
+<div>
+  no comment
+</div>
+`;
+
+exports[`server ignore multiline html comment 1`] = `
+<div>
+  no multiline comment
 </div>
 `;
 

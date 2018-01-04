@@ -51,10 +51,11 @@ describe('universal API', () => {
 
   test('custom component', () => {
     const html = '<p data-custom="true">Custom component</p>';
-    const Paragraph = ({ children, ...props }) =>
+    const Paragraph = ({ children, ...props }) => (
       <p {...props} className="css-x243s">
         {children}
-      </p>;
+      </p>
+    );
 
     const nodeMap = { p: Paragraph };
     serverBrowserCompare(html, nodeMap);
@@ -86,22 +87,36 @@ function serverBrowserCompare(html, nodeMap, useWrapper) {
   let htmlBrowser = convertBrowser(html);
 
   if (useWrapper) {
-    htmlServer = (
-      <div>
-        {htmlServer}
-      </div>
-    );
-    htmlBrowser = (
-      <div>
-        {htmlBrowser}
-      </div>
-    );
+    htmlServer = <div>{htmlServer}</div>;
+    htmlBrowser = <div>{htmlBrowser}</div>;
   }
 
   expect(jsonc(htmlBrowser)).toEqual(jsonc(htmlServer));
 }
 
 function suite(converter) {
+  test('ignore comment', () => {
+    const html = `
+      <!-- comment should be ignored-->
+      <div>no comment</div>
+    `;
+    const content = converter(html);
+
+    const tree = renderer.create(content);
+    expect(tree).toMatchSnapshot();
+  });
+
+  test('ignore multiline html comment', () => {
+    const html = `
+      <!--<div>\n<p>multiline</p> \t</div>-->
+      <div>no multiline comment</div>
+    `;
+    const content = converter(html);
+
+    const tree = renderer.create(content);
+    expect(tree).toMatchSnapshot();
+  });
+
   test('convert correctly', () => {
     const html = '<p id="test">This is cool</p>';
     const content = converter(html);
@@ -134,10 +149,11 @@ function suite(converter) {
   test('custom component', () => {
     const html = '<p data-custom="true">Custom component</p>';
 
-    const Paragraph = ({ children, ...props }) =>
+    const Paragraph = ({ children, ...props }) => (
       <p {...props} className="css-x243s">
         {children}
-      </p>;
+      </p>
+    );
 
     const nodeMap = { p: Paragraph };
     const content = converter(html, nodeMap);
@@ -153,11 +169,7 @@ function suite(converter) {
     `;
     const content = converter(html);
 
-    const tree = renderer.create(
-      <div className="wrapper">
-        {content}
-      </div>
-    );
+    const tree = renderer.create(<div className="wrapper">{content}</div>);
 
     expect(tree).toMatchSnapshot();
   });
@@ -167,11 +179,7 @@ function suite(converter) {
       what are <strong>you</strong> doing?
     `;
     const content = converter(html);
-    const tree = renderer.create(
-      <div className="wrapper">
-        {content}
-      </div>
-    );
+    const tree = renderer.create(<div className="wrapper">{content}</div>);
 
     expect(tree).toMatchSnapshot();
   });
