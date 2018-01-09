@@ -4,69 +4,170 @@ import renderer from 'react-test-renderer';
 import convertServer from '../server';
 import convertBrowser from '../browser';
 
-describe('server', () => {
-  suite(convertServer);
+testRender('convert correctly', () => {
+  const html = '<p id="test">This is cool</p>';
+  return { html };
 });
 
-describe('browser', () => {
-  suite(convertBrowser);
+testRender('supports valid html attribute', () => {
+  const html = `
+    <div data-type="calendar" aria-describedby="info">
+      <link xml:lang="en" xlink:actuate="" />
+      <svg fill-rule="evenodd" color-interpolation-filters="">
+        <path fill="#fa0"></path>
+      </svg>
+    </div>
+  `;
+
+  return { html };
 });
 
-describe('universal API', () => {
-  test('single element', () => {
-    serverBrowserCompare('<p id="test">This is cool</p>');
-  });
-
-  test('self closing', () => {
-    const html = `
-      <div>
-        <img src="https://www.google.com/logo.png" />
-        <iframe src="https://www.youtube.com/embed/I2-_iLzmkVw"></iframe>
-      </div>
-    `;
-    serverBrowserCompare(html);
-  });
-
-  test('multi element', () => {
-    const html = `
-      <!-- comment should be ignored-->
-      <p style="margin: 0px">Multi</p>
-      <p style="display: none">Component</p>
-    `;
-    serverBrowserCompare(html, {}, true);
-  });
-
-  test('element inside text node', () => {
-    const html = `
-      what are <strong>you</strong> doing?
-    `;
-
-    serverBrowserCompare(html, {}, true);
-  });
-
-  test('unescape html entities', () => {
-    const html = '&amp; and &';
-    serverBrowserCompare(html);
-  });
-
-  test('custom component', () => {
-    const html = '<p data-custom="true">Custom component</p>';
-    const Paragraph = ({ children, ...props }) => (
-      <p {...props} className="css-x243s">
-        {children}
-      </p>
-    );
-
-    const nodeMap = { p: Paragraph };
-    serverBrowserCompare(html, nodeMap);
-  });
+testRender('unsafe html attributes', () => {
+  const html = '<label class="input-text" for="name"></div>';
+  return { html };
 });
+
+testRender('self closing component', () => {
+  const html = `
+    <div>
+      <img src="https://www.google.com/logo.png" />
+      <iframe src="https://www.youtube.com/embed/I2-_iLzmkVw"></iframe>
+    </div>
+  `;
+
+  return { html };
+});
+
+testRender('multi children', () => {
+  const html = `
+    <p style="margin: 0px">Multi</p>
+    <p style="display: none">Component</p>
+  `;
+
+  return { html, multi: true };
+});
+
+testRender('element inside text node', () => {
+  const html = 'what are <strong>you</strong> doing?';
+  return { html, multi: true };
+});
+
+testRender('convert style values', () => {
+  const html = `
+    <div style="margin: 0 auto; padding: 0 10px">
+      <span style="font-size: 12"></span>
+    </div>
+  `;
+
+  return { html };
+});
+
+testRender('css vendor prefixes', () => {
+  const html = `
+    <div style="-ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%">
+      prefix
+    </div>
+  `;
+
+  return { html };
+});
+
+testRender('css html entities', () => {
+  const html = `
+    <div style="font-family: Consolas, &quot;Liberation Mono &quot;">
+    </div>
+  `;
+
+  return { html };
+});
+
+testRender('ignore invalid style', () => {
+  const html =
+    '<div class="component-overflow" style="TITLE_2">Explore Categories</div>';
+  return { html };
+});
+
+testRender('ignore partially invalid style', () => {
+  const html =
+    '<div class="component-overflow" style="TITLE_2; color:\'red\'">Explore Categories</div>';
+  return { html };
+});
+
+testRender('style with url & protocol', () => {
+  const html = `
+    <div class="tera-promo-card--header" style="background-image:url(https://d1nabgopwop1kh.cloudfront.net/xx);"></div>
+  `;
+
+  return { html };
+});
+
+testRender('unescape html entities', () => {
+  const html = '<div class="entities">&amp; and &</div>';
+  return { html };
+});
+
+testRender('ignore comment', () => {
+  const html = `
+    <!-- comment should be ignored-->
+    <div>no comment</div>
+  `;
+
+  return { html };
+});
+
+testRender('ignore multiline html comment', () => {
+  const html = `
+    <!--<div>\n<p>multiline</p> \t</div>-->
+    <div>no multiline comment</div>
+  `;
+
+  return { html };
+});
+
+testRender('custom component', () => {
+  const html = '<p data-custom="true">Custom component</p>';
+
+  const Paragraph = ({ children, ...props }) => (
+    <p {...props} className="css-x243s">
+      {children}
+    </p>
+  );
+
+  return { html, map: { p: Paragraph } };
+});
+
+/**
+ * Test utilities
+ */
+
+function testRender(label, render) {
+  test(label, () => {
+    const { html, map, multi } = render();
+    let server = convertServer(html, map);
+    let browser = convertBrowser(html, map);
+
+    if (multi) {
+      server = <div>{server}</div>;
+      browser = <div>{browser}</div>;
+    }
+
+    // make sure return value is the same between server and browser
+    // Expected: browser
+    // Received: server
+    expect(jsonc(server)).toEqual(jsonc(browser));
+
+    // assert snapshot, doesn't matter from server or browser
+    // because we've already done assert equal between them
+    const tree = renderer.create(server);
+    expect(tree).toMatchSnapshot();
+  });
+}
 
 // delete all key property on the given object
 function deleteKey(obj) {
   delete obj.key;
 
-  if (obj.props && obj.props.children) {
+  if (obj.props && Array.isArray(obj.props.children)) {
     obj.props.children.forEach(child => {
       deleteKey(child);
     });
@@ -80,133 +181,4 @@ function jsonc(obj) {
   const result = JSON.parse(JSON.stringify(obj));
   deleteKey(result);
   return result;
-}
-
-function serverBrowserCompare(html, nodeMap, useWrapper) {
-  let htmlServer = convertServer(html);
-  let htmlBrowser = convertBrowser(html);
-
-  if (useWrapper) {
-    htmlServer = <div>{htmlServer}</div>;
-    htmlBrowser = <div>{htmlBrowser}</div>;
-  }
-
-  expect(jsonc(htmlBrowser)).toEqual(jsonc(htmlServer));
-}
-
-function suite(converter) {
-  test('ignore comment', () => {
-    const html = `
-      <!-- comment should be ignored-->
-      <div>no comment</div>
-    `;
-    const content = converter(html);
-
-    const tree = renderer.create(content);
-    expect(tree).toMatchSnapshot();
-  });
-
-  test('ignore multiline html comment', () => {
-    const html = `
-      <!--<div>\n<p>multiline</p> \t</div>-->
-      <div>no multiline comment</div>
-    `;
-    const content = converter(html);
-
-    const tree = renderer.create(content);
-    expect(tree).toMatchSnapshot();
-  });
-
-  test('convert correctly', () => {
-    const html = '<p id="test">This is cool</p>';
-    const content = converter(html);
-
-    const tree = renderer.create(content);
-    expect(tree).toMatchSnapshot();
-  });
-
-  test('unescape html entities', () => {
-    const html = '<div class="entities">&amp; and &</div>';
-    const content = converter(html);
-
-    const tree = renderer.create(content);
-    expect(tree).toMatchSnapshot();
-  });
-
-  test('self closing component', () => {
-    const html = `
-      <div>
-        <img src="https://www.google.com/logo.png" />
-        <iframe src="https://www.youtube.com/embed/I2-_iLzmkVw"></iframe>
-      </div>
-    `;
-
-    const content = converter(html);
-    const tree = renderer.create(content);
-    expect(tree).toMatchSnapshot();
-  });
-
-  test('custom component', () => {
-    const html = '<p data-custom="true">Custom component</p>';
-
-    const Paragraph = ({ children, ...props }) => (
-      <p {...props} className="css-x243s">
-        {children}
-      </p>
-    );
-
-    const nodeMap = { p: Paragraph };
-    const content = converter(html, nodeMap);
-    const tree = renderer.create(content);
-
-    expect(tree).toMatchSnapshot();
-  });
-
-  test('multi children', () => {
-    const html = `
-      <p style="margin: 0px">Multi</p>
-      <p style="display: none">Component</p>
-    `;
-    const content = converter(html);
-
-    const tree = renderer.create(<div className="wrapper">{content}</div>);
-
-    expect(tree).toMatchSnapshot();
-  });
-
-  test('ignore invalid style', () => {
-    const html = `
-      <div class='component-overflow' style="TITLE_2">Explore Categories</div>
-    `;
-    const content = converter(html);
-    const tree = renderer.create(<div className="wrapper">{content}</div>);
-    expect(tree).toMatchSnapshot();
-  });
-
-  test('ignore partially invalid style', () => {
-    const html = `
-      <div class='component-overflow' style="TITLE_2; color:'red' ">Explore Categories</div>
-    `;
-    const content = converter(html);
-    const tree = renderer.create(<div className="wrapper">{content}</div>);
-    expect(tree).toMatchSnapshot();
-  });
-
-  test('element inside text node', () => {
-    const html = `
-      what are <strong>you</strong> doing?
-    `;
-    const content = converter(html);
-    const tree = renderer.create(<div className="wrapper">{content}</div>);
-    expect(tree).toMatchSnapshot();
-  });
-
-  test('can handle style with url', () => {
-    const html = `
-      <div class="tera-promo-card--header" style="background-image:url(https://d1nabgopwop1kh.cloudfront.net/xx);"></div>
-    `;
-    const content = converter(html);
-    const tree = renderer.create(<div className="wrapper">{content}</div>);
-    expect(tree).toMatchSnapshot();
-  });
 }

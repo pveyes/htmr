@@ -1,21 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`browser can handle style with url 1`] = `
-<div
-  className="wrapper"
->
-  <div
-    className="tera-promo-card--header"
-    style={
-      Object {
-        "backgroundImage": "url(https://d1nabgopwop1kh.cloudfront.net/xx)",
-      }
-    }
-  />
-</div>
-`;
-
-exports[`browser convert correctly 1`] = `
+exports[`convert correctly 1`] = `
 <p
   id="test"
 >
@@ -23,7 +8,51 @@ exports[`browser convert correctly 1`] = `
 </p>
 `;
 
-exports[`browser custom component 1`] = `
+exports[`convert style values 1`] = `
+<div
+  style={
+    Object {
+      "margin": "0 auto",
+      "padding": "0 10px",
+    }
+  }
+>
+  <span
+    style={
+      Object {
+        "fontSize": "12",
+      }
+    }
+  />
+</div>
+`;
+
+exports[`css html entities 1`] = `
+<div
+  style={
+    Object {
+      "fontFamily": "Consolas, \\"Liberation Mono \\"",
+    }
+  }
+/>
+`;
+
+exports[`css vendor prefixes 1`] = `
+<div
+  style={
+    Object {
+      "WebkitTextSizeAdjust": "100%",
+      "msTextSizeAdjust": "100%",
+    }
+  }
+>
+  
+        prefix
+      
+</div>
+`;
+
+exports[`custom component 1`] = `
 <p
   className="css-x243s"
   data-custom="true"
@@ -32,10 +61,8 @@ exports[`browser custom component 1`] = `
 </p>
 `;
 
-exports[`browser element inside text node 1`] = `
-<div
-  className="wrapper"
->
+exports[`element inside text node 1`] = `
+<div>
   what are 
   <strong>
     you
@@ -44,52 +71,42 @@ exports[`browser element inside text node 1`] = `
 </div>
 `;
 
-exports[`browser ignore comment 1`] = `
+exports[`ignore comment 1`] = `
 <div>
   no comment
 </div>
 `;
 
-exports[`browser ignore invalid style 1`] = `
+exports[`ignore invalid style 1`] = `
 <div
-  className="wrapper"
+  className="component-overflow"
+  style={Object {}}
 >
-  <div
-    className="component-overflow"
-    style={Object {}}
-  >
-    Explore Categories
-  </div>
+  Explore Categories
 </div>
 `;
 
-exports[`browser ignore multiline html comment 1`] = `
+exports[`ignore multiline html comment 1`] = `
 <div>
   no multiline comment
 </div>
 `;
 
-exports[`browser ignore partially invalid style 1`] = `
+exports[`ignore partially invalid style 1`] = `
 <div
-  className="wrapper"
->
-  <div
-    className="component-overflow"
-    style={
-      Object {
-        "color": "\\"red\\"",
-      }
+  className="component-overflow"
+  style={
+    Object {
+      "color": "\\"red\\"",
     }
-  >
-    Explore Categories
-  </div>
+  }
+>
+  Explore Categories
 </div>
 `;
 
-exports[`browser multi children 1`] = `
-<div
-  className="wrapper"
->
+exports[`multi children 1`] = `
+<div>
   <p
     style={
       Object {
@@ -111,7 +128,7 @@ exports[`browser multi children 1`] = `
 </div>
 `;
 
-exports[`browser self closing component 1`] = `
+exports[`self closing component 1`] = `
 <div>
   <img
     src="https://www.google.com/logo.png"
@@ -122,7 +139,38 @@ exports[`browser self closing component 1`] = `
 </div>
 `;
 
-exports[`browser unescape html entities 1`] = `
+exports[`style with url & protocol 1`] = `
+<div
+  className="tera-promo-card--header"
+  style={
+    Object {
+      "backgroundImage": "url(https://d1nabgopwop1kh.cloudfront.net/xx)",
+    }
+  }
+/>
+`;
+
+exports[`supports valid html attribute 1`] = `
+<div
+  aria-describedby="info"
+  data-type="calendar"
+>
+  <link
+    xlinkActuate={undefined}
+    xmlLang={undefined}
+  />
+  <svg
+    colorInterpolationFilters={undefined}
+    fillRule={undefined}
+  >
+    <path
+      fill="#fa0"
+    />
+  </svg>
+</div>
+`;
+
+exports[`unescape html entities 1`] = `
 <div
   className="entities"
 >
@@ -130,132 +178,9 @@ exports[`browser unescape html entities 1`] = `
 </div>
 `;
 
-exports[`server can handle style with url 1`] = `
-<div
-  className="wrapper"
->
-  <div
-    className="tera-promo-card--header"
-    style={
-      Object {
-        "backgroundImage": "url(https://d1nabgopwop1kh.cloudfront.net/xx)",
-      }
-    }
-  />
-</div>
-`;
-
-exports[`server convert correctly 1`] = `
-<p
-  id="test"
->
-  This is cool
-</p>
-`;
-
-exports[`server custom component 1`] = `
-<p
-  className="css-x243s"
-  data-custom="true"
->
-  Custom component
-</p>
-`;
-
-exports[`server element inside text node 1`] = `
-<div
-  className="wrapper"
->
-  what are 
-  <strong>
-    you
-  </strong>
-   doing?
-</div>
-`;
-
-exports[`server ignore comment 1`] = `
-<div>
-  no comment
-</div>
-`;
-
-exports[`server ignore invalid style 1`] = `
-<div
-  className="wrapper"
->
-  <div
-    className="component-overflow"
-    style={Object {}}
-  >
-    Explore Categories
-  </div>
-</div>
-`;
-
-exports[`server ignore multiline html comment 1`] = `
-<div>
-  no multiline comment
-</div>
-`;
-
-exports[`server ignore partially invalid style 1`] = `
-<div
-  className="wrapper"
->
-  <div
-    className="component-overflow"
-    style={
-      Object {
-        "color": "\\"red\\"",
-      }
-    }
-  >
-    Explore Categories
-  </div>
-</div>
-`;
-
-exports[`server multi children 1`] = `
-<div
-  className="wrapper"
->
-  <p
-    style={
-      Object {
-        "margin": "0",
-      }
-    }
-  >
-    Multi
-  </p>
-  <p
-    style={
-      Object {
-        "display": "none",
-      }
-    }
-  >
-    Component
-  </p>
-</div>
-`;
-
-exports[`server self closing component 1`] = `
-<div>
-  <img
-    src="https://www.google.com/logo.png"
-  />
-  <iframe
-    src="https://www.youtube.com/embed/I2-_iLzmkVw"
-  />
-</div>
-`;
-
-exports[`server unescape html entities 1`] = `
-<div
-  className="entities"
->
-  & and &
-</div>
+exports[`unsafe html attributes 1`] = `
+<label
+  className="input-text"
+  htmlFor="name"
+/>
 `;

@@ -46,7 +46,7 @@ function transform(node: Node, key: string, nodeMap: NodeMap): ?Element {
   );
 
   // self closing component doesn't have children
-  const children =
+  let children =
     content === undefined
       ? null
       : content
@@ -55,6 +55,10 @@ function transform(node: Node, key: string, nodeMap: NodeMap): ?Element {
             return transform(child, childKey, nodeMap);
           })
           .filter(child => child !== null);
+
+  if (children && children.length === 0) {
+    children = null;
+  }
 
   const Component = nodeMap[tag] || tag;
   return React.createElement(Component, props, children);
