@@ -38,7 +38,13 @@ export default function convertStyle(styleStr: string): Style {
       const rules = declaration.split(':');
       if (rules.length > 1) {
         const prop = convertProperty(rules[0].trim());
-        const val = convertValue(rules[1].trim());
+        //To handle url: attribute on style
+        const val = convertValue(
+          rules
+            .slice(1)
+            .join(':')
+            .trim()
+        );
         style[prop] = val;
       }
     });
