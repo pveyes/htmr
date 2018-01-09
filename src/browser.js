@@ -50,6 +50,12 @@ function transform(node, nodeMap: NodeMap, key: ?number) {
     }
   }
 
+  // style tag needs to preserve its children
+  if (tag === 'style' && Component === tag) {
+    props.dangerouslySetInnerHTML = { __html: children[0] };
+    return React.createElement(tag, props, null);
+  }
+
   // self closing tag shouldn't have children
   if (children.length === 0) {
     children = null;

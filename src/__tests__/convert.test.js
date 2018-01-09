@@ -1,5 +1,6 @@
 /* eslint-env jest */
 import React from 'react';
+import ReactDOMServer from 'react-dom/server';
 import renderer from 'react-test-renderer';
 import convertServer from '../server';
 import convertBrowser from '../browser';
@@ -101,6 +102,22 @@ testRender('style with url & protocol', () => {
   return { html };
 });
 
+testRender('preserve child of style tag', () => {
+  const html = `
+    <style>
+      ul > li {
+        list-style: none
+      }
+
+      div[data-id="test"]:not(.y) {
+        display: none;
+      }
+    </style>
+  `;
+
+  return { html };
+});
+
 testRender('unescape html entities', () => {
   const html = '<div class="entities">&amp; and &</div>';
   return { html };
@@ -154,31 +171,13 @@ function testRender(label, render) {
     // make sure return value is the same between server and browser
     // Expected: browser
     // Received: server
-    expect(jsonc(server)).toEqual(jsonc(browser));
+    expect(ReactDOMServer.renderToString(server)).toEqual(
+      ReactDOMServer.renderToString(browser)
+    );
 
     // assert snapshot, doesn't matter from server or browser
     // because we've already done assert equal between them
     const tree = renderer.create(server);
     expect(tree).toMatchSnapshot();
   });
-}
-
-// delete all key property on the given object
-function deleteKey(obj) {
-  delete obj.key;
-
-  if (obj.props && Array.isArray(obj.props.children)) {
-    obj.props.children.forEach(child => {
-      deleteKey(child);
-    });
-  }
-}
-
-// Compare component object without comparing instance and key
-// key props is not reused in React client rehydration, so we can
-// ignore it
-function jsonc(obj) {
-  const result = JSON.parse(JSON.stringify(obj));
-  deleteKey(result);
-  return result;
 }

@@ -29,9 +29,7 @@ function transform(node: Node, key: string, nodeMap: NodeMap): ?Element {
     if (text === '' || /^<!--[\s\S]+-->/.test(text)) {
       return null;
     }
-  }
 
-  if (typeof node === 'string') {
     return HtmlEntity.decode(node);
   }
 
@@ -44,6 +42,12 @@ function transform(node: Node, key: string, nodeMap: NodeMap): ?Element {
     // multiple elements
     { key }
   );
+
+  // style tag needs to preserve its children
+  if (tag === 'style' && nodeMap[tag] === undefined) {
+    props.dangerouslySetInnerHTML = { __html: content[0] };
+    return React.createElement(tag, props, null);
+  }
 
   // self closing component doesn't have children
   let children =
