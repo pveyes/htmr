@@ -1,6 +1,6 @@
 {
   "name": "htmr",
-  "version": "0.4.6",
+  "version": "0.4.7",
   "description": "Simple and lightweight (< 2kB) HTML to React converter that works in server and browser",
   "main": "lib/index.js",
   "files": [
