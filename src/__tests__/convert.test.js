@@ -174,6 +174,24 @@ function suite(converter) {
     expect(tree).toMatchSnapshot();
   });
 
+  test('ignore invalid style', () => {
+    const html = `
+      <div class='component-overflow' style="TITLE_2">Explore Categories</div>
+    `;
+    const content = converter(html);
+    const tree = renderer.create(<div className="wrapper">{content}</div>);
+    expect(tree).toMatchSnapshot();
+  });
+
+  test('ignore partially invalid style', () => {
+    const html = `
+      <div class='component-overflow' style="TITLE_2; color:'red' ">Explore Categories</div>
+    `;
+    const content = converter(html);
+    const tree = renderer.create(<div className="wrapper">{content}</div>);
+    expect(tree).toMatchSnapshot();
+  });
+
   test('element inside text node', () => {
     const html = `
       what are <strong>you</strong> doing?

@@ -36,10 +36,11 @@ export default function convertStyle(styleStr: string): Style {
     })
     .forEach(declaration => {
       const rules = declaration.split(':');
-
-      const prop = convertProperty(rules[0].trim());
-      const val = convertValue(rules[1].trim());
-      style[prop] = val;
+      if (rules.length > 1) {
+        const prop = convertProperty(rules[0].trim());
+        const val = convertValue(rules[1].trim());
+        style[prop] = val;
+      }
     });
 
   return style;
