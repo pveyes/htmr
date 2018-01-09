@@ -198,7 +198,15 @@ function suite(converter) {
     `;
     const content = converter(html);
     const tree = renderer.create(<div className="wrapper">{content}</div>);
+    expect(tree).toMatchSnapshot();
+  });
 
+  test('can handle style with url', () => {
+    const html = `
+      <div class="tera-promo-card--header" style="background-image:url(https://d1nabgopwop1kh.cloudfront.net/xx);"></div>
+    `;
+    const content = converter(html);
+    const tree = renderer.create(<div className="wrapper">{content}</div>);
     expect(tree).toMatchSnapshot();
   });
 }

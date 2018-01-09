@@ -1,5 +1,20 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`browser can handle style with url 1`] = `
+<div
+  className="wrapper"
+>
+  <div
+    className="tera-promo-card--header"
+    style={
+      Object {
+        "backgroundImage": "url(https://d1nabgopwop1kh.cloudfront.net/xx)",
+      }
+    }
+  />
+</div>
+`;
+
 exports[`browser convert correctly 1`] = `
 <p
   id="test"
@@ -112,6 +127,21 @@ exports[`browser unescape html entities 1`] = `
   className="entities"
 >
   & and &
+</div>
+`;
+
+exports[`server can handle style with url 1`] = `
+<div
+  className="wrapper"
+>
+  <div
+    className="tera-promo-card--header"
+    style={
+      Object {
+        "backgroundImage": "url(https://d1nabgopwop1kh.cloudfront.net/xx)",
+      }
+    }
+  />
 </div>
 `;
 
