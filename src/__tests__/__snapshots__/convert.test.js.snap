@@ -35,9 +35,39 @@ exports[`browser ignore comment 1`] = `
 </div>
 `;
 
+exports[`browser ignore invalid style 1`] = `
+<div
+  className="wrapper"
+>
+  <div
+    className="component-overflow"
+    style={Object {}}
+  >
+    Explore Categories
+  </div>
+</div>
+`;
+
 exports[`browser ignore multiline html comment 1`] = `
 <div>
   no multiline comment
+</div>
+`;
+
+exports[`browser ignore partially invalid style 1`] = `
+<div
+  className="wrapper"
+>
+  <div
+    className="component-overflow"
+    style={
+      Object {
+        "color": "\\"red\\"",
+      }
+    }
+  >
+    Explore Categories
+  </div>
 </div>
 `;
 
@@ -120,9 +150,39 @@ exports[`server ignore comment 1`] = `
 </div>
 `;
 
+exports[`server ignore invalid style 1`] = `
+<div
+  className="wrapper"
+>
+  <div
+    className="component-overflow"
+    style={Object {}}
+  >
+    Explore Categories
+  </div>
+</div>
+`;
+
 exports[`server ignore multiline html comment 1`] = `
 <div>
   no multiline comment
+</div>
+`;
+
+exports[`server ignore partially invalid style 1`] = `
+<div
+  className="wrapper"
+>
+  <div
+    className="component-overflow"
+    style={
+      Object {
+        "color": "\\"red\\"",
+      }
+    }
+  >
+    Explore Categories
+  </div>
 </div>
 `;
 
