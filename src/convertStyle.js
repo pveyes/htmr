@@ -16,9 +16,9 @@ function convertProperty(prop: string): string {
 }
 
 function convertValue(value: string): number | string {
-  // pixel
-  if (/^\d+px$/.test(value)) {
-    return value.slice(0, value.length - 2);
+  // value can be converted to pixel automatically by converting it to number
+  if (/^\d+$/.test(value)) {
+    return Number(value);
   }
 
   return value.replace(/'/g, '"');

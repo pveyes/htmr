@@ -41,8 +41,8 @@ testRender('self closing component', () => {
 
 testRender('multi children', () => {
   const html = `
-    <p style="margin: 0px">Multi</p>
-    <p style="display: none">Component</p>
+    <p>Multi</p>
+    <p>Component</p>
   `;
 
   return { html, multi: true };

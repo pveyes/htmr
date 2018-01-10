@@ -20,7 +20,7 @@ exports[`convert style values 1`] = `
   <span
     style={
       Object {
-        "fontSize": "12",
+        "fontSize": 12,
       }
     }
   />
@@ -107,22 +107,10 @@ exports[`ignore partially invalid style 1`] = `
 
 exports[`multi children 1`] = `
 <div>
-  <p
-    style={
-      Object {
-        "margin": "0",
-      }
-    }
-  >
+  <p>
     Multi
   </p>
-  <p
-    style={
-      Object {
-        "display": "none",
-      }
-    }
-  >
+  <p>
     Component
   </p>
 </div>
