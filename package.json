@@ -10,7 +10,7 @@
   "scripts": {
     "build": "rollup -c",
     "clean": "rimraf lib",
-    "fmt": "prettier --write --single-quote --trailing-comma es5 \"src/**/*.js\"",
+    "fmt": "prettier --write \"src/**/*.js\" README.md",
     "flow": "flow",
     "precommit": "lint-staged",
     "prepublish": "npm-run-all clean build",
@@ -61,7 +61,7 @@
     "jest": "^20.0.4",
     "lint-staged": "^4.0.3",
     "npm-run-all": "^4.0.2",
-    "prettier": "^1.5.3",
+    "prettier": "^1.9.2",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "react-test-renderer": "^16.2.0",
@@ -84,11 +84,7 @@
     }
   ],
   "lint-staged": {
-    "*.js": [
-      "prettier --write --single-quote --trailing-comma es5",
-      "git add"
-    ],
-    "*.md": [
+    "*.{js,md}": [
       "prettier --write",
       "git add"
     ]

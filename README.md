@@ -20,12 +20,12 @@ $ npm install htmr --save
 Usage is quite straightforward, use the default export, and pass HTML string.
 
 ```js
-import React from "react";
-import convert from "htmr";
+import React from 'react';
+import convert from 'htmr';
 
 class Component extends React.Component {
   render() {
-    return convert("<p>No more dangerouslySetInnerHTML</p>");
+    return convert('<p>No more dangerouslySetInnerHTML</p>');
   }
 }
 ```
@@ -37,24 +37,24 @@ predefined styles such as [emotion](https://github.com/tkh44/emotion) /
 [styled-components](https://github.com/styled-components/styled-components).
 
 ```js
-import React from "react";
-import convert from "htmr";
-import styled from "emotion/react";
+import React from 'react';
+import convert from 'htmr';
+import styled from 'emotion/react';
 
-const Paragraph = styled("p")`
+const Paragraph = styled('p')`
   font-family: Helvetica, Arial, sans-serif;
   line-height: 1.5;
 `;
 
 // map is key value object that maps tagName (key) to Component (value)
 const map = {
-  p: Paragraph
+  p: Paragraph,
 };
 
 class Component extends React.Component {
   render() {
     // will return <Paragraph>{'Custom component'}</Paragraph>
-    return convert("<p>Custom component</p>", map);
+    return convert('<p>Custom component</p>', map);
   }
 }
 ```
@@ -71,8 +71,8 @@ an array, so make sure to wrap the output inside other component such as div, or
 use React 16.
 
 ```js
-import React from "react";
-import convert from "htmr";
+import React from 'react';
+import convert from 'htmr';
 
 const html = `
   <h1>This string</h1>
