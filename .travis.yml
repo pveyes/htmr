@@ -2,13 +2,15 @@ language: node_js
 
 node_js:
   - "6"
+  - "8"
 
 cache:
+  yarn: true
   directories:
     - node_modules
 
 before_install:
-  - npm install codecov
+  - yarn global add codecov
 
 after_success:
-  - cat ./coverage/lcov.info | ./node_modules/codecov/bin/codecov
+  - cat ./coverage/lcov.info | codecov
