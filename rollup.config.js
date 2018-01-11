@@ -6,22 +6,27 @@ import uglify from 'rollup-plugin-uglify';
 export default [
   // cjs
   {
-    entry: 'src/server.js',
-    format: 'cjs',
+    input: 'src/server.js',
+    output: {
+      file: 'lib/index.js',
+      format: 'cjs',
+    },
     plugins: [
       babel({
         exclude: 'node_modules/**',
       }),
     ],
-    external: ['posthtml-parser', 'react'],
-    dest: 'lib/index.js',
+    external: ['posthtml-parser', 'react', 'html-entities'],
   },
   // umd
   {
-    entry: 'src/browser.js',
-    format: 'umd',
-    globals: {
-      react: 'React',
+    input: 'src/browser.js',
+    output: {
+      file: 'lib/htmr.min.js',
+      format: 'umd',
+      globals: {
+        react: 'React',
+      },
     },
     plugins: [
       resolve({
@@ -39,6 +44,5 @@ export default [
       uglify(),
     ],
     external: ['react'],
-    dest: 'lib/htmr.min.js',
   },
 ];

@@ -47,8 +47,8 @@ exports[`css vendor prefixes 1`] = `
   }
 >
   
-        prefix
-      
+      prefix
+    
 </div>
 `;
 
@@ -121,14 +121,14 @@ exports[`preserve child of style tag 1`] = `
   dangerouslySetInnerHTML={
     Object {
       "__html": "
-          ul > li {
-            list-style: none
-          }
-    
-          div[data-id=\\"test\\"]:not(.y) {
-            display: none;
-          }
-        ",
+      ul > li {
+        list-style: none
+      }
+
+      div[data-id=\\"test\\"]:not(.y) {
+        display: none;
+      }
+    ",
     }
   }
 />
