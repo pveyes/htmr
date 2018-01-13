@@ -49,9 +49,9 @@ export default function mapAttribute(attrs: Attributes = {}) {
 
     const name = attributeMap[attributeName] || attributeName;
     if (name === 'style') {
-      result[name] = convertStyle(attrs[attributeName]);
+      result[name] = convertStyle(attrs.style);
     } else {
-      result[name] = attrs[attributeName];
+      result[name] = attrs[attr];
     }
 
     return result;

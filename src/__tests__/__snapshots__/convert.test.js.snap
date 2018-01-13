@@ -162,12 +162,12 @@ exports[`supports valid html attribute 1`] = `
   data-type="calendar"
 >
   <link
-    xlinkActuate={undefined}
-    xmlLang={undefined}
+    xlinkActuate=""
+    xmlLang="en"
   />
   <svg
-    colorInterpolationFilters={undefined}
-    fillRule={undefined}
+    colorInterpolationFilters=""
+    fillRule="evenodd"
   >
     <path
       fill="#fa0"
