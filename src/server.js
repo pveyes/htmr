@@ -34,6 +34,7 @@ function transform(node: Node, key: string, nodeMap: NodeMap): ?Element {
   }
 
   const { tag, attrs, content } = node;
+  const Component = nodeMap[tag] || tag;
 
   const props = Object.assign(
     {},
@@ -44,7 +45,7 @@ function transform(node: Node, key: string, nodeMap: NodeMap): ?Element {
   );
 
   // style tag needs to preserve its children
-  if (tag === 'style' && nodeMap[tag] === undefined) {
+  if (tag === 'style' && Component === tag) {
     props.dangerouslySetInnerHTML = { __html: content[0] };
     return React.createElement(tag, props, null);
   }
@@ -64,7 +65,6 @@ function transform(node: Node, key: string, nodeMap: NodeMap): ?Element {
     children = null;
   }
 
-  const Component = nodeMap[tag] || tag;
   return React.createElement(Component, props, children);
 }
 

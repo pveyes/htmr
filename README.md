@@ -122,6 +122,8 @@ HTML (page) to react component (file/string):
 
 * Inline event attributes (`onclick=""` etc) are not supported due to
   unnecessary complexity
+* Script tag is not rendered using `dangerouslySetInnerHTML` by default due to security. You can opt in by using [custom component mapping](#custom-component)
+* Style tag renders it children using `dangerouslySetInnerHTML` by default. You can also reverse this behavior using custom mapping.
 
 ## License
 
