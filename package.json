@@ -1,12 +1,12 @@
 {
   "name": "htmr",
   "version": "0.4.10",
-  "description": "Simple and lightweight (< 2kB) HTML to React converter that works in server and browser",
+  "description":
+    "Simple and lightweight (< 2kB) HTML to React converter that works in server and browser",
   "main": "lib/index.js",
-  "files": [
-    "lib"
-  ],
+  "module": "lib/module.js",
   "browser": "lib/htmr.min.js",
+  "files": ["lib"],
   "scripts": {
     "build": "rollup -c",
     "clean": "rimraf lib",
@@ -84,9 +84,6 @@
     }
   ],
   "lint-staged": {
-    "*.{js,md}": [
-      "prettier --write",
-      "git add"
-    ]
+    "*.{js,md}": ["prettier --write", "git add"]
   }
 }

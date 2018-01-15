@@ -89,4 +89,4 @@ function convertBrowser(
   return result;
 }
 
-module.exports = convertBrowser;
+export default convertBrowser;
