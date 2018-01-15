@@ -1,48 +1,45 @@
-import babel from 'rollup-plugin-babel';
 import resolve from 'rollup-plugin-node-resolve';
 import commonjs from 'rollup-plugin-commonjs';
+import babel from 'rollup-plugin-babel';
 import uglify from 'rollup-plugin-uglify';
 
 export default [
-  // cjs
-  {
-    input: 'src/server.js',
-    output: {
-      file: 'lib/index.js',
-      format: 'cjs',
-    },
-    plugins: [
-      babel({
-        exclude: 'node_modules/**',
-      }),
-    ],
-    external: ['posthtml-parser', 'react', 'html-entities'],
-  },
-  // umd
+  // browser-friendly UMD build
   {
     input: 'src/browser.js',
+    external: ['react'],
     output: {
+      name: 'htmr',
       file: 'lib/htmr.min.js',
       format: 'umd',
-      globals: {
-        react: 'React',
-      },
     },
     plugins: [
-      resolve({
-        jsnext: false,
-        main: true,
-        browser: true,
-      }),
-      commonjs({
-        ignoreGlobal: true,
-        include: 'node_modules/**',
-      }),
+      babel({ exclude: 'node_modules/**' }),
+      commonjs({ include: 'node_modules/**' }),
+      resolve(),
+      uglify(),
+    ],
+  },
+  // commonJS
+  {
+    input: 'src/server.js',
+    external: ['posthtml-parser', 'react', 'html-entities'],
+    output: [{ file: 'lib/index.js', format: 'cjs' }],
+    plugins: [
       babel({
         exclude: 'node_modules/**',
       }),
-      uglify(),
     ],
+  },
+  //   ES modules
+  {
+    input: 'src/browser.js',
     external: ['react'],
+    output: [{ file: 'lib/module.js', format: 'es' }],
+    plugins: [
+      babel({
+        exclude: 'node_modules/**',
+      }),
+    ],
   },
 ];
