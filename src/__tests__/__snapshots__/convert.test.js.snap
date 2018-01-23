@@ -116,6 +116,19 @@ exports[`multi children 1`] = `
 </div>
 `;
 
+exports[`newline between tags 1`] = `
+<pre>
+  <span>
+    Hello
+  </span>
+  
+
+  <span>
+    World
+  </span>
+</pre>
+`;
+
 exports[`preserve child of style tag 1`] = `
 <style
   dangerouslySetInnerHTML={
@@ -189,4 +202,16 @@ exports[`unsafe html attributes 1`] = `
   className="input-text"
   htmlFor="name"
 />
+`;
+
+exports[`whitespace only text nodes 1`] = `
+Array [
+  <span>
+    Hello
+  </span>,
+  " ",
+  <span>
+    World
+  </span>,
+]
 `;
