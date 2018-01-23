@@ -45,7 +45,7 @@
   "homepage": "https://github.com/pveyes/htmr#readme",
   "dependencies": {
     "html-entities": "^1.2.1",
-    "posthtml-parser": "^0.3.1"
+    "posthtml-parser": "^0.4.0"
   },
   "peerDependencies": {
     "react": "^15.6.1 || ^16.0.0"
