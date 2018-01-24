@@ -11,14 +11,14 @@ testRender('convert correctly', () => {
 });
 
 testRender('supports valid html attribute', () => {
-  const html = `
-    <div data-type="calendar" aria-describedby="info">
-      <link xml:lang="en" xlink:actuate="" />
-      <svg fill-rule="evenodd" color-interpolation-filters="">
-        <path fill="#fa0"></path>
-      </svg>
-    </div>
-  `;
+  const html = [
+    '<div data-type="calendar" aria-describedby="info">',
+    '<link xml:lang="en" xlink:actuate="" />',
+    '<svg fill-rule="evenodd" color-interpolation-filters="">',
+    '<path fill="#fa0"></path>',
+    '</svg>',
+    '</div>',
+  ].join('');
 
   return { html };
 });
@@ -29,21 +29,18 @@ testRender('unsafe html attributes', () => {
 });
 
 testRender('self closing component', () => {
-  const html = `
-    <div>
-      <img src="https://www.google.com/logo.png" />
-      <iframe src="https://www.youtube.com/embed/I2-_iLzmkVw"></iframe>
-    </div>
-  `;
+  const html = [
+    '<div>',
+    '<img src="https://www.google.com/logo.png" />',
+    '<iframe src="https://www.youtube.com/embed/I2-_iLzmkVw"></iframe>',
+    '</div>',
+  ].join('');
 
   return { html };
 });
 
 testRender('multi children', () => {
-  const html = `
-    <p>Multi</p>
-    <p>Component</p>
-  `;
+  const html = '<p>Multi</p><p>Component</p>';
 
   return { html, multi: true };
 });
@@ -54,11 +51,11 @@ testRender('element inside text node', () => {
 });
 
 testRender('convert style values', () => {
-  const html = `
-    <div style="margin: 0 auto; padding: 0 10px">
-      <span style="font-size: 12"></span>
-    </div>
-  `;
+  const html = [
+    '<div style="margin: 0 auto; padding: 0 10px">',
+    '<span style="font-size: 12"></span>',
+    '</div>',
+  ].join('');
 
   return { html };
 });
@@ -74,10 +71,8 @@ testRender('css vendor prefixes', () => {
 });
 
 testRender('css html entities', () => {
-  const html = `
-    <div style="font-family: Consolas, &quot;Liberation Mono &quot;">
-    </div>
-  `;
+  const html =
+    '<div style="font-family: Consolas, &quot;Liberation Mono &quot;"></div>';
 
   return { html };
 });
@@ -95,9 +90,8 @@ testRender('ignore partially invalid style', () => {
 });
 
 testRender('style with url & protocol', () => {
-  const html = `
-    <div class="tera-promo-card--header" style="background-image:url(https://d1nabgopwop1kh.cloudfront.net/xx);"></div>
-  `;
+  const html =
+    '<div class="tera-promo-card--header" style="background-image:url(https://d1nabgopwop1kh.cloudfront.net/xx);"></div>';
 
   return { html };
 });
@@ -124,19 +118,16 @@ testRender('unescape html entities', () => {
 });
 
 testRender('ignore comment', () => {
-  const html = `
-    <!-- comment should be ignored-->
-    <div>no comment</div>
-  `;
+  const html = '<!-- comment should be ignored--><div>no comment</div>';
 
   return { html };
 });
 
 testRender('ignore multiline html comment', () => {
-  const html = `
-    <!--<div>\n<p>multiline</p> \t</div>-->
-    <div>no multiline comment</div>
-  `;
+  const html = [
+    '<!--<div>\n<p>multiline</p> \t</div>-->',
+    '<div>no multiline comment</div>',
+  ].join('');
 
   return { html };
 });
@@ -151,6 +142,16 @@ testRender('custom component', () => {
   );
 
   return { html, map: { p: Paragraph } };
+});
+
+testRender('whitespace only text nodes', () => {
+  const html = '<span>Hello</span> <span>World</span>';
+  return { html };
+});
+
+testRender('newline between tags', () => {
+  const html = '<pre><span>Hello</span>\n<span>World</span></pre>';
+  return { html };
 });
 
 /**

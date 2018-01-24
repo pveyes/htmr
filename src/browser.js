@@ -24,7 +24,9 @@ function transform(node, nodeMap: NodeMap, key: ?number) {
   if (node.nodeType === NodeTypes.COMMENT) {
     return null;
   } else if (node.nodeType === NodeTypes.TEXT) {
-    return node.textContent.trim() === '' ? null : unescape(node.textContent);
+    return node.textContent.trim() === ''
+      ? node.textContent
+      : unescape(node.textContent);
   }
 
   // element
