@@ -26,8 +26,11 @@ function transform(node: Node, key: string, nodeMap: NodeMap): ?Element {
     // newline and space will be parsed as 'node' in posthtml-parser,
     // we can ignore it along with comment node
     const text = node.trim();
-    if (text === '' || /^<!--[\s\S]+-->/.test(text)) {
+    if (/^<!--[\s\S]+-->/.test(text)) {
       return null;
+    }
+    if (text === '') {
+      return node;
     }
 
     return HtmlEntity.decode(node);
