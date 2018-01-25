@@ -141,7 +141,22 @@ testRender('custom component', () => {
     </p>
   );
 
-  return { html, map: { p: Paragraph } };
+  return { html, options: { map: { p: Paragraph } } };
+});
+
+testRender('default mapping', () => {
+  const html = '<article> <p>Default mapping</p> </article>';
+  let i = 0;
+  const defaultMap = (node, props, children) => {
+    if (typeof props === 'undefined') {
+      // we need to add key for elements inside array
+      return <span key={i++}>{node}</span>;
+    }
+
+    return <div {...props}>{children}</div>;
+  };
+
+  return { html, options: { map: { _: defaultMap } } };
 });
 
 testRender('whitespace only text nodes', () => {
@@ -160,9 +175,9 @@ testRender('newline between tags', () => {
 
 function testRender(label, render) {
   test(label, () => {
-    const { html, map, multi } = render();
-    let server = convertServer(html, map);
-    let browser = convertBrowser(html, map);
+    const { html, options, multi } = render();
+    let server = convertServer(html, options);
+    let browser = convertBrowser(html, options);
 
     if (multi) {
       server = <div>{server}</div>;

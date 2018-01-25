@@ -61,6 +61,20 @@ exports[`custom component 1`] = `
 </p>
 `;
 
+exports[`default mapping 1`] = `
+<div>
+  <span>
+     
+  </span>
+  <div>
+    Default mapping
+  </div>
+  <span>
+     
+  </span>
+</div>
+`;
+
 exports[`element inside text node 1`] = `
 <div>
   what are 
