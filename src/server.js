@@ -81,10 +81,7 @@ function transform(node: Node, key: string, options: HtmrOptions): ?Element {
   return React.createElement(tag, props, children);
 }
 
-function convertServer(
-  html: string,
-  options: HtmrOptions = {}
-): ConvertedComponent {
+function convertServer(html: string, options: Object = {}): ConvertedComponent {
   const opts = { map: options.map || {} };
   const ast = parse(html.trim());
   const components = ast

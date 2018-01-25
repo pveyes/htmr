@@ -4,7 +4,7 @@ export type NodeMap = {
 };
 
 export type HtmrOptions = {
-  map?: NodeMap,
+  map: NodeMap,
 };
 
 type Component = React$Element<*>;
