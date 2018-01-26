@@ -31,15 +31,4 @@ export default [
       }),
     ],
   },
-  //   ES modules
-  {
-    input: 'src/browser.js',
-    external: ['react'],
-    output: [{ file: 'lib/module.js', format: 'es' }],
-    plugins: [
-      babel({
-        exclude: 'node_modules/**',
-      }),
-    ],
-  },
 ];
