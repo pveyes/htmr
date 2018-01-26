@@ -31,15 +31,20 @@ function transform(node: Node, key: string, options: HtmrOptions): ?Element {
     if (/^<!--[\s\S]+-->/.test(text)) {
       return null;
     }
-    if (text === '') {
-      return defaultMap ? defaultMap(node) : node;
-    }
 
-    return HtmlEntity.decode(node);
+    const str = HtmlEntity.decode(node);
+    return defaultMap ? defaultMap(str) : str;
   }
 
   const { tag, attrs, content } = node;
   const customElement = options.map[tag];
+
+  // decode all attribute value
+  if (attrs) {
+    Object.keys(attrs).forEach(key => {
+      attrs[key] = HtmlEntity.decode(attrs[key]);
+    });
+  }
 
   const props = Object.assign(
     {},

@@ -61,13 +61,29 @@ exports[`custom component 1`] = `
 </p>
 `;
 
+exports[`decode html attributes 1`] = `
+<a
+  href="https://www.google.com/?a=b&c=d"
+>
+  test
+</a>
+`;
+
+exports[`decode html entities on defaultMap 1`] = `
+<p>
+  & and &
+</p>
+`;
+
 exports[`default mapping 1`] = `
 <div>
   <span>
      
   </span>
   <div>
-    Default mapping
+    <span>
+      Default mapping
+    </span>
   </div>
   <span>
      

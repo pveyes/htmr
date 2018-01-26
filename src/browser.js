@@ -26,9 +26,8 @@ function transform(node, key: number, options: HtmrOptions) {
   if (node.nodeType === NodeTypes.COMMENT) {
     return null;
   } else if (node.nodeType === NodeTypes.TEXT) {
-    return node.textContent.trim() === ''
-      ? defaultMap ? defaultMap(node.textContent) : node.textContent
-      : unescape(node.textContent);
+    const text = unescape(node.textContent);
+    return defaultMap ? defaultMap(text) : text;
   }
 
   // element

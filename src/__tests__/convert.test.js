@@ -117,6 +117,21 @@ test('unescape html entities', () => {
   testRender(html);
 });
 
+test('decode html entities on defaultMap', () => {
+  const html = '<div class="entities">&amp; and &</div>';
+  testRender(html, {
+    map: {
+      _: (node, props, children) => {
+        if (typeof props === 'undefined') {
+          return node;
+        }
+
+        return <p>{children}</p>;
+      },
+    },
+  });
+});
+
 test('ignore comment', () => {
   const html = '<!-- comment should be ignored--><div>no comment</div>';
   testRender(html);
@@ -165,6 +180,11 @@ test('whitespace only text nodes', () => {
 
 test('newline between tags', () => {
   const html = '<pre><span>Hello</span>\n<span>World</span></pre>';
+  testRender(html);
+});
+
+test('decode html attributes', () => {
+  const html = '<a href="https://www.google.com/?a=b&amp;c=d">test</a>';
   testRender(html);
 });
 
