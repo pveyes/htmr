@@ -1,7 +1,8 @@
 /* eslint-env jest */
 import React from 'react';
-import ReactDOMServer from 'react-dom/server';
 import renderer from 'react-test-renderer';
+import snapshot from 'jest-snapshot';
+
 import convertServer from '../server';
 import convertBrowser from '../browser';
 
@@ -188,6 +189,23 @@ test('decode html attributes', () => {
   testRender(html);
 });
 
+test('remove whitespace on table', () => {
+  const html = `
+    <table>
+      <tbody>
+        <tr>
+          <th>title</th>
+        </tr>
+        <tr>
+          <td>entry</td>
+        </tr>
+      </tbody>
+    </table>
+  `.trim();
+
+  testRender(html);
+});
+
 /**
  * Test utilities
  */
@@ -196,15 +214,16 @@ function testRender(html, options) {
   let server = convertServer(html, options);
   let browser = convertBrowser(html, options);
 
+  const rs = renderer.create(server);
+  const rb = renderer.create(browser);
+
   // make sure return value is the same between server and browser
+  // compare snapshot result to make sure they're the exact same
   // Expected: browser
   // Received: server
-  expect(ReactDOMServer.renderToString(server)).toEqual(
-    ReactDOMServer.renderToString(browser)
-  );
+  expect(snapshot.utils.serialize(rs)).toEqual(snapshot.utils.serialize(rb));
 
   // assert snapshot, doesn't matter from server or browser
   // because we've already done assert equal between them
-  const tree = renderer.create(server);
-  expect(tree).toMatchSnapshot();
+  expect(rs).toMatchSnapshot();
 }

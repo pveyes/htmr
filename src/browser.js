@@ -11,6 +11,8 @@ const NodeTypes = {
   COMMENT: 8,
 };
 
+const TABLE_ELEMENTS = ['table', 'tbody', 'td', 'th', 'tr'];
+
 const tempEl = document.createElement('div');
 function unescape(str) {
   // Here we use innerHTML to unescape html entities.
@@ -46,8 +48,20 @@ function transform(node, key: number, options: HtmrOptions) {
 
   let children = [];
   for (let i = 0; i < node.childNodes.length; i++) {
+    const childNode = node.childNodes[i];
     const childKey = `${key}.${i}`;
-    const component = transform(node.childNodes[i], childKey, options);
+
+    if (
+      TABLE_ELEMENTS.indexOf(tag) > -1 &&
+      childNode.nodeType === NodeTypes.TEXT
+    ) {
+      childNode.textContent = childNode.textContent.trim();
+      if (childNode.textContent === '') {
+        continue;
+      }
+    }
+
+    const component = transform(childNode, childKey, options);
     if (component !== null) {
       children.push(component);
     }

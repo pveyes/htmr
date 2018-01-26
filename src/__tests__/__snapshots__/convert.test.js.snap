@@ -177,6 +177,23 @@ exports[`preserve child of style tag 1`] = `
 />
 `;
 
+exports[`remove whitespace on table 1`] = `
+<table>
+  <tbody>
+    <tr>
+      <th>
+        title
+      </th>
+    </tr>
+    <tr>
+      <td>
+        entry
+      </td>
+    </tr>
+  </tbody>
+</table>
+`;
+
 exports[`self closing component 1`] = `
 <div>
   <img

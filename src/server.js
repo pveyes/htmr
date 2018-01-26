@@ -21,6 +21,8 @@ type ElementNode = {
 
 type Element = React$Element<*> | string;
 
+const TABLE_ELEMENTS = ['table', 'tbody', 'td', 'th', 'tr'];
+
 function transform(node: Node, key: string, options: HtmrOptions): ?Element {
   const defaultMap = options.map._;
 
@@ -66,6 +68,13 @@ function transform(node: Node, key: string, options: HtmrOptions): ?Element {
       ? null
       : content
           .map((child, index) => {
+            if (TABLE_ELEMENTS.indexOf(tag) > -1 && typeof child == 'string') {
+              child = child.trim();
+              if (child === '') {
+                return null;
+              }
+            }
+
             const childKey = `${key}.${index}`;
             return transform(child, childKey, options);
           })
