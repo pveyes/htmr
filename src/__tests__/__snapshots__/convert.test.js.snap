@@ -76,13 +76,13 @@ exports[`default mapping 1`] = `
 `;
 
 exports[`element inside text node 1`] = `
-<div>
-  what are 
+Array [
+  "what are ",
   <strong>
     you
-  </strong>
-   doing?
-</div>
+  </strong>,
+  " doing?",
+]
 `;
 
 exports[`ignore comment 1`] = `
@@ -120,14 +120,14 @@ exports[`ignore partially invalid style 1`] = `
 `;
 
 exports[`multi children 1`] = `
-<div>
+Array [
   <p>
     Multi
-  </p>
+  </p>,
   <p>
     Component
-  </p>
-</div>
+  </p>,
+]
 `;
 
 exports[`newline between tags 1`] = `
