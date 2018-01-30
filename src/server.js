@@ -21,7 +21,7 @@ type ElementNode = {
 
 type Element = React$Element<*> | string;
 
-const TABLE_ELEMENTS = ['table', 'tbody', 'td', 'th', 'tr'];
+const TABLE_ELEMENTS = ['table', 'tbody', 'thead', 'tfoot', 'tr'];
 
 function transform(node: Node, key: string, options: HtmrOptions): ?Element {
   const defaultMap = options.map._;

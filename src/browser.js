@@ -11,7 +11,7 @@ const NodeTypes = {
   COMMENT: 8,
 };
 
-const TABLE_ELEMENTS = ['table', 'tbody', 'td', 'th', 'tr'];
+const TABLE_ELEMENTS = ['table', 'tbody', 'thead', 'tfoot', 'tr'];
 
 const tempEl = document.createElement('div');
 function unescape(str) {

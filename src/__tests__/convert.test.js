@@ -194,10 +194,10 @@ test('remove whitespace on table', () => {
     <table>
       <tbody>
         <tr>
-          <th>title</th>
+          <th> title</th>
         </tr>
         <tr>
-          <td>entry</td>
+          <td>entry </td>
         </tr>
       </tbody>
     </table>

@@ -182,12 +182,12 @@ exports[`remove whitespace on table 1`] = `
   <tbody>
     <tr>
       <th>
-        title
+         title
       </th>
     </tr>
     <tr>
       <td>
-        entry
+        entry 
       </td>
     </tr>
   </tbody>
