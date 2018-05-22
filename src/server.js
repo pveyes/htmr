@@ -96,11 +96,16 @@ function transform(node: Node, key: string, options: HtmrOptions): ?Element {
 }
 
 function convertServer(html: string, options: Object = {}): ConvertedComponent {
+  if (typeof html !== 'string') {
+    throw new TypeError('Expected HTML string');
+  }
+
   const opts = {
     transform: options.transform || {},
     preserveAttributes: options.preserveAttributes || [],
   };
   const ast = parse(html.trim());
+
   const components = ast
     .map((node, index) => transform(node, index.toString(), opts))
     .filter(node => node !== null);

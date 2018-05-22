@@ -11,6 +11,19 @@ test('convert correctly', () => {
   testRender(html);
 });
 
+test('make sure HTML is string', () => {
+  const error = new Error('Expected HTML string');
+  const fixtures = [null, [], {}, 1, true];
+
+  // server & browser
+  expect.assertions(fixtures.length * 2);
+
+  fixtures.forEach(fixture => {
+    expect(() => convertServer(fixture)).toThrow(error);
+    expect(() => convertBrowser(fixture)).toThrow(error);
+  });
+});
+
 test('supports valid html attribute', () => {
   const html = [
     '<div data-type="calendar" aria-describedby="info">',
@@ -25,7 +38,7 @@ test('supports valid html attribute', () => {
 });
 
 test('unsafe html attributes', () => {
-  const html = '<label class="input-text" for="name"></div>';
+  const html = '<label class="input-text" for="name"></label>';
   testRender(html);
 });
 

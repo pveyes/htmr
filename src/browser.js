@@ -93,6 +93,10 @@ function convertBrowser(
   html: string,
   options: HtmrOptions = {}
 ): ConvertedComponent {
+  if (typeof html !== 'string') {
+    throw new TypeError('Expected HTML string');
+  }
+
   const opts = {
     transform: options.transform || {},
     preserveAttributes: options.preserveAttributes || [],
