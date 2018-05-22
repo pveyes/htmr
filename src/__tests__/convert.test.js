@@ -121,7 +121,7 @@ test('unescape html entities', () => {
 test('decode html entities on defaultMap', () => {
   const html = '<div class="entities">&amp; and &</div>';
   testRender(html, {
-    map: {
+    transform: {
       _: (node, props, children) => {
         if (typeof props === 'undefined') {
           return node;
@@ -156,7 +156,7 @@ test('custom component', () => {
     </p>
   );
 
-  testRender(html, { map: { p: Paragraph } });
+  testRender(html, { transform: { p: Paragraph } });
 });
 
 test('default mapping', () => {
@@ -171,7 +171,7 @@ test('default mapping', () => {
     return <div {...props}>{children}</div>;
   };
 
-  testRender(html, { map: { _: defaultMap } });
+  testRender(html, { transform: { _: defaultMap } });
 });
 
 test('whitespace only text nodes', () => {

@@ -24,7 +24,7 @@ type Element = React$Element<*> | string;
 const TABLE_ELEMENTS = ['table', 'tbody', 'thead', 'tfoot', 'tr'];
 
 function transform(node: Node, key: string, options: HtmrOptions): ?Element {
-  const defaultMap = options.map._;
+  const defaultTransform = options.transform._;
 
   if (typeof node === 'string') {
     // newline and space will be parsed as 'node' in posthtml-parser,
@@ -35,11 +35,11 @@ function transform(node: Node, key: string, options: HtmrOptions): ?Element {
     }
 
     const str = HtmlEntity.decode(node);
-    return defaultMap ? defaultMap(str) : str;
+    return defaultTransform ? defaultTransform(str) : str;
   }
 
   const { tag, attrs, content } = node;
-  const customElement = options.map[tag];
+  const customElement = options.transform[tag];
 
   // decode all attribute value
   if (attrs) {
@@ -57,7 +57,7 @@ function transform(node: Node, key: string, options: HtmrOptions): ?Element {
   );
 
   // style tag needs to preserve its children
-  if (tag === 'style' && !customElement && !defaultMap) {
+  if (tag === 'style' && !customElement && !defaultTransform) {
     props.dangerouslySetInnerHTML = { __html: content[0] };
     return React.createElement(tag, props, null);
   }
@@ -88,8 +88,8 @@ function transform(node: Node, key: string, options: HtmrOptions): ?Element {
     return React.createElement(customElement, props, children);
   }
 
-  if (defaultMap) {
-    return defaultMap(tag, props, children);
+  if (defaultTransform) {
+    return defaultTransform(tag, props, children);
   }
 
   return React.createElement(tag, props, children);
@@ -97,7 +97,7 @@ function transform(node: Node, key: string, options: HtmrOptions): ?Element {
 
 function convertServer(html: string, options: Object = {}): ConvertedComponent {
   const opts = {
-    map: options.map || {},
+    transform: options.transform || {},
     preserveAttributes: options.preserveAttributes || [],
   };
   const ast = parse(html.trim());
