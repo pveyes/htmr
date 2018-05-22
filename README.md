@@ -37,6 +37,7 @@ The API also accepts second argument `options` containing few fields
 ```js
 const options = {
   map: {},
+  preserveAttributes: [],
 };
 convert(html, options);
 ```
@@ -88,7 +89,7 @@ const map = {
     return React.createElement(node, props, children);
   },
 };
-convert(html, map);
+convert(html, { map });
 ```
 
 This can be useful if you want to do string preprocessing (like removing all whitespace), or rendering HTML as native view in [react-native](https://github.com/facebook/react-native):
@@ -121,6 +122,16 @@ class NativeHTMLRenderer extends React.Component {
     return convert(this.props.html, { map });
   }
 }
+```
+
+### preserveAttributes
+
+By default `htmr` will convert attribute to camelCase version because that's what react uses. You can override this behavior by passing `preserveAttributes` options. Specify array of string / regular expression to test which attributes you want to preserve.
+
+For example you want to make sure `ng-if`, `v-if` and `v-for` to be rendered as is
+
+```js
+convert(html, { preserveAttributes: ['ng-if', new RegExp('v-')] });
 ```
 
 ### Multiple children

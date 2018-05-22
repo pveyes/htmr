@@ -44,7 +44,7 @@ function transform(node, key: number, options: HtmrOptions) {
   }
 
   attrs.key = key.toString();
-  const props = mapAttribute(attrs);
+  const props = mapAttribute(attrs, options.preserveAttributes);
 
   let children = [];
   for (let i = 0; i < node.childNodes.length; i++) {
@@ -93,7 +93,10 @@ function convertBrowser(
   html: string,
   options: HtmrOptions = {}
 ): ConvertedComponent {
-  const opts = { map: options.map || {} };
+  const opts = {
+    map: options.map || {},
+    preserveAttributes: options.preserveAttributes || [],
+  };
   const container = document.createElement('div');
   container.innerHTML = html.trim();
 

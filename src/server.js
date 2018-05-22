@@ -50,7 +50,7 @@ function transform(node: Node, key: string, options: HtmrOptions): ?Element {
 
   const props = Object.assign(
     {},
-    mapAttribute(attrs),
+    mapAttribute(attrs, options.preserveAttributes),
     // always set key because it's possible the html source contains
     // multiple elements
     { key }
@@ -96,7 +96,10 @@ function transform(node: Node, key: string, options: HtmrOptions): ?Element {
 }
 
 function convertServer(html: string, options: Object = {}): ConvertedComponent {
-  const opts = { map: options.map || {} };
+  const opts = {
+    map: options.map || {},
+    preserveAttributes: options.preserveAttributes || [],
+  };
   const ast = parse(html.trim());
   const components = ast
     .map((node, index) => transform(node, index.toString(), opts))

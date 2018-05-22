@@ -33,7 +33,10 @@ const attributeMap: Object = preval`
 `;
 
 // convert attr to valid react props
-export default function mapAttribute(attrs: Attributes = {}) {
+export default function mapAttribute(
+  attrs: Attributes = {},
+  preserveAttributes: Array<String | RegExp>
+) {
   return Object.keys(attrs).reduce((result, attr) => {
     // ignore inline event attribute
     if (/^on.*/.test(attr)) {
@@ -44,7 +47,18 @@ export default function mapAttribute(attrs: Attributes = {}) {
     // https://facebook.github.io/react/docs/dom-elements.html
     let attributeName = attr;
     if (!/^(data|aria)-/.test(attr)) {
-      attributeName = hypenColonToCamelCase(attr);
+      // Allow preserving non-standard attribute, e.g: `ng-if`
+      const preserved = preserveAttributes.filter(at => {
+        if (at instanceof RegExp) {
+          return at.test(attr);
+        }
+
+        return at === attr;
+      });
+
+      if (preserved.length === 0) {
+        attributeName = hypenColonToCamelCase(attr);
+      }
     }
 
     const name = attributeMap[attributeName] || attributeName;

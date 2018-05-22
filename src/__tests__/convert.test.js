@@ -206,6 +206,16 @@ test('remove whitespace on table', () => {
   testRender(html);
 });
 
+test('allow preserve some attributes', () => {
+  const html = `
+    <div ng-if="x">
+      <div tv-abc="d" tv-xxx="y"></div>
+    </div>
+  `;
+
+  testRender(html, { preserveAttributes: ['ng-if', new RegExp('tv-')] });
+});
+
 /**
  * Test utilities
  */

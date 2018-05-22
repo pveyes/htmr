@@ -1,5 +1,20 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`allow preserve some attributes 1`] = `
+<div
+  ng-if="x"
+>
+  
+      
+  <div
+    tv-abc="d"
+    tv-xxx="y"
+  />
+  
+    
+</div>
+`;
+
 exports[`convert correctly 1`] = `
 <p
   id="test"
