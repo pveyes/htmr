@@ -51,7 +51,7 @@
     "react": "^15.6.1 || ^16.0.0"
   },
   "devDependencies": {
-    "babel-plugin-preval": "^2.0.0",
+    "babel-plugin-preval": "^3.0.0",
     "babel-plugin-transform-object-rest-spread": "^6.23.0",
     "babel-preset-env": "^1.6.0",
     "babel-preset-react": "^6.24.1",
