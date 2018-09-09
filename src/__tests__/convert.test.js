@@ -2,6 +2,7 @@
 import React from 'react';
 import renderer from 'react-test-renderer';
 import snapshot from 'jest-snapshot';
+import diff from 'jest-diff';
 
 import convertServer from '../server';
 import convertBrowser from '../browser';
@@ -229,6 +230,39 @@ test('allow preserve some attributes', () => {
   testRender(html, { preserveAttributes: ['ng-if', new RegExp('tv-')] });
 });
 
+expect.extend({
+  toRenderConsistently({ server, browser }, html) {
+    const serverRender = renderer.create(server);
+    const browserRender = renderer.create(browser);
+
+    const serverHtml = snapshot.utils.serialize(serverRender);
+    const browserHtml = snapshot.utils.serialize(browserRender);
+
+    const diffString = diff(serverHtml, browserHtml, { expand: this.expand });
+    const pass = serverHtml === browserHtml;
+    let messageExpectation;
+
+    if (pass) {
+      messageExpectation =
+        'Expected server rendered HTML to not equal browser rendered HTML';
+    } else {
+      messageExpectation =
+        'Expected server rendered HTML to equal browser rendered HTML';
+    }
+
+    const message = () =>
+      messageExpectation +
+      '\n\n' +
+      'Server render:\n' +
+      `  ${this.utils.printExpected(serverHtml)}\n` +
+      'Browser render:\n' +
+      `  ${this.utils.printReceived(browserHtml)}\n` +
+      (diffString ? `\n\nDifference:\n\n${diffString}` : '');
+
+    return { message, pass };
+  },
+});
+
 /**
  * Test utilities
  */
@@ -237,16 +271,9 @@ function testRender(html, options) {
   let server = convertServer(html, options);
   let browser = convertBrowser(html, options);
 
-  const rs = renderer.create(server);
-  const rb = renderer.create(browser);
-
-  // make sure return value is the same between server and browser
-  // compare snapshot result to make sure they're the exact same
-  // Expected: browser
-  // Received: server
-  expect(snapshot.utils.serialize(rs)).toEqual(snapshot.utils.serialize(rb));
+  expect({ server, browser }).toRenderConsistently(html);
 
   // assert snapshot, doesn't matter from server or browser
   // because we've already done assert equal between them
-  expect(rs).toMatchSnapshot();
+  expect(renderer.create(server)).toMatchSnapshot();
 }
