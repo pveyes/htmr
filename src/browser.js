@@ -23,18 +23,18 @@ function unescape(str) {
 }
 
 function transform(node, key: number, options: HtmrOptions) {
-  const defaultMap = options.map._;
+  const defaultTransform = options.transform._;
 
   if (node.nodeType === NodeTypes.COMMENT) {
     return null;
   } else if (node.nodeType === NodeTypes.TEXT) {
     const text = unescape(node.textContent);
-    return defaultMap ? defaultMap(text) : text;
+    return defaultTransform ? defaultTransform(text) : text;
   }
 
   // element
   const tag = node.tagName.toLowerCase();
-  const customElement = options.map[tag];
+  const customElement = options.transform[tag];
 
   const attrs = {};
   for (let i = 0; i < node.attributes.length; i++) {
@@ -44,7 +44,7 @@ function transform(node, key: number, options: HtmrOptions) {
   }
 
   attrs.key = key.toString();
-  const props = mapAttribute(attrs);
+  const props = mapAttribute(attrs, options.preserveAttributes);
 
   let children = [];
   for (let i = 0; i < node.childNodes.length; i++) {
@@ -68,7 +68,7 @@ function transform(node, key: number, options: HtmrOptions) {
   }
 
   // style tag needs to preserve its children
-  if (tag === 'style' && !customElement && !defaultMap) {
+  if (tag === 'style' && !customElement && !defaultTransform) {
     props.dangerouslySetInnerHTML = { __html: children[0] };
     return React.createElement(tag, props, null);
   }
@@ -82,8 +82,8 @@ function transform(node, key: number, options: HtmrOptions) {
     return React.createElement(customElement, props, children);
   }
 
-  if (defaultMap) {
-    return defaultMap(tag, props, children);
+  if (defaultTransform) {
+    return defaultTransform(tag, props, children);
   }
 
   return React.createElement(tag, props, children);
@@ -93,7 +93,14 @@ function convertBrowser(
   html: string,
   options: HtmrOptions = {}
 ): ConvertedComponent {
-  const opts = { map: options.map || {} };
+  if (typeof html !== 'string') {
+    throw new TypeError('Expected HTML string');
+  }
+
+  const opts = {
+    transform: options.transform || {},
+    preserveAttributes: options.preserveAttributes || [],
+  };
   const container = document.createElement('div');
   container.innerHTML = html.trim();
 

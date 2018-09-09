@@ -2,6 +2,7 @@
 import React from 'react';
 import renderer from 'react-test-renderer';
 import snapshot from 'jest-snapshot';
+import diff from 'jest-diff';
 
 import convertServer from '../server';
 import convertBrowser from '../browser';
@@ -9,6 +10,19 @@ import convertBrowser from '../browser';
 test('convert correctly', () => {
   const html = '<p id="test">This is cool</p>';
   testRender(html);
+});
+
+test('make sure HTML is string', () => {
+  const error = new Error('Expected HTML string');
+  const fixtures = [null, [], {}, 1, true];
+
+  // server & browser
+  expect.assertions(fixtures.length * 2);
+
+  fixtures.forEach(fixture => {
+    expect(() => convertServer(fixture)).toThrow(error);
+    expect(() => convertBrowser(fixture)).toThrow(error);
+  });
 });
 
 test('supports valid html attribute', () => {
@@ -25,7 +39,7 @@ test('supports valid html attribute', () => {
 });
 
 test('unsafe html attributes', () => {
-  const html = '<label class="input-text" for="name"></div>';
+  const html = '<label class="input-text" for="name"></label>';
   testRender(html);
 });
 
@@ -121,7 +135,7 @@ test('unescape html entities', () => {
 test('decode html entities on defaultMap', () => {
   const html = '<div class="entities">&amp; and &</div>';
   testRender(html, {
-    map: {
+    transform: {
       _: (node, props, children) => {
         if (typeof props === 'undefined') {
           return node;
@@ -156,7 +170,7 @@ test('custom component', () => {
     </p>
   );
 
-  testRender(html, { map: { p: Paragraph } });
+  testRender(html, { transform: { p: Paragraph } });
 });
 
 test('default mapping', () => {
@@ -171,7 +185,7 @@ test('default mapping', () => {
     return <div {...props}>{children}</div>;
   };
 
-  testRender(html, { map: { _: defaultMap } });
+  testRender(html, { transform: { _: defaultMap } });
 });
 
 test('whitespace only text nodes', () => {
@@ -206,6 +220,49 @@ test('remove whitespace on table', () => {
   testRender(html);
 });
 
+test('allow preserve some attributes', () => {
+  const html = `
+    <div ng-if="x">
+      <div tv-abc="d" tv-xxx="y"></div>
+    </div>
+  `;
+
+  testRender(html, { preserveAttributes: ['ng-if', new RegExp('tv-')] });
+});
+
+expect.extend({
+  toRenderConsistently({ server, browser }, html) {
+    const serverRender = renderer.create(server);
+    const browserRender = renderer.create(browser);
+
+    const serverHtml = snapshot.utils.serialize(serverRender);
+    const browserHtml = snapshot.utils.serialize(browserRender);
+
+    const diffString = diff(serverHtml, browserHtml, { expand: this.expand });
+    const pass = serverHtml === browserHtml;
+    let messageExpectation;
+
+    if (pass) {
+      messageExpectation =
+        'Expected server rendered HTML to not equal browser rendered HTML';
+    } else {
+      messageExpectation =
+        'Expected server rendered HTML to equal browser rendered HTML';
+    }
+
+    const message = () =>
+      messageExpectation +
+      '\n\n' +
+      'Server render:\n' +
+      `  ${this.utils.printExpected(serverHtml)}\n` +
+      'Browser render:\n' +
+      `  ${this.utils.printReceived(browserHtml)}\n` +
+      (diffString ? `\n\nDifference:\n\n${diffString}` : '');
+
+    return { message, pass };
+  },
+});
+
 /**
  * Test utilities
  */
@@ -214,16 +271,9 @@ function testRender(html, options) {
   let server = convertServer(html, options);
   let browser = convertBrowser(html, options);
 
-  const rs = renderer.create(server);
-  const rb = renderer.create(browser);
-
-  // make sure return value is the same between server and browser
-  // compare snapshot result to make sure they're the exact same
-  // Expected: browser
-  // Received: server
-  expect(snapshot.utils.serialize(rs)).toEqual(snapshot.utils.serialize(rb));
+  expect({ server, browser }).toRenderConsistently(html);
 
   // assert snapshot, doesn't matter from server or browser
   // because we've already done assert equal between them
-  expect(rs).toMatchSnapshot();
+  expect(renderer.create(server)).toMatchSnapshot();
 }

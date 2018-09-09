@@ -36,14 +36,15 @@ The API also accepts second argument `options` containing few fields
 
 ```js
 const options = {
-  map: {},
+  transform: {},
+  preserveAttributes: [],
 };
 convert(html, options);
 ```
 
-### map
+### transform
 
-map accepts key value object that maps tagName (key) to Component (value). You can use it to render specific tag name using custom component. For example: component with
+transform accepts key value object that transforms node (key) to custom component (value). You can use it to render specific tag name with custom component. For example: component with
 predefined styles such as [emotion](https://github.com/tkh44/emotion) /
 [styled-components](https://github.com/styled-components/styled-components).
 
@@ -57,39 +58,21 @@ const Paragraph = styled('p')`
   line-height: 1.5;
 `;
 
-const map = {
+const transform = {
   p: Paragraph,
+  // you can also pass string for native DOM node
+  span: 'div',
 };
 
 class Component extends React.Component {
   render() {
     // will return <Paragraph>{'Custom component'}</Paragraph>
-    return convert('<p>Custom component</p>', { map });
+    return convert('<p>Custom component</p>', { transform });
   }
 }
 ```
 
-You can also use component mapping to achieve more things, like
-[attaching event handler](https://gist.github.com/pveyes/be1da04bdbf57d6e487daf4b596af7cd#file-eventhandler-js),
-[map component by its HTML attribute](https://gist.github.com/pveyes/be1da04bdbf57d6e487daf4b596af7cd#file-mapcomponentbyattribute-js).
-
-`map` also accepts default component mapper using underscore `_` syntax, similar to [pattern matching](https://reasonml.github.io/docs/en/pattern-matching.html) default handler:
-
-```js
-const map = {
-  _: (node, props, children) => {
-    // returns react element
-    // defaults to `return node` for text node / string
-    // and `return React.createElement(node, props, children)` for HTML node
-    if (typeof props === 'undefined') {
-      return node;
-    }
-
-    return React.createElement(node, props, children);
-  },
-};
-convert(html, map);
-```
+You can also provide default transform using underscore `_` syntax, similar to [pattern matching](https://reasonml.github.io/docs/en/pattern-matching.html) special fall-through case.
 
 This can be useful if you want to do string preprocessing (like removing all whitespace), or rendering HTML as native view in [react-native](https://github.com/facebook/react-native):
 
@@ -99,7 +82,7 @@ import { Text, View } from 'react-native';
 
 let i = 0;
 
-const map = {
+const transform = {
   // react-native uses View instead of div
   div: View,
   _: (node, props, children) => {
@@ -118,12 +101,22 @@ const map = {
 
 class NativeHTMLRenderer extends React.Component {
   render() {
-    return convert(this.props.html, { map });
+    return convert(this.props.html, { transform });
   }
 }
 ```
 
-### Multiple children
+### preserveAttributes
+
+By default `htmr` will convert attribute to camelCase version because that's what react uses. You can override this behavior by passing `preserveAttributes` options. Specify array of string / regular expression to test which attributes you want to preserve.
+
+For example you want to make sure `ng-if`, `v-if` and `v-for` to be rendered as is
+
+```js
+convert(html, { preserveAttributes: ['ng-if', new RegExp('v-')] });
+```
+
+## Multiple children
 
 You can also convert HTML string which contains multiple elements. This returns
 an array, so make sure to wrap the output inside other component such as div, or
