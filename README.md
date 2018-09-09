@@ -1,11 +1,8 @@
-# htmr [![Build Status](https://travis-ci.org/pveyes/htmr.svg?branch=master)](https://travis-ci.org/pveyes/htmr) [![bundle size](http://img.badgesize.io/https://unpkg.com/htmr/lib/htmr.min.js?compression=gzip)](https://unpkg.com/htmr/lib/htmr.min.js)
+# htmr [![Build Status](https://travis-ci.org/pveyes/htmr.svg?branch=master)](https://travis-ci.org/pveyes/htmr) [![bundle size](http://img.badgesize.io/https://unpkg.com/htmr/lib/htmr.min.js?compression=gzip)](https://unpkg.com/htmr/lib/htmr.min.js) [![codecov](https://codecov.io/gh/pveyes/htmr/branch/master/graph/badge.svg)](https://codecov.io/gh/pveyes/htmr)
 
 [![Greenkeeper badge](https://badges.greenkeeper.io/pveyes/htmr.svg)](https://greenkeeper.io/)
 
-> Simple and lightweight HTML to react component converter
-
-Convert HTML string to React component using simple API that works universally
-in server and browser in a small package (< 2kB minified gzipped)
+> Simple and lightweight (< 2kB) HTML string to react element conversion library
 
 ## Install
 
@@ -19,7 +16,7 @@ $ npm install htmr --save
 
 ## Usage
 
-Usage is quite straightforward, use the default export, and pass HTML string.
+Use the default export, and pass HTML string.
 
 ```js
 import React from 'react';
@@ -32,7 +29,7 @@ class Component extends React.Component {
 }
 ```
 
-The API also accepts second argument `options` containing few fields
+The API also accepts second argument `options` containing few optional fields:
 
 ```js
 const options = {
@@ -44,7 +41,7 @@ convert(html, options);
 
 ### transform
 
-transform accepts key value object that transforms node (key) to custom component (value). You can use it to render specific tag name with custom component. For example: component with
+transform accepts key value pairs, that will be used to transforms node (key) to custom component (value). You can use it to render specific tag name with custom component. For example: component with
 predefined styles such as [emotion](https://github.com/tkh44/emotion) /
 [styled-components](https://github.com/styled-components/styled-components).
 
@@ -61,13 +58,13 @@ const Paragraph = styled('p')`
 const transform = {
   p: Paragraph,
   // you can also pass string for native DOM node
-  span: 'div',
+  a: 'span',
 };
 
 class Component extends React.Component {
   render() {
-    // will return <Paragraph>{'Custom component'}</Paragraph>
-    return convert('<p>Custom component</p>', { transform });
+    // will return <Paragraph><span>{'Custom component'}</span></Paragraph>
+    return convert('<p><a>Custom component</a></p>', { transform });
   }
 }
 ```
@@ -87,6 +84,7 @@ const transform = {
   div: View,
   _: (node, props, children) => {
     // react-native can't render string without <Text> component
+    // we can test text node by checking component props, text node won't have them
     if (typeof props === 'undefined') {
       // we use auto incrementing key because it's possible that <Text>
       // is rendered inside array as sibling
@@ -134,9 +132,10 @@ const html = `
 
 class Component extends React.Component {
   render() {
-    // if using react 16
+    // if using react 16, simply use the return value because
+    // v16 can render array
     return convert(html);
-    // if using react 15 and below
+    // if using react 15 and below, wrap in another component
     return <div>{convert(html)}</div>;
   }
 }
