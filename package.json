@@ -56,7 +56,7 @@
     "babel-preset-env": "^1.6.0",
     "babel-preset-react": "^6.24.1",
     "bundlesize": "^0.17.0",
-    "flow-bin": "^0.80.0",
+    "flow-bin": "^0.87.0",
     "husky": "^1.0.0",
     "jest": "^22.0.5",
     "lint-staged": "^7.0.0",
