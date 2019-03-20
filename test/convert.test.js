@@ -4,8 +4,8 @@ import renderer from 'react-test-renderer';
 import snapshot from 'jest-snapshot';
 import diff from 'jest-diff';
 
-import convertServer from '../server';
-import convertBrowser from '../browser';
+import convertServer from '../src/server';
+import convertBrowser from '../src/browser';
 
 test('convert correctly', () => {
   const html = '<p id="test">This is cool</p>';

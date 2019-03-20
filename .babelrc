@@ -1,12 +1,7 @@
 {
   "presets": [
-    ["env", {
-      "modules": false
-    }],
-    "react"
-  ],
-  "plugins": [
-    "preval",
-    "transform-object-rest-spread",
+    "@babel/preset-env",
+    "@babel/preset-react",
+    "@babel/preset-typescript"
   ]
 }

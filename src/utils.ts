@@ -1,4 +1,4 @@
-export function hypenColonToCamelCase(str) {
+export function hypenColonToCamelCase(str: string): string {
   // convert hypen and colon to camel case
   // color-profile -> colorProfile
   // xlink:role -> xlinkRole

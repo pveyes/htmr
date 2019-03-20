@@ -1,34 +1,34 @@
-import resolve from 'rollup-plugin-node-resolve';
-import commonjs from 'rollup-plugin-commonjs';
-import babel from 'rollup-plugin-babel';
-import uglify from 'rollup-plugin-uglify';
+import typescript2 from 'rollup-plugin-typescript2';
+import { terser } from 'rollup-plugin-terser';
+import json from 'rollup-plugin-json';
 
 export default [
   // browser-friendly UMD build
   {
-    input: 'src/browser.js',
+    input: 'src/browser.ts',
     external: ['react'],
     output: {
       name: 'htmr',
       file: 'lib/htmr.min.js',
       format: 'umd',
+      globals: {
+        'react': 'React',
+      }
     },
     plugins: [
-      babel({ exclude: 'node_modules/**' }),
-      commonjs({ include: 'node_modules/**' }),
-      resolve(),
-      uglify(),
+      typescript2(),
+      terser(),
+      json(),
     ],
   },
   // commonJS
   {
-    input: 'src/server.js',
+    input: 'src/server.ts',
     external: ['posthtml-parser', 'react', 'html-entities'],
     output: [{ file: 'lib/index.js', format: 'cjs' }],
     plugins: [
-      babel({
-        exclude: 'node_modules/**',
-      }),
+      typescript2(),
+      json(),
     ],
   },
 ];
