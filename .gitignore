@@ -1,6 +1,5 @@
 node_modules/
-lib/index.js
-lib/module.js
-lib/htmr.min.js
+lib/
 coverage/
 *.log
+*cache*

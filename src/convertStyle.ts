@@ -2,7 +2,7 @@
 // Based on https://github.com/reactjs/react-magic/blob/master/src/htmltojsx.js
 import { hypenColonToCamelCase } from './utils';
 
-export type Style = {
+export type StyleObject = {
   [key: string]: number | string,
 };
 
@@ -24,8 +24,8 @@ function convertValue(value: string): number | string {
   return value.replace(/'/g, '"');
 }
 
-export default function convertStyle(styleStr: string): Style {
-  const style = {};
+export default function convertStyle(styleStr: string): StyleObject {
+  const style = {} as StyleObject;
 
   styleStr
     .split(';')

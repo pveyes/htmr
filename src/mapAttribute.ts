@@ -1,42 +1,31 @@
-// @flow
 /* global preval */
-import convertStyle from './convertStyle';
+import convertStyle, { StyleObject } from './convertStyle';
 import { hypenColonToCamelCase } from './utils';
+import attributes from './attribute.json';
 
-type Attributes = {
-  [key: string]: string,
+declare const preval: (str: TemplateStringsArray) => any;
+
+export type RawAttributes = {
+  [key: string]: string | number,
+} & {
+  style?: string
 };
 
-// only includes attribute that needs mapping (lowercase -> camelCase)
-// credits: https://github.com/noraesae/react-attr-converter/blob/master/index.js
-const attributeMap: Object = preval`
-  const map = JSON.parse(
-    require('fs').readFileSync(
-      require('path').resolve(
-        process.cwd(),
-        './src/attribute.json',
-      )
-    )
-  );
+type AttributeMap = {
+  [key: string]: string
+}
 
-  const attributeMap = Object
-    .keys(map)
-    .reduce((result, attr) => {
-      if (attr !== map[attr]) {
-        result[attr] = map[attr];
-      }
+type Attributes = {
+  [key: string]: number | string | StyleObject,
+}
 
-      return result;
-    }, {});
-
-  module.exports = attributeMap;
-`;
+const attributeMap = <AttributeMap>attributes;
 
 // convert attr to valid react props
 export default function mapAttribute(
-  attrs: Attributes = {},
+  attrs = {} as RawAttributes,
   preserveAttributes: Array<String | RegExp>
-) {
+): Attributes {
   return Object.keys(attrs).reduce((result, attr) => {
     // ignore inline event attribute
     if (/^on.*/.test(attr)) {
@@ -63,11 +52,13 @@ export default function mapAttribute(
 
     const name = attributeMap[attributeName] || attributeName;
     if (name === 'style') {
-      result[name] = convertStyle(attrs.style);
+      // if there's an attribute called style, this means that the value must be exists
+      // even if it's an empty string
+      result[name] = convertStyle(attrs.style!);
     } else {
       result[name] = attrs[attr];
     }
 
     return result;
-  }, {});
+  }, {} as Attributes);
 }

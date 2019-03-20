@@ -4,7 +4,7 @@ import React from 'react';
 import { AllHtmlEntities as HtmlEntity } from 'html-entities';
 import mapAttribute from './mapAttribute';
 
-import type { HtmrOptions, ConvertedComponent } from './types';
+import { HtmrOptions, ChildComponent } from './types';
 
 // eslint-disable-next-line no-use-before-define
 type Node = ElementNode | TextNode;
@@ -19,11 +19,9 @@ type ElementNode = {
   content: Array<Node>,
 };
 
-type Element = React$Element<*> | string;
-
 const TABLE_ELEMENTS = ['table', 'tbody', 'thead', 'tfoot', 'tr'];
 
-function transform(node: Node, key: string, options: HtmrOptions): ?Element {
+function transform(node: Node, key: string, options: HtmrOptions): ChildComponent {
   const defaultTransform = options.transform._;
 
   if (typeof node === 'string') {
@@ -58,7 +56,7 @@ function transform(node: Node, key: string, options: HtmrOptions): ?Element {
 
   // style tag needs to preserve its children
   if (tag === 'style' && !customElement && !defaultTransform) {
-    props.dangerouslySetInnerHTML = { __html: content[0] };
+    props.dangerouslySetInnerHTML = { __html: <string>content[0] };
     return React.createElement(tag, props, null);
   }
 
@@ -67,18 +65,18 @@ function transform(node: Node, key: string, options: HtmrOptions): ?Element {
     content === undefined
       ? null
       : content
-          .map((child, index) => {
-            if (TABLE_ELEMENTS.indexOf(tag) > -1 && typeof child == 'string') {
-              child = child.trim();
-              if (child === '') {
-                return null;
-              }
+        .map((child, index) => {
+          if (TABLE_ELEMENTS.indexOf(tag) > -1 && typeof child == 'string') {
+            child = child.trim();
+            if (child === '') {
+              return null;
             }
+          }
 
-            const childKey = `${key}.${index}`;
-            return transform(child, childKey, options);
-          })
-          .filter(child => child !== null);
+          const childKey = `${key}.${index}`;
+          return transform(child, childKey, options);
+        })
+        .filter(child => child !== null);
 
   if (children && children.length === 0) {
     children = null;
@@ -95,7 +93,7 @@ function transform(node: Node, key: string, options: HtmrOptions): ?Element {
   return React.createElement(tag, props, children);
 }
 
-function convertServer(html: string, options: Object = {}): ConvertedComponent {
+function convertServer(html: string, options = {} as HtmrOptions) {
   if (typeof html !== 'string') {
     throw new TypeError('Expected HTML string');
   }
@@ -104,7 +102,7 @@ function convertServer(html: string, options: Object = {}): ConvertedComponent {
     transform: options.transform || {},
     preserveAttributes: options.preserveAttributes || [],
   };
-  const ast = parse(html.trim());
+  const ast: Array<Node> = parse(html.trim());
 
   const components = ast
     .map((node, index) => transform(node, index.toString(), opts))
