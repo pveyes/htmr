@@ -52,7 +52,9 @@ export default function mapAttribute(
 
     const name = attributeMap[attributeName] || attributeName;
     if (name === 'style') {
-      result[name] = convertStyle(attrs.style);
+      // if there's an attribute called style, this means that the value must be exists
+      // even if it's an empty string
+      result[name] = convertStyle(attrs.style!);
     } else {
       result[name] = attrs[attr];
     }

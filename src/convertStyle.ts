@@ -24,12 +24,8 @@ function convertValue(value: string): number | string {
   return value.replace(/'/g, '"');
 }
 
-export default function convertStyle(styleStr?: string): StyleObject {
+export default function convertStyle(styleStr: string): StyleObject {
   const style = {} as StyleObject;
-
-  if (!styleStr) {
-    return style;
-  }
 
   styleStr
     .split(';')
