@@ -1,10 +1,10 @@
 // @flow
 import parse from 'posthtml-parser';
-import React, { ReactHTML } from 'react';
+import React from 'react';
 import { AllHtmlEntities as HtmlEntity } from 'html-entities';
 import mapAttribute from './mapAttribute';
 
-import { HtmrOptions, ChildComponent } from './types';
+import { HtmrOptions, ChildComponent, HTMLTags } from './types';
 
 // eslint-disable-next-line no-use-before-define
 type Node = ElementNode | TextNode;
@@ -12,7 +12,7 @@ type Node = ElementNode | TextNode;
 type TextNode = string;
 
 type ElementNode = {
-  tag: keyof ReactHTML,
+  tag: HTMLTags,
   attrs: {
     [key: string]: string,
   },
