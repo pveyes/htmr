@@ -93,7 +93,7 @@ function transform(node: Node, key: string, options: HtmrOptions): ChildComponen
   return React.createElement(tag, props, children);
 }
 
-function convertServer(html: string, options = {} as HtmrOptions) {
+export default function convertServer(html: string, options: Partial<HtmrOptions> = {}) {
   if (typeof html !== 'string') {
     throw new TypeError('Expected HTML string');
   }
@@ -114,5 +114,3 @@ function convertServer(html: string, options = {} as HtmrOptions) {
 
   return components[0];
 }
-
-module.exports = convertServer;
