@@ -2,7 +2,7 @@
 // Based on https://github.com/reactjs/react-magic/blob/master/src/htmltojsx.js
 import React from 'react';
 import mapAttribute, { RawAttributes } from './mapAttribute';
-import { HtmrOptions, ChildComponent } from './types';
+import { HtmrOptions, ChildComponent, HTMLTags } from './types';
 
 // https://developer.mozilla.org/en-US/docs/Web/API/Node.nodeType
 const NodeTypes = {
@@ -33,7 +33,7 @@ function transform(node: any, key: string, options: HtmrOptions): ChildComponent
   }
 
   // element
-  const tag = node.tagName.toLowerCase();
+  const tag = node.tagName.toLowerCase() as HTMLTags;
   const customElement = options.transform[tag];
 
   const attrs: RawAttributes = {};
@@ -91,7 +91,7 @@ function transform(node: any, key: string, options: HtmrOptions): ChildComponent
 
 function convertBrowser(
   html: string,
-  options = {} as HtmrOptions
+  options: Partial<HtmrOptions> = {}
 ) {
   if (typeof html !== 'string') {
     throw new TypeError('Expected HTML string');
