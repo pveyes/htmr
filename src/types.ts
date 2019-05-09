@@ -7,7 +7,7 @@ type HTMLTransform = {
 };
 
 type DefaultTransform = {
-  _: <T>(element: string | HTMLTags, props: T, children: ReactNode) => ReactElement<T>
+  _: <T>(element: string | HTMLTags, props?: T, children?: ReactNode) => ReactElement<T>
 }
 
 export type HtmrOptions = {

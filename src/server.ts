@@ -33,7 +33,7 @@ function transform(node: Node, key: string, options: HtmrOptions): ChildComponen
     }
 
     const str = HtmlEntity.decode(node);
-    return defaultTransform ? defaultTransform(str, null, null) : str;
+    return defaultTransform ? defaultTransform(str) : str;
   }
 
   const { tag, attrs, content } = node;

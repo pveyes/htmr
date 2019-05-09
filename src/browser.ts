@@ -29,7 +29,7 @@ function transform(node: any, key: string, options: HtmrOptions): ChildComponent
     return null;
   } else if (node.nodeType === NodeTypes.TEXT) {
     const text = unescape(node.textContent);
-    return defaultTransform ? defaultTransform(text, null, null) : text;
+    return defaultTransform ? defaultTransform(text) : text;
   }
 
   // element
