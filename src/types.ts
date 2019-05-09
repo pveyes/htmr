@@ -1,11 +1,17 @@
-import { ReactElement } from "react";
+import { ReactElement, ReactHTML, ReactNode, ComponentType } from "react";
 
-export type NodeMap = {
-  [key: string]: any,
+export type HTMLTags = keyof ReactHTML;
+
+type HTMLTransform = {
+  [tag in HTMLTags]: HTMLTags | ComponentType;
 };
 
+type DefaultTransform = {
+  _: <T>(element: string | HTMLTags, props: T, children: ReactNode) => ReactElement<T>
+}
+
 export type HtmrOptions = {
-  transform: NodeMap,
+  transform: Partial<HTMLTransform & DefaultTransform>,
   preserveAttributes: Array<String | RegExp>,
 };
 

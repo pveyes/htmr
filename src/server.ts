@@ -1,6 +1,6 @@
 // @flow
 import parse from 'posthtml-parser';
-import React from 'react';
+import React, { ReactHTML } from 'react';
 import { AllHtmlEntities as HtmlEntity } from 'html-entities';
 import mapAttribute from './mapAttribute';
 
@@ -12,7 +12,7 @@ type Node = ElementNode | TextNode;
 type TextNode = string;
 
 type ElementNode = {
-  tag: string,
+  tag: keyof ReactHTML,
   attrs: {
     [key: string]: string,
   },
@@ -33,7 +33,7 @@ function transform(node: Node, key: string, options: HtmrOptions): ChildComponen
     }
 
     const str = HtmlEntity.decode(node);
-    return defaultTransform ? defaultTransform(str) : str;
+    return defaultTransform ? defaultTransform(str, null, null) : str;
   }
 
   const { tag, attrs, content } = node;
