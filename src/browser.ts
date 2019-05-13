@@ -73,6 +73,11 @@ function transform(node: any, key: string, options: HtmrOptions): ChildComponent
     return React.createElement(tag, props, null);
   }
 
+  if(options.dangerouslySetChildren.indexOf(tag) !== -1){
+    props.dangerouslySetInnerHTML = { __html: node.innerHTML.replace(/"/g, "&quot;") };
+    return React.createElement(tag, props, null);
+  }
+
   // self closing tag shouldn't have children
   const reactChildren = children.length === 0
     ? null
@@ -97,9 +102,10 @@ function convertBrowser(
     throw new TypeError('Expected HTML string');
   }
 
-  const opts = {
+  const opts: HtmrOptions = {
     transform: options.transform || {},
     preserveAttributes: options.preserveAttributes || [],
+    dangerouslySetChildren: options.dangerouslySetChildren || []
   };
   const container = document.createElement('div');
   container.innerHTML = html.trim();

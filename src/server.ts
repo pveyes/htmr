@@ -60,6 +60,12 @@ function transform(node: Node, key: string, options: HtmrOptions): ChildComponen
     return React.createElement(tag, props, null);
   }
 
+  // if the tags children should be set dangerously
+  if(options.dangerouslySetChildren.indexOf(tag) !== -1){
+    props.dangerouslySetInnerHTML = { __html: <string>content[0] };
+    return React.createElement(tag, props, null);
+  }
+
   // self closing component doesn't have children
   let children =
     content === undefined
@@ -98,9 +104,10 @@ export default function convertServer(html: string, options: Partial<HtmrOptions
     throw new TypeError('Expected HTML string');
   }
 
-  const opts = {
+  const opts: HtmrOptions = {
     transform: options.transform || {},
     preserveAttributes: options.preserveAttributes || [],
+    dangerouslySetChildren: options.dangerouslySetChildren || [],
   };
   const ast: Array<Node> = parse(html.trim());
 

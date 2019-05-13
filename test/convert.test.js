@@ -230,6 +230,12 @@ test('allow preserve some attributes', () => {
   testRender(html, { preserveAttributes: ['ng-if', new RegExp('tv-')] });
 });
 
+test('should dangerously set html for required tags', () => {
+  const html = `<pre>&lt;a href=&quot;/&quot;&gt;Test&lt;/a&gt;</pre>`;
+
+  testRender(html, { dangerouslySetChildren: ['pre'] });
+});
+
 expect.extend({
   toRenderConsistently({ server, browser }, html) {
     const serverRender = renderer.create(server);

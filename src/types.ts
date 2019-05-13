@@ -13,6 +13,8 @@ type DefaultTransform = {
 export type HtmrOptions = {
   transform: Partial<HTMLTransform & DefaultTransform>,
   preserveAttributes: Array<String | RegExp>,
+  /** An array of tags whos children should be set as raw html */
+  dangerouslySetChildren: string[]
 };
 
 type Component = ReactElement<any>;
