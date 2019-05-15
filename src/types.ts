@@ -14,7 +14,7 @@ export type HtmrOptions = {
   transform: Partial<HTMLTransform & DefaultTransform>,
   preserveAttributes: Array<String | RegExp>,
   /** An array of tags whos children should be set as raw html */
-  dangerouslySetChildren: string[]
+  dangerouslySetChildren: HTMLTags[]
 };
 
 type Component = ReactElement<any>;

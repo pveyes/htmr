@@ -224,7 +224,7 @@ exports[`should dangerously set html for required tags 1`] = `
 <pre
   dangerouslySetInnerHTML={
     Object {
-      "__html": "&lt;a href=&quot;/&quot;&gt;Test&lt;/a&gt;",
+      "__html": "&lt;a href=\\"/\\"&gt;Test&lt;/a&gt;",
     }
   }
 />

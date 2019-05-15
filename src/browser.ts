@@ -67,14 +67,8 @@ function transform(node: any, key: string, options: HtmrOptions): ChildComponent
     }
   }
 
-  // style tag needs to preserve its children
-  if (tag === 'style' && !customElement && !defaultTransform) {
-    props.dangerouslySetInnerHTML = { __html: node.textContent };
-    return React.createElement(tag, props, null);
-  }
-
-  if(options.dangerouslySetChildren.indexOf(tag) !== -1){
-    props.dangerouslySetInnerHTML = { __html: node.innerHTML.replace(/"/g, "&quot;") };
+  if (options.dangerouslySetChildren.indexOf(tag) > -1) {
+    props.dangerouslySetInnerHTML = { __html: node.innerHTML };
     return React.createElement(tag, props, null);
   }
 
@@ -105,7 +99,7 @@ function convertBrowser(
   const opts: HtmrOptions = {
     transform: options.transform || {},
     preserveAttributes: options.preserveAttributes || [],
-    dangerouslySetChildren: options.dangerouslySetChildren || []
+    dangerouslySetChildren: options.dangerouslySetChildren || ["style"]
   };
   const container = document.createElement('div');
   container.innerHTML = html.trim();
