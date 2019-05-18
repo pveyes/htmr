@@ -54,9 +54,12 @@ function transform(node: Node, key: string, options: HtmrOptions): ChildComponen
     { key }
   );
 
-  // style tag needs to preserve its children
-  if (tag === 'style' && !customElement && !defaultTransform) {
-    props.dangerouslySetInnerHTML = { __html: <string>content[0] };
+  // if the tags children should be set dangerously
+  if (options.dangerouslySetChildren.indexOf(tag) > -1) {
+    const innerHTML = <TextNode>content[0];
+    props.dangerouslySetInnerHTML = {
+      __html: innerHTML.trim()
+    };
     return React.createElement(tag, props, null);
   }
 
@@ -98,9 +101,10 @@ export default function convertServer(html: string, options: Partial<HtmrOptions
     throw new TypeError('Expected HTML string');
   }
 
-  const opts = {
+  const opts: HtmrOptions = {
     transform: options.transform || {},
     preserveAttributes: options.preserveAttributes || [],
+    dangerouslySetChildren: options.dangerouslySetChildren || ["style"],
   };
   const ast: Array<Node> = parse(html.trim());
 

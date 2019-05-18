@@ -178,15 +178,13 @@ exports[`preserve child of style tag 1`] = `
 <style
   dangerouslySetInnerHTML={
     Object {
-      "__html": "
-      ul > li {
+      "__html": "ul > li {
         list-style: none
       }
 
       div[data-id=\\"test\\"]:not(.y) {
         display: none;
-      }
-    ",
+      }",
     }
   }
 />
@@ -218,6 +216,16 @@ exports[`self closing component 1`] = `
     src="https://www.youtube.com/embed/I2-_iLzmkVw"
   />
 </div>
+`;
+
+exports[`should dangerously set html for required tags 1`] = `
+<pre
+  dangerouslySetInnerHTML={
+    Object {
+      "__html": "&lt;a href=&quot;/&quot;&gt;Test&lt;/a&gt;",
+    }
+  }
+/>
 `;
 
 exports[`style with url & protocol 1`] = `

@@ -29,12 +29,13 @@ class Component extends React.Component {
 }
 ```
 
-The API also accepts second argument `options` containing few optional fields:
+The API also accepts second argument `options` containing few optional fields. Below are their default values:
 
 ```js
 const options = {
   transform: {},
   preserveAttributes: [],
+  dangerouslySetChildren: ['style'],
 };
 convert(html, options);
 ```
@@ -114,6 +115,16 @@ For example you want to make sure `ng-if`, `v-if` and `v-for` to be rendered as 
 convert(html, { preserveAttributes: ['ng-if', new RegExp('v-')] });
 ```
 
+### dangerouslySetChildren
+
+By default `htmr` will only render children of `style` tag inside `dangerouslySetInnerHTML` due to security reason. You can override this behavior by passing array of HTML tags if you want the children of the tag to be rendered dangerously.
+
+```js
+convert(html, { dangerouslySetChildren: ['code', 'style'] });
+```
+
+**Note** that if you still want `style` tag to be rendered using `dangerouslySetInnerHTML`, you still need to include it in the array.
+
 ## Multiple children
 
 You can also convert HTML string which contains multiple elements. This returns
@@ -157,8 +168,8 @@ using this library, you can check out some related projects below.
 
 * Inline event attributes (`onclick=""` etc) are not supported due to unnecessary complexity
 * htmr use native browser HTML parser when run in browser instead of using custom parser. Due to how browser HTML parser works, you can get weird result if you supply "invalid" html, for example `div` inside `p` element like `<p><div>text</div></p>`
-* Script tag is not rendered using `dangerouslySetInnerHTML` by default due to security. You can opt in by using [custom component mapping](#custom-component)
-* Style tag renders it children using `dangerouslySetInnerHTML` by default. You can also reverse this behavior using custom mapping.
+* Script tag is not rendered using `dangerouslySetInnerHTML` by default due to security. You can opt in by using [`dangerouslySetChildren`](#dangerouslysetchildren)
+* Style tag renders it children using `dangerouslySetInnerHTML` by default. You can also reverse this behavior using same method.
 
 ## Related projects
 
