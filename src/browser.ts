@@ -1,8 +1,8 @@
 /* eslint-env browser */
 // Based on https://github.com/reactjs/react-magic/blob/master/src/htmltojsx.js
-import React from 'react';
+import React, { ReactNode } from 'react';
 import mapAttribute, { RawAttributes } from './mapAttribute';
-import { HtmrOptions, ChildComponent, HTMLTags } from './types';
+import { HtmrOptions, HTMLTags } from './types';
 
 // https://developer.mozilla.org/en-US/docs/Web/API/Node.nodeType
 const NodeTypes = {
@@ -22,7 +22,7 @@ function unescape(str: string): string {
   return tempEl.textContent!;
 }
 
-function transform(node: any, key: string, options: HtmrOptions): ChildComponent {
+function transform(node: any, key: string, options: HtmrOptions): ReactNode {
   const defaultTransform = options.transform._;
 
   if (node.nodeType === NodeTypes.COMMENT) {
@@ -46,7 +46,7 @@ function transform(node: any, key: string, options: HtmrOptions): ChildComponent
   attrs.key = key.toString();
   const props = mapAttribute(attrs, options.preserveAttributes);
 
-  let children: Array<ChildComponent> = [];
+  let children = [];
   for (let i = 0; i < node.childNodes.length; i++) {
     const childNode = node.childNodes[i];
     const childKey = `${key}.${i}`;

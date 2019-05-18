@@ -16,7 +16,3 @@ export type HtmrOptions = {
   /** An array of tags whos children should be set as raw html */
   dangerouslySetChildren: HTMLTags[]
 };
-
-type Component = ReactElement<any>;
-
-export type ChildComponent = Component | string | null;

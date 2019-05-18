@@ -1,10 +1,10 @@
 // @flow
 import parse from 'posthtml-parser';
-import React from 'react';
+import React, { ReactNode } from 'react';
 import { AllHtmlEntities as HtmlEntity } from 'html-entities';
 import mapAttribute from './mapAttribute';
 
-import { HtmrOptions, ChildComponent, HTMLTags } from './types';
+import { HtmrOptions, HTMLTags } from './types';
 
 // eslint-disable-next-line no-use-before-define
 type Node = ElementNode | TextNode;
@@ -21,7 +21,7 @@ type ElementNode = {
 
 const TABLE_ELEMENTS = ['table', 'tbody', 'thead', 'tfoot', 'tr'];
 
-function transform(node: Node, key: string, options: HtmrOptions): ChildComponent {
+function transform(node: Node, key: string, options: HtmrOptions): ReactNode {
   const defaultTransform = options.transform._;
 
   if (typeof node === 'string') {

@@ -2,21 +2,25 @@
   "name": "htmr",
   "version": "0.8.1",
   "description": "Simple and lightweight (< 2kB) HTML to React converter that works in server and browser",
-  "main": "lib/server.js",
+  "main": "lib/index.js",
   "browser": "lib/htmr.min.js",
+  "types": "index.d.ts",
   "files": [
-    "lib"
+    "lib",
+    "src/types.ts",
+    "index.d.ts"
   ],
   "scripts": {
-    "build": "tsc && rollup -c",
+    "build": "rollup -c",
     "clean": "rimraf lib",
     "fmt": "prettier --write \"**/*.{js,md}\"",
-    "prepare": "npm-run-all clean build",
+    "prepare": "npm-run-all clean typecheck build",
     "size": "bundlesize",
     "test": "npm-run-all -p test:coverage test:size",
     "test:coverage": "jest --coverage --no-cache --ci --runInBand",
     "test:watch": "jest --watch --no-cache",
-    "test:size": "npm-run-all clean build size"
+    "test:size": "npm-run-all clean build size",
+    "typecheck": "tsc --noEmit"
   },
   "repository": {
     "type": "git",
