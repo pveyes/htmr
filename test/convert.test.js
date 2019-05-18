@@ -231,7 +231,11 @@ test('allow preserve some attributes', () => {
 });
 
 test('should dangerously set html for required tags', () => {
-  const html = `<pre>&lt;a href=&quot;/&quot;&gt;Test&lt;/a&gt;</pre>`;
+  const html = `
+    <pre>
+      &lt;a href=&quot;/&quot;&gt;Test&lt;/a&gt;
+    </pre>
+  `;
 
   testRender(html, { dangerouslySetChildren: ['pre'] });
 });

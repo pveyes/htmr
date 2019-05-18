@@ -68,7 +68,12 @@ function transform(node: any, key: string, options: HtmrOptions): ChildComponent
   }
 
   if (options.dangerouslySetChildren.indexOf(tag) > -1) {
-    props.dangerouslySetInnerHTML = { __html: node.innerHTML };
+    let html = node.innerHTML;
+    // we need to preserve quote inside style declaration
+    if (tag !== 'style') {
+      html = html.replace(/"/g, "&quot;")
+    }
+    props.dangerouslySetInnerHTML = { __html: html.trim() };
     return React.createElement(tag, props, null);
   }
 

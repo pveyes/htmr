@@ -58,8 +58,7 @@ function transform(node: Node, key: string, options: HtmrOptions): ChildComponen
   if (options.dangerouslySetChildren.indexOf(tag) > -1) {
     const innerHTML = <TextNode>content[0];
     props.dangerouslySetInnerHTML = {
-      // decode &quot; to make sure browser & server render the same thing 
-      __html: innerHTML.replace(/&quot;/g, "\"")
+      __html: innerHTML.trim()
     };
     return React.createElement(tag, props, null);
   }
