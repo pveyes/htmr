@@ -1,8 +1,9 @@
 import React, { ReactNode } from 'react';
-import { HtmrOptions, HTMLTags } from "./types";
 import Parser from 'htmlparser2';
 import { AllHtmlEntities as HtmlEntity } from 'html-entities';
 import mapAttribute from './mapAttribute';
+
+import { HtmrOptions, HTMLTags } from "./types";
 
 type HTMLNode = {
   type: 'tag' | 'style',
