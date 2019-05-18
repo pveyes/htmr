@@ -82,7 +82,6 @@ function transform(node: Node, key: string, options: HtmrOptions): ReactNode {
       }
 
       str = HtmlEntity.decode(str);
-
       return defaultTransform ? defaultTransform(str) : str;
     }
   }

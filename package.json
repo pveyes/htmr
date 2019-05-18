@@ -11,6 +11,7 @@
     "index.d.ts"
   ],
   "scripts": {
+    "bench": "node benchmark",
     "build": "rollup -c",
     "clean": "rimraf lib",
     "fmt": "prettier --write \"**/*.{js,md}\"",
