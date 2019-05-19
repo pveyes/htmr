@@ -1,0 +1,179 @@
+<p>This weekend I was working on my side project to list and display all my future tech talks. This is an overengineered
+  web app built using <a href="https://github.com/facebook/create-react-app">CRA</a> and <a
+    href="http://formidable.com/open-source/spectacle">Spectacle</a>, with a little bit of React Router (I'll write
+  about it in another post). I want to be able to display talk information in both inside app and in GitHub (where I
+  host the repository), so I decided to put talk title and description in <code>README.md</code> inside talk directory
+  to prevent duplication.</p>
+<h2>preval.macro</h2>
+<p>My original solution to this problem was using <code>preval.macro</code> which uses <code>babel-plugin-macro</code>.
+  Using preval is straightforward. Preval allows me to write JS code with filesystem access that will be executed on
+  build step (via babel). It's really cool, you should try it yourself.</p>
+<p>Basically you just import the macro, use it via <a
+    href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals">tagged template</a>, and
+  put the code you want to execute as string.</p>
+<pre><code class="language-js">import preval from &#x26;#39;preval.macro&#x26;#39;;
+
+const markdown = preval`
+  const fs = require(&#x26;#39;fs&#x26;#39;);
+  const path = require(&#x26;#39;path&#x26;#39;);
+  module.exports = fs.readFileSync(
+    path.resolve(__dirname, &#x26;#39;./README.md&#x26;#39;),
+    { encoding: &#x26;#39;utf-8&#x26;#39; }
+  );
+`;
+</code></pre>
+<p>This works but I don't like the boilerplate of requiring <code>fs</code> and <code>path</code>. It's also not
+  reusable because I can't just pass file path.</p>
+<h2>raw-loader</h2>
+<p>Then I remember about <a href="https://webpack.js.org/">webpack</a> <a
+    href="https://github.com/webpack-contrib/raw-loader"><code>raw-loader</code></a>. CRA uses webpack under the hood,
+  so <code>raw-loader</code> should work. Unfortunately CRA <a
+    href="https://github.com/facebook/create-react-app/issues/2961">doesn't yet have a solution</a> regarding importing
+  raw text file. I know this is unsupported method, but maybe still worth trying.</p>
+<p>First I need to install <code>raw-loader</code> as <code>devDependencies</code> because CRA doesn't include it by
+  default, then I need to use webpack loader require syntax because CRA doesn't allow me to extends webpack (for good
+  reason). The result is slightly better than preval (in term of boilerplate).</p>
+<pre><code class="language-js">const markdown = require(&#x26;#39;raw-loader!./README.md&#x26;#39;);
+</code></pre>
+<p>This fails the build of course, because CRA enable eslint rule to disallow webpack loader syntax. I need to disable
+  it via eslint comment. Not pretty.</p>
+<p>Then I had another use case for importing code example to spectacle code slide. This is where it gets weird. Somehow,
+  importing it using raw-loader causes some newlines to be removed unintentionally. This is really frustrating because I
+  need to annotate the exact line number to highlight some parts of code. This inconsistencies of removing newlines
+  means I need to know the line number AFTER it was removed. Not pretty.</p>
+<p>Then I was thinking of creating my own <code>babel-plugin-macros</code> to replace <code>preval</code> and
+  <code>raw-loader.</code> I searched it first, but no luck.</p>
+<p>It's time for another side project.</p>
+<h2>raw.macro</h2>
+<p>This is the first time I write macro using <code>babel-plugin-macros</code>, so I didn't have a clue what to do. I do
+  know AST a little, but still. Fortunately I have a lot of inspirations from <a
+    href="https://twitter.com/kentcdodds">Kent C. Dodds</a>. He has a lot of repositories using babel macro. (of course,
+  he was the author of <code>babel-plugin-macros</code>).</p>
+<p>I saw <code>preval.macro</code> codebase and learn basic macro creation, but the functionality is quite different, so
+  not much to copy/paste (sorry Kent). Then I saw <code>import-all.macro</code> codebase and it's pretty similar to what
+  I want to achieve. A function accepting arguments that gets compiled to another thing.</p>
+<p>First step of creating macros are making sure all references in codebase get replaced.
+  <code>babel-plugin-macros</code> provides <code>createMacro</code> function that accept function with some parameters:
+</p>
+<pre><code class="language-js">import { createMacro } from &#x26;#39;babel-plugin-macros&#x26;#39;;
+
+export default createMacro(rawMacro);
+
+function createMacro({ references, state, babel }) {
+  // do something
+}
+</code></pre>
+<p>Our function will be given one argument (it's an object) that includes <code>references</code>, <code>state</code>,
+  and <code>babel</code>. We use <code>references</code> to perform AST transform for all macro references in the
+  codebase. <code>state</code> provides us with information regarding current processed file (we mostly interested with
+  its filename, more on that later), and finally <code>babel</code> is mostly used to create new AST via <a
+    href="https://github.com/babel/babel/tree/master/packages/babel-types">babel-types</a> available as
+  <code>babel.types</code> (people usually rename it to <code>t</code>).</p>
+<h3>API requirement</h3>
+<p>We want to create macro like this</p>
+<pre><code class="language-js">import raw from &#x26;#39;raw.macro&#x26;#39;;
+
+const md = raw(&#x26;#39;./README.md&#x26;#39;);
+</code></pre>
+<p>That will be converted to this (depends on <code>README.md</code> content):</p>
+<pre><code class="language-js">const md = &#x26;#39;# Title\ndescription&#x26;#39;;
+</code></pre>
+<p>So we know that the only valid usage is function call (or <code>CallExpression</code> in the AST). First we need to
+  process all references</p>
+<pre><code class="language-js">function rawMacro({ references, state, babel }) {
+  references.default.forEach(referencePath =&#x26;gt; {
+    if (referencePath.parentPath.type === &#x26;#39;CallExpression&#x26;#39;) {
+      processReference({ referencePath, state, babel });
+    } else {
+      throw new Error(&#x26;#39;Invalid usage&#x26;#39;);
+    }
+  });
+}
+</code></pre>
+<p>Then we need to get function arguments We only need one because the function only accepts one argument. We also need
+  to make sure that the file path is deterministic (not a variable where we need to know the value).</p>
+<pre><code class="language-js">function processReference({ referencePath, state, babel }) {
+  let relativePath;
+  try {
+    relativePath = referencePath.parentPath.get(&#x26;#39;arguments&#x26;#39;)[0].evaluate()
+      .value;
+  } catch (err) {
+    throw new Error(&#x26;#39;Value is not deterministic&#x26;#39;);
+  }
+}
+</code></pre>
+<h3>Reading file contents</h3>
+<p>After getting function argument, we need to resolve its absolute path. This is where filename from <code>state</code>
+  comes in handy. We can get directory of the filename using <code>path</code>, and merge the path with the relative
+  path from previous step. We can use full path to get file contents via <code>fs</code>. We need to use sync method
+  because macro needs to be resolved synchronously.</p>
+<pre><code class="language-js">import path from &#x26;#39;path&#x26;#39;;
+import fs from &#x26;#39;fs&#x26;#39;;
+
+function processReference({ referencePath, state, babel }) {
+  const dirname = path.dirname(state.file.opts.filename);
+  const fullPath = path.resolve(dirname, relativePath);
+  const content = fs.readFileSync(fullPath, { encoding: &#x26;#39;utf-8&#x26;#39; });
+}
+</code></pre>
+<h3>Replacing AST</h3>
+<p>The last step is replace original AST. We'll use babel.types to create new AST. What we replace is the function call,
+  with an expression containing string literal. We use <code>replaceWith</code> method on AST node that we want to
+  replace.</p>
+<pre><code class="language-js">function processReference({ referencePath, state, babel }) {
+  const t = babel.types;
+  referencePath.parentPath.replaceWith(
+    t.expressionStatement(t.stringLiteral(content))
+  );
+});
+</code></pre>
+<p>That's it. We only need a few lines of code to replicate webpack <code>raw-loader</code> functionality.</p>
+<h3>Unit Testing</h3>
+<p>Finally we need to add some tests to make sure that our macro works as expected. The easiest way to unit test macro
+  is by using <code>babel-plugin-tester</code> with snapshot enabled. We provides some code, and
+  <code>babel-plugin-tester</code> will write a new snapshot containing our code and our transpiled code. You should
+  learn about <a href="https://facebook.github.io/jest/docs/en/snapshot-testing.html">Snapshot Testing</a> if you
+  haven't already. It's really cool, useful, and will probably saves you a lot of time testing something.</p>
+<pre><code class="language-js">const pluginTester = require(&#x26;#39;babel-plugin-tester&#x26;#39;);
+const plugin = require(&#x26;#39;babel-plugin-macros&#x26;#39;);
+const prettier = require(&#x26;#39;prettier&#x26;#39;);
+
+pluginTester({
+  plugin,
+  snapshot: true,
+  babelOptions: {
+    filename: __filename,
+  },
+  formatResult(result) {
+    return prettier.format(result, { trailingComma: &#x26;#39;es5&#x26;#39; });
+  },
+  tests: {
+    &#x26;#39;correct usage&#x26;#39;: `
+      import raw from &#x26;#39;../macro&#x26;#39;;
+      const md = raw(&#x26;#39;./fixtures/markdown.md&#x26;#39;);
+    `,
+  },
+});
+</code></pre>
+<p>It will create this snapshot:</p>
+<pre><code class="language-js">// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`macros correct usage: correct usage 1`] = `
+&#x26;quot;
+import raw from &#x26;#39;../macro&#x26;#39;;
+
+const md = raw(&#x26;#39;./fixtures/markdown.md&#x26;#39;);
+
+      ↓ ↓ ↓ ↓ ↓ ↓
+
+const md = \\&#x26;quot;# Title\\\\n\\\\nThis is the description\\\\n\\&#x26;quot;;
+&#x26;quot;
+`;
+</code></pre>
+<p>As you see in the snapshot, the macro works as expected.</p>
+<p>You can see end result in my repository: <a
+    href="https://github.com/pveyes/raw.macro">https://github.com/pveyes/raw.macro</a></p>
+<hr>
+<p>I was really amazed on how much we can do with babel, especially with babel macros. The possibilities are endless. I
+  think I'm going to write another babel macro soon.</p>
+<p>​</p>
