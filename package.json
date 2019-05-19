@@ -11,16 +11,15 @@
     "index.d.ts"
   ],
   "scripts": {
-    "bench": "npm run build && node benchmark",
+    "bench": "node benchmark",
     "build": "rollup -c",
     "clean": "rimraf lib",
     "fmt": "prettier --write \"**/*.{js,md}\"",
     "prepare": "npm-run-all clean typecheck build",
-    "size": "bundlesize",
-    "test": "npm-run-all -p test:coverage test:size typecheck bench",
+    "test": "npm-run-all clean build && npm-run-all -p test:coverage test:size typecheck bench",
     "test:coverage": "jest --coverage --no-cache --ci --runInBand",
     "test:watch": "jest --watch --no-cache",
-    "test:size": "npm-run-all clean build size",
+    "test:size": "bundlesize",
     "typecheck": "tsc --noEmit"
   },
   "repository": {
