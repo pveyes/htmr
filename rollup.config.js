@@ -24,7 +24,7 @@ export default [
   // commonJS		
   {
     input: 'src/server.ts',
-    external: ['posthtml-parser', 'react', 'html-entities'],
+    external: ['htmlparser2', 'react', 'html-entities'],
     output: [{ file: 'lib/index.js', format: 'cjs' }],
     plugins: [
       typescript2(),
