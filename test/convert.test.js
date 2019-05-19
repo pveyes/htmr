@@ -248,7 +248,11 @@ expect.extend({
     const serverHtml = snapshot.utils.serialize(serverRender);
     const browserHtml = snapshot.utils.serialize(browserRender);
 
-    const diffString = diff(serverHtml, browserHtml, { expand: this.expand });
+    const diffString = diff(serverHtml, browserHtml, {
+      expand: this.expand,
+      aAnnotation: 'Server render',
+      bAnnotation: 'Browser render',
+    });
     const pass = serverHtml === browserHtml;
     let messageExpectation;
 
