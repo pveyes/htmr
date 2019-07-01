@@ -16,7 +16,7 @@ type AttributeMap = {
 }
 
 type Attributes = {
-  [key: string]: number | string | StyleObject,
+  [key: string]: number | string | boolean | StyleObject,
 }
 
 const attributeMap = <AttributeMap>attributes;
@@ -56,7 +56,11 @@ export default function mapAttribute(
       // even if it's an empty string
       result[name] = convertStyle(attrs.style!);
     } else {
-      result[name] = attrs[attr];
+      const value = attrs[attr]
+      // Convert attribute value to boolean attribute if needed
+      // https://html.spec.whatwg.org/multipage/common-microsyntaxes.html#boolean-attributes
+      const isBooleanAttribute = value === '' || String(value).toLowerCase() === attributeName.toLowerCase();
+      result[name] = isBooleanAttribute ? true : value;
     }
 
     return result;

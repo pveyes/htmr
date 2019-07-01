@@ -1,6 +1,7 @@
 /* eslint-env jest */
 import React from 'react';
 import renderer from 'react-test-renderer';
+import { render } from '@testing-library/react';
 import snapshot from 'jest-snapshot';
 import diff from 'jest-diff';
 
@@ -28,8 +29,8 @@ test('make sure HTML is string', () => {
 test('supports valid html attribute', () => {
   const html = [
     '<div data-type="calendar" aria-describedby="info">',
-    '<link xml:lang="en" xlink:actuate="" />',
-    '<svg fill-rule="evenodd" color-interpolation-filters="">',
+    '<link xml:lang="en" xlink:actuate="other" />',
+    '<svg fill-rule="evenodd" color-interpolation-filters="sRGB">',
     '<path fill="#fa0"></path>',
     '</svg>',
     '</div>',
@@ -238,6 +239,17 @@ test('should dangerously set html for required tags', () => {
   `;
 
   testRender(html, { dangerouslySetChildren: ['pre'] });
+});
+
+// https://github.com/pveyes/htmr/issues/103
+test('correctly handle boolean attributes', () => {
+  const html = '<iframe allowfullscreen />';
+
+  testRender(html);
+
+  // more test case just to make sure
+  const { container } = render(convertBrowser(html));
+  expect(container.querySelector('iframe').getAttribute('allowfullscreen')).toEqual('');
 });
 
 expect.extend({
