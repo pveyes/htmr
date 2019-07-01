@@ -1,7 +1,5 @@
 # htmr [![Build Status](https://travis-ci.org/pveyes/htmr.svg?branch=master)](https://travis-ci.org/pveyes/htmr) [![bundle size](http://img.badgesize.io/https://unpkg.com/htmr/lib/htmr.min.js?compression=gzip)](https://unpkg.com/htmr/lib/htmr.min.js) [![codecov](https://codecov.io/gh/pveyes/htmr/branch/master/graph/badge.svg)](https://codecov.io/gh/pveyes/htmr)
 
-[![Greenkeeper badge](https://badges.greenkeeper.io/pveyes/htmr.svg)](https://greenkeeper.io/)
-
 > Simple and lightweight (< 2kB) HTML string to react element conversion library
 
 ## Install

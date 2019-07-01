@@ -42,6 +42,12 @@ exports[`convert style values 1`] = `
 </div>
 `;
 
+exports[`correctly handle boolean attributes 1`] = `
+<iframe
+  allowFullScreen={true}
+/>
+`;
+
 exports[`css html entities 1`] = `
 <div
   style={
@@ -245,11 +251,11 @@ exports[`supports valid html attribute 1`] = `
   data-type="calendar"
 >
   <link
-    xlinkActuate=""
+    xlinkActuate="other"
     xmlLang="en"
   />
   <svg
-    colorInterpolationFilters=""
+    colorInterpolationFilters="sRGB"
     fillRule="evenodd"
   >
     <path
