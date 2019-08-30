@@ -74,7 +74,11 @@ function transform(node: any, key: string, options: HtmrOptions): ReactNode {
       html = html.replace(/"/g, "&quot;")
     }
     props.dangerouslySetInnerHTML = { __html: html.trim() };
-    return React.createElement(tag, props, null);
+    return customElement
+      ? React.createElement(customElement, props, null)
+      : defaultTransform
+        ? defaultTransform(tag, props, null)
+        : React.createElement(tag, props, null)
   }
 
   // self closing tag shouldn't have children

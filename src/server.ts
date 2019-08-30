@@ -43,13 +43,19 @@ function transform(node: Node, key: string, options: HtmrOptions): ReactNode {
         { key }
       );
 
+      const customElement = options.transform[name];
+
       // if the tags children should be set dangerously
       if (options.dangerouslySetChildren.indexOf(name) > -1) {
         const childNode = <TextNode>node.children[0];
         props.dangerouslySetInnerHTML = {
           __html: childNode.data.trim()
         };
-        return React.createElement(name, props, null);
+        return customElement
+          ? React.createElement(customElement, props, null)
+          : defaultTransform
+            ? defaultTransform(name, props, null)
+            : React.createElement(name, props, null)
       }
 
       const childNodes = node.children
@@ -61,7 +67,6 @@ function transform(node: Node, key: string, options: HtmrOptions): ReactNode {
         ? null
         : childNodes;
 
-      const customElement = options.transform[name];
       if (customElement) {
         return React.createElement(customElement, props, children);
       }
