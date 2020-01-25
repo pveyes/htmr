@@ -13,22 +13,13 @@ const NodeTypes = {
 
 const TABLE_ELEMENTS = ['table', 'tbody', 'thead', 'tfoot', 'tr'];
 
-const tempEl = document.createElement('div');
-function unescape(str: string): string {
-  // Here we use innerHTML to unescape html entities.
-  // This is okay because we use the returned value as react children
-  // not dangerouslySetInnerHTML
-  tempEl.innerHTML = str;
-  return tempEl.textContent!;
-}
-
 function transform(node: any, key: string, options: HtmrOptions): ReactNode {
   const defaultTransform = options.transform._;
 
   if (node.nodeType === NodeTypes.COMMENT) {
     return null;
   } else if (node.nodeType === NodeTypes.TEXT) {
-    const text = unescape(node.textContent);
+    const text = node.textContent;
     return defaultTransform ? defaultTransform(text) : text;
   }
 
