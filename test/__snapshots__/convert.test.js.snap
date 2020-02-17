@@ -82,6 +82,19 @@ exports[`custom component 1`] = `
 </p>
 `;
 
+exports[`dangerously render script tag 1`] = `
+<script
+  data-cfasync="false"
+  type="text/javascript"
+>
+  
+      var gtm4wp_datalayer_name = "dataLayer";
+      var dataLayer = dataLayer || [];
+      dataLayer.push({"pagePostType":"post","pagePostType2":"single-post","pageCategory":["kalender-cuti"],"pagePostAuthor":"Candra Alif Irawan"});
+    
+</script>
+`;
+
 exports[`decode html attributes 1`] = `
 <a
   href="https://www.google.com/?a=b&c=d"
