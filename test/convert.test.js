@@ -252,6 +252,18 @@ test('correctly handle boolean attributes', () => {
   expect(container.querySelector('iframe').getAttribute('allowfullscreen')).toEqual('');
 });
 
+test('dangerously render script tag', () => {
+  const html = `
+    <script data-cfasync="false" type="text/javascript">
+      var gtm4wp_datalayer_name = "dataLayer";
+      var dataLayer = dataLayer || [];
+      dataLayer.push({"pagePostType":"post","pagePostType2":"single-post","pageCategory":["kalender-cuti"],"pagePostAuthor":"Candra Alif Irawan"});
+    </script>
+  `.trim();
+
+  testRender(html);
+});
+
 expect.extend({
   toRenderConsistently({ server, browser }, html) {
     const serverRender = renderer.create(server);

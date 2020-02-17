@@ -6,7 +6,7 @@ import mapAttribute from './mapAttribute';
 import { HtmrOptions, HTMLTags } from "./types";
 
 type HTMLNode = {
-  type: 'tag' | 'style',
+  type: 'tag' | 'style' | 'script',
   name: HTMLTags,
   attribs: {
     [key: string]: any
@@ -28,6 +28,7 @@ function transform(node: Node, key: string, options: HtmrOptions): ReactNode {
   const defaultTransform = options.transform._;
 
   switch (node.type) {
+    case 'script':
     case 'style':
     case 'tag': {
       const { name, attribs } = node;
