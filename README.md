@@ -76,6 +76,9 @@ This can be useful if you want to do string preprocessing (like removing all whi
 import React from 'react';
 import { Text, View } from 'react-native';
 
+// IMPORTANT: use the server bundle for react-native
+import convert from 'htmr/lib/index.js';
+
 let i = 0;
 
 const transform = {
