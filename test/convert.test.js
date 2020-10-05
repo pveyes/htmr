@@ -264,7 +264,7 @@ test('dangerously render script tag', () => {
   testRender(html);
 });
 
-test.only('svg viewbox', () => {
+test('svg viewbox', () => {
   const svg = `<svg viewbox="0 0 24 24"></svg>`
 
   testRender(svg);
