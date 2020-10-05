@@ -3,8 +3,6 @@ import convertStyle, { StyleObject } from './convertStyle';
 import { hypenColonToCamelCase } from './utils';
 import attributes from './attribute.json';
 
-declare const preval: (str: TemplateStringsArray) => any;
-
 export type RawAttributes = {
   [key: string]: string | number,
 } & {
