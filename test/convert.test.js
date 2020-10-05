@@ -264,6 +264,12 @@ test('dangerously render script tag', () => {
   testRender(html);
 });
 
+test.only('svg viewbox', () => {
+  const svg = `<svg viewbox="0 0 24 24"></svg>`
+
+  testRender(svg);
+});
+
 expect.extend({
   toRenderConsistently({ server, browser }, html) {
     const serverRender = renderer.create(server);
