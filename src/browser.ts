@@ -66,7 +66,7 @@ function transform(node: any, key: string, options: HtmrOptions): ReactNode {
     }
     props.dangerouslySetInnerHTML = { __html: html.trim() };
     return customElement
-      ? React.createElement(customElement, props, null)
+      ? React.createElement(customElement as any, props, null)
       : defaultTransform
         ? defaultTransform(tag, props, null)
         : React.createElement(tag, props, null)
@@ -78,7 +78,7 @@ function transform(node: any, key: string, options: HtmrOptions): ReactNode {
     : children;
 
   if (customElement) {
-    return React.createElement(customElement, props, reactChildren);
+    return React.createElement(customElement as any, props, reactChildren);
   }
 
   if (defaultTransform) {

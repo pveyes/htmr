@@ -53,7 +53,7 @@ function transform(node: Node, key: string, options: HtmrOptions): ReactNode {
           __html: childNode.data.trim()
         };
         return customElement
-          ? React.createElement(customElement, props, null)
+          ? React.createElement(customElement as any, props, null)
           : defaultTransform
             ? defaultTransform(name, props, null)
             : React.createElement(name, props, null)
@@ -69,7 +69,7 @@ function transform(node: Node, key: string, options: HtmrOptions): ReactNode {
         : childNodes;
 
       if (customElement) {
-        return React.createElement(customElement, props, children);
+        return React.createElement(customElement as any, props, children);
       }
 
       if (defaultTransform) {
