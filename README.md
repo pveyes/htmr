@@ -1,4 +1,4 @@
-# htmr [![Build Status](https://travis-ci.org/pveyes/htmr.svg?branch=master)](https://travis-ci.org/pveyes/htmr) [![bundle size](http://img.badgesize.io/https://unpkg.com/htmr/lib/htmr.min.js?compression=gzip)](https://unpkg.com/htmr/lib/htmr.min.js) [![codecov](https://codecov.io/gh/pveyes/htmr/branch/master/graph/badge.svg)](https://codecov.io/gh/pveyes/htmr)
+# htmr [![bundle size](http://img.badgesize.io/https://unpkg.com/htmr/lib/htmr.min.js?compression=gzip)](https://unpkg.com/htmr/lib/htmr.min.js)
 
 > Simple and lightweight (< 2kB) HTML string to react element conversion library
 
@@ -18,12 +18,10 @@ Use the default export, and pass HTML string.
 
 ```js
 import React from 'react';
-import convert from 'htmr';
+import htmr from 'htmr';
 
-class Component extends React.Component {
-  render() {
-    return convert('<p>No more dangerouslySetInnerHTML</p>');
-  }
+function HTMLComponent() {
+  return htmr('<p>No more dangerouslySetInnerHTML</p>');
 }
 ```
 
@@ -35,21 +33,21 @@ const options = {
   preserveAttributes: [],
   dangerouslySetChildren: ['style'],
 };
-convert(html, options);
+htmr(html, options);
 ```
 
 ### transform
 
 transform accepts key value pairs, that will be used to transforms node (key) to custom component (value). You can use it to render specific tag name with custom component. For example: component with
-predefined styles such as [emotion](https://github.com/tkh44/emotion) /
+predefined styles like
 [styled-components](https://github.com/styled-components/styled-components).
 
 ```js
 import React from 'react';
-import convert from 'htmr';
-import styled from 'emotion/react';
+import htmr from 'htmr';
+import styled from 'styled-components';
 
-const Paragraph = styled('p')`
+const Paragraph = styled.p`
   font-family: Helvetica, Arial, sans-serif;
   line-height: 1.5;
 `;
@@ -60,15 +58,13 @@ const transform = {
   a: 'span',
 };
 
-class Component extends React.Component {
-  render() {
-    // will return <Paragraph><span>{'Custom component'}</span></Paragraph>
-    return convert('<p><a>Custom component</a></p>', { transform });
-  }
+function TransformedHTMLComponent() {
+  // will return <Paragraph><span>{'Custom component'}</span></Paragraph>
+  return htmr('<p><a>Custom component</a></p>', { transform });
 }
 ```
 
-You can also provide default transform using underscore `_` syntax, similar to [pattern matching](https://reasonml.github.io/docs/en/pattern-matching.html) special fall-through case.
+You can also provide default transform using underscore `_` as property name.
 
 This can be useful if you want to do string preprocessing (like removing all whitespace), or rendering HTML as native view in [react-native](https://github.com/facebook/react-native):
 
@@ -79,7 +75,6 @@ import { Text, View } from 'react-native';
 let i = 0;
 
 const transform = {
-  // react-native uses View instead of div
   div: View,
   _: (node, props, children) => {
     // react-native can't render string without <Text> component
@@ -96,21 +91,19 @@ const transform = {
   },
 };
 
-class NativeHTMLRenderer extends React.Component {
-  render() {
-    return convert(this.props.html, { transform });
-  }
+function NativeHTMLRenderer(props) {
+  return htmr(props.html, { transform })
 }
 ```
 
 ### preserveAttributes
 
-By default `htmr` will convert attribute to camelCase version because that's what react uses. You can override this behavior by passing `preserveAttributes` options. Specify array of string / regular expression to test which attributes you want to preserve.
+By default `htmr` will convert HTML attributes to camelCase because that's what React uses. You can override this behavior by passing `preserveAttributes` options. Specify array of string / regular expression to test which attributes you want to preserve.
 
 For example you want to make sure `ng-if`, `v-if` and `v-for` to be rendered as is
 
 ```js
-convert(html, { preserveAttributes: ['ng-if', new RegExp('v-')] });
+htmr(html, { preserveAttributes: ['ng-if', new RegExp('v-')] });
 ```
 
 ### dangerouslySetChildren
@@ -118,7 +111,7 @@ convert(html, { preserveAttributes: ['ng-if', new RegExp('v-')] });
 By default `htmr` will only render children of `style` tag inside `dangerouslySetInnerHTML` due to security reason. You can override this behavior by passing array of HTML tags if you want the children of the tag to be rendered dangerously.
 
 ```js
-convert(html, { dangerouslySetChildren: ['code', 'style'] });
+htmr(html, { dangerouslySetChildren: ['code', 'style'] });
 ```
 
 **Note** that if you still want `style` tag to be rendered using `dangerouslySetInnerHTML`, you still need to include it in the array.
@@ -131,7 +124,7 @@ use React 16.
 
 ```js
 import React from 'react';
-import convert from 'htmr';
+import htmr from 'htmr';
 
 const html = `
   <h1>This string</h1>
@@ -139,24 +132,44 @@ const html = `
   <p>as sibling</p>
 `;
 
-class Component extends React.Component {
-  render() {
-    // if using react 16, simply use the return value because
-    // v16 can render array
-    return convert(html);
-    // if using react 15 and below, wrap in another component
-    return <div>{convert(html)}</div>;
+function ComponentWithSibling() {
+  // if using react 16, simply use the return value because
+  // v16 can render array
+  return htmr(html);
+  // if using react 15 and below, wrap in another component
+  return <div>{htmr(html)}</div>;
+}
+```
+
+## Typescript, htmr transform and Web Components
+
+If you're using `htmr` to transform custom elements in a typescript code, you'll get type error because custom element is not defined as valid property. To work around this, you can define the mapping in a separate object, and typecast as `any` while spreading in transform object:
+
+```ts
+import { ElementType } from 'react';
+import { HtmrOptions } from 'htmr';
+
+const customElementTransform: Record<string, ElementType> = {
+  'virtual-scroller': VirtualScroller
+}
+
+const options: HtmrOptions = {
+  transform : {
+    a: Anchor,
+    ...customElementTransform as any
   }
 }
+
+htmr(html, options);
 ```
 
 ## Use Cases
 
 This library was initially built to provides easy component mapping between HTML
-string and React component. It's mainly used in my blog to render custom
-component from HTML string returned from blog API. This library **prioritize
+string and React component. It's mainly used to render custom
+component from HTML string returned from an API. This library **prioritize
 file size and simple API** over full HTML conversion coverage and other features
-like flexible node traversal.
+like JSX parsing or flexible node traversal.
 
 That's why I've decided to not implement some features (see **Trade Off**
 section below). If you feel like you need more features that's not possible

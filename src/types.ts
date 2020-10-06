@@ -1,13 +1,14 @@
-import { ReactElement, ReactHTML, ReactNode, ComponentType } from "react";
+import React, { ReactHTML, ReactSVG, ReactNode, ComponentType } from "react";
 
 export type HTMLTags = keyof ReactHTML;
+export type SVGTags = keyof ReactSVG;
 
 type HTMLTransform = {
-  [tag in HTMLTags]: HTMLTags | ComponentType;
+  [tag in HTMLTags | SVGTags]: HTMLTags | SVGTags | ComponentType<React.ComponentProps<tag>>;
 };
 
 type DefaultTransform = {
-  _: <T>(element: string | HTMLTags, props?: T, children?: ReactNode) => ReactElement<T>
+  _: <P>(element: string | HTMLTags | SVGTags, props?: P, children?: ReactNode) => ReactNode
 }
 
 export type HtmrOptions = {
