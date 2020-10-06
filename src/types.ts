@@ -4,7 +4,7 @@ export type HTMLTags = keyof ReactHTML;
 export type SVGTags = keyof ReactSVG;
 
 type HTMLTransform = {
-  [tag in HTMLTags | SVGTags]: HTMLTags | SVGTags | ComponentType<React.ComponentProps<tag>>;
+  [tag in HTMLTags | SVGTags]: HTMLTags | SVGTags | ComponentType<Omit<React.ComponentProps<tag>, 'ref'>>;
 };
 
 type DefaultTransform = {
