@@ -1,4 +1,4 @@
-# htmr [![bundle size](http://img.badgesize.io/https://unpkg.com/htmr/lib/htmr.min.js?compression=gzip)](https://unpkg.com/htmr/lib/htmr.min.js)
+# htmr [![Actions Status](https://github.com/pveyes/htmr/workflows/test/badge.svg)](https://github.com/pveyes/htmr/actions) [![bundle size](http://img.badgesize.io/https://unpkg.com/htmr/lib/htmr.min.js?compression=gzip)](https://unpkg.com/htmr/lib/htmr.min.js)
 
 > Simple and lightweight (< 2kB) HTML string to react element conversion library
 
@@ -92,7 +92,7 @@ const transform = {
 };
 
 function NativeHTMLRenderer(props) {
-  return htmr(props.html, { transform })
+  return htmr(props.html, { transform });
 }
 ```
 
@@ -150,15 +150,15 @@ import { ElementType } from 'react';
 import { HtmrOptions } from 'htmr';
 
 const customElementTransform: Record<string, ElementType> = {
-  'virtual-scroller': VirtualScroller
-}
+  'virtual-scroller': VirtualScroller,
+};
 
 const options: HtmrOptions = {
-  transform : {
+  transform: {
     a: Anchor,
-    ...customElementTransform as any
-  }
-}
+    ...(customElementTransform as any),
+  },
+};
 
 htmr(html, options);
 ```
@@ -177,24 +177,24 @@ using this library, you can check out some related projects below.
 
 ## Trade Off
 
-* Inline event attributes (`onclick=""` etc) are not supported due to unnecessary complexity
-* htmr use native browser HTML parser when run in browser instead of using custom parser. Due to how browser HTML parser works, you can get weird result if you supply "invalid" html, for example `div` inside `p` element like `<p><div>text</div></p>`
-* Script tag is not rendered using `dangerouslySetInnerHTML` by default due to security. You can opt in by using [`dangerouslySetChildren`](#dangerouslysetchildren)
-* Style tag renders it children using `dangerouslySetInnerHTML` by default. You can also reverse this behavior using same method.
+- Inline event attributes (`onclick=""` etc) are not supported due to unnecessary complexity
+- htmr use native browser HTML parser when run in browser instead of using custom parser. Due to how browser HTML parser works, you can get weird result if you supply "invalid" html, for example `div` inside `p` element like `<p><div>text</div></p>`
+- Script tag is not rendered using `dangerouslySetInnerHTML` by default due to security. You can opt in by using [`dangerouslySetChildren`](#dangerouslysetchildren)
+- Style tag renders it children using `dangerouslySetInnerHTML` by default. You can also reverse this behavior using same method.
 
 ## Related projects
 
 HTML to react element:
 
-* [html-to-react](https://github.com/aknuds1/html-to-react)
-* [react-html-parser](https://github.com/wrakky/react-html-parser)
-* [html-react-parser](https://github.com/remarkablemark/html-react-parser)
-* [react-render-html](https://github.com/noraesae/react-render-html)
+- [html-to-react](https://github.com/aknuds1/html-to-react)
+- [react-html-parser](https://github.com/wrakky/react-html-parser)
+- [html-react-parser](https://github.com/remarkablemark/html-react-parser)
+- [react-render-html](https://github.com/noraesae/react-render-html)
 
 HTML (page) to react component (file/string):
 
-* [html-to-react-components](https://github.com/roman01la/html-to-react-components)
-* [react-magic](https://github.com/reactjs/react-magic)
+- [html-to-react-components](https://github.com/roman01la/html-to-react-components)
+- [react-magic](https://github.com/reactjs/react-magic)
 
 ## License
 
