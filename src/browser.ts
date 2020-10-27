@@ -60,11 +60,16 @@ function transform(node: any, key: string, options: HtmrOptions): ReactNode {
 
   if (options.dangerouslySetChildren.indexOf(tag) > -1) {
     let html = node.innerHTML;
-    // we need to preserve quote inside style declaration
-    if (tag !== 'style') {
-      html = html.replace(/"/g, "&quot;")
+    
+    // Script tag can have empty children
+    if (html) {
+      // we need to preserve quote inside style declaration
+      if (tag !== 'style') {
+        html = html.replace(/"/g, '&quot;');
+      }
+      props.dangerouslySetInnerHTML = { __html: html.trim() };
     }
-    props.dangerouslySetInnerHTML = { __html: html.trim() };
+    
     return customElement
       ? React.createElement(customElement as any, props, null)
       : defaultTransform

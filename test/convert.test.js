@@ -264,6 +264,12 @@ test('dangerously render script tag', () => {
   testRender(html);
 });
 
+test('dangerously render empty script tag', () => {
+  const html = `<script type="text/javascript"></script>`.trim();
+
+  testRender(html, { dangerouslySetChildren: ['script'] });
+});
+
 test('svg viewbox', () => {
   const svg = `<svg viewbox="0 0 24 24"></svg>`
 

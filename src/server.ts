@@ -48,10 +48,17 @@ function transform(node: Node, key: string, options: HtmrOptions): ReactNode {
 
       // if the tags children should be set dangerously
       if (options.dangerouslySetChildren.indexOf(name) > -1) {
-        const childNode = <TextNode>node.children[0];
-        props.dangerouslySetInnerHTML = {
-          __html: childNode.data.trim()
-        };
+        
+        // Script tag can have empty children
+        if (node.children.length > 0) {
+          const childNode = <TextNode>(
+            node.children[0]
+          );
+          props.dangerouslySetInnerHTML = {
+            __html: childNode.data.trim(),
+          };
+        }
+        
         return customElement
           ? React.createElement(customElement as any, props, null)
           : defaultTransform
