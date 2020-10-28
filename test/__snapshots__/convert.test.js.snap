@@ -82,6 +82,12 @@ exports[`custom component 1`] = `
 </p>
 `;
 
+exports[`dangerously render empty script tag 1`] = `
+<script
+  type="text/javascript"
+/>
+`;
+
 exports[`dangerously render script tag 1`] = `
 <script
   data-cfasync="false"
