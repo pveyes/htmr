@@ -1,5 +1,6 @@
 import React, { ReactNode } from 'react';
-import Parser from 'htmlparser2';
+import { parseDocument } from 'htmlparser2';
+import { Node } from 'domhandler';
 import { AllHtmlEntities as HtmlEntity } from 'html-entities';
 import mapAttribute from './mapAttribute';
 
@@ -20,17 +21,15 @@ type TextNode = {
   parent?: HTMLNode
 }
 
-type Node = HTMLNode | TextNode;
-
 const TABLE_ELEMENTS = ['table', 'tbody', 'thead', 'tfoot', 'tr'];
 
-function transform(node: Node, key: string, options: HtmrOptions): ReactNode {
+function transform(childNode: Node, key: string, options: HtmrOptions): ReactNode {
   const defaultTransform = options.transform._;
-
-  switch (node.type) {
+  switch (childNode.type) {
     case 'script':
     case 'style':
     case 'tag': {
+      const node: HTMLNode = childNode as any;
       const { name, attribs } = node;
 
       // decode all attribute value
@@ -48,17 +47,16 @@ function transform(node: Node, key: string, options: HtmrOptions): ReactNode {
 
       // if the tags children should be set dangerously
       if (options.dangerouslySetChildren.indexOf(name) > -1) {
-        
-        // Script tag can have empty children
+        // Tag can have empty children
         if (node.children.length > 0) {
-          const childNode = <TextNode>(
-            node.children[0]
-          );
-          props.dangerouslySetInnerHTML = {
-            __html: childNode.data.trim(),
-          };
+          const childNode: TextNode = node.children[0] as any;
+          const html = name === 'style'
+            // preserve encoding on style tag
+            ? childNode.data.trim()
+            : HtmlEntity.encode(childNode.data.trim());
+          props.dangerouslySetInnerHTML = { __html: html };
         }
-        
+
         return customElement
           ? React.createElement(customElement as any, props, null)
           : defaultTransform
@@ -86,6 +84,7 @@ function transform(node: Node, key: string, options: HtmrOptions): ReactNode {
       return React.createElement(name, props, children);
     }
     case 'text': {
+      const node: TextNode = childNode as any;
       let str = node.data;
 
       if (node.parent && TABLE_ELEMENTS.indexOf(node.parent.name) > -1) {
@@ -112,8 +111,8 @@ export default function convertServer(html: string, options: Partial<HtmrOptions
     dangerouslySetChildren: options.dangerouslySetChildren || ["style"],
   };
 
-  const ast = Parser.parseDOM(html.trim(), {}) as Array<HTMLNode>;
-  const components = ast.map((node, index) => transform(node, index.toString(), opts));
+  const doc = parseDocument(html.trim(), {});
+  const components = doc.childNodes.map((node, index) => transform(node, index.toString(), opts));
 
   if (components.length > 1) {
     return components;
