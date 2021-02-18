@@ -46,7 +46,6 @@
   },
   "homepage": "https://github.com/pveyes/htmr#readme",
   "dependencies": {
-    "domhandler": "^4.0.0",
     "html-entities": "^1.2.1",
     "htmlparser2": "^6.0.0"
   },
@@ -62,6 +61,7 @@
     "@types/react": "^16.8.8",
     "benchmark": "^2.1.4",
     "bundlesize": "^0.17.1",
+    "domhandler": "^4.0.0",
     "husky": "^1.3.1",
     "jest": "^24.5.0",
     "npm-run-all": "^4.0.2",
