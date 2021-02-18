@@ -1,12 +1,14 @@
 /* eslint-env jest */
 import React from 'react';
+import ReactDOM from 'react-dom';
+import { renderToStaticMarkup, renderToString } from 'react-dom/server';
 import renderer from 'react-test-renderer';
 import { render } from '@testing-library/react';
 import snapshot from 'jest-snapshot';
 import diff from 'jest-diff';
 
-import convertServer from '../src/server';
-import convertBrowser from '../src/browser';
+import htmrServer from '../src/server';
+import htmrBrowser from '../src/browser';
 
 test('convert correctly', () => {
   const html = '<p id="test">This is cool</p>';
@@ -21,8 +23,8 @@ test('make sure HTML is string', () => {
   expect.assertions(fixtures.length * 2);
 
   fixtures.forEach(fixture => {
-    expect(() => convertServer(fixture)).toThrow(error);
-    expect(() => convertBrowser(fixture)).toThrow(error);
+    expect(() => htmrServer(fixture)).toThrow(error);
+    expect(() => htmrBrowser(fixture)).toThrow(error);
   });
 });
 
@@ -248,7 +250,7 @@ test('correctly handle boolean attributes', () => {
   testRender(html);
 
   // more test case just to make sure
-  const { container } = render(convertBrowser(html));
+  const { container } = render(htmrBrowser(html));
   expect(container.querySelector('iframe').getAttribute('allowfullscreen')).toEqual('');
 });
 
@@ -318,10 +320,25 @@ expect.extend({
  */
 
 function testRender(html, options) {
-  let server = convertServer(html, options);
-  let browser = convertBrowser(html, options);
+  const server = htmrServer(html, options);
+  const browser = htmrBrowser(html, options);
 
   expect({ server, browser }).toRenderConsistently(html);
+
+  // assert SSR
+  expect(() => renderToString(server)).not.toThrow();
+  expect(() => renderToStaticMarkup(server)).not.toThrow();
+
+  // assert CSR
+  const el = document.createElement('div');
+  try {
+    document.body.appendChild(el);
+    expect(() => {
+      ReactDOM.render(browser, el)
+    }).not.toThrow();
+  } finally {
+    document.body.removeChild(el);
+  }
 
   // assert snapshot, doesn't matter from server or browser
   // because we've already done assert equal between them
