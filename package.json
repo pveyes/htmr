@@ -2,8 +2,8 @@
   "name": "htmr",
   "version": "0.10.0",
   "description": "Simple and lightweight (< 2kB) HTML to React converter that works in server and browser",
-  "main": "lib/index.js",
-  "browser": "lib/htmr.min.js",
+  "main": "lib/htmr.js",
+  "browser": "lib/htmr.browser.js",
   "types": "index.d.ts",
   "files": [
     "lib",
@@ -84,7 +84,7 @@
   },
   "bundlesize": [
     {
-      "path": "./lib/htmr.min.js",
+      "path": "./lib/htmr.browser.js",
       "maxSize": "2 kB"
     }
   ]

@@ -7,8 +7,8 @@ import { render } from '@testing-library/react';
 import snapshot from 'jest-snapshot';
 import diff from 'jest-diff';
 
-import htmrServer from '../src/server';
-import htmrBrowser from '../src/browser';
+import htmrServer from '../src';
+import htmrBrowser from '../src/index.browser';
 
 test('convert correctly', () => {
   const html = '<p id="test">This is cool</p>';
