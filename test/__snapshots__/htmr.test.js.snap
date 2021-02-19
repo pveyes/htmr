@@ -1,29 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`allow preserve some attributes 1`] = `
-<div
-  ng-if="x"
->
-  
-      
-  <div
-    tv-abc="d"
-    tv-xxx="y"
-  />
-  
-    
-</div>
-`;
-
-exports[`convert correctly 1`] = `
-<p
-  id="test"
->
-  This is cool
-</p>
-`;
-
-exports[`convert style values 1`] = `
+exports[`attributes convert style values 1`] = `
 <div
   style={
     Object {
@@ -42,13 +19,60 @@ exports[`convert style values 1`] = `
 </div>
 `;
 
-exports[`correctly handle boolean attributes 1`] = `
-<iframe
-  allowFullScreen={true}
-/>
+exports[`attributes correctly map HTML attributes to react props 1`] = `
+<div>
+  <label
+    className="input-text"
+    htmlFor="name"
+  />
+  <div
+    aria-describedby="info"
+    contentEditable={true}
+    data-type="calendar"
+    id="test"
+    spellCheck="true"
+  />
+  <link
+    xlinkActuate="other"
+    xmlLang="en"
+  />
+  <svg
+    colorInterpolationFilters="sRGB"
+    fillRule="evenodd"
+    viewBox="0 0 24 24"
+  >
+    <path
+      fill="#ffa0"
+    />
+  </svg>
+  <img
+    crossOrigin="true"
+    srcSet="https://img.src"
+  />
+  <iframe
+    allowFullScreen={true}
+    srcDoc="<p>html</p>"
+  />
+  <input
+    autoComplete="on"
+    autoFocus={true}
+    maxLength="10"
+    readOnly={true}
+  />
+  <button
+    accessKey="s"
+  >
+    Stress reliever
+  </button>
+  <time
+    dateTime="2018-07-07"
+  >
+    July 7
+  </time>
+</div>
 `;
 
-exports[`css html entities 1`] = `
+exports[`attributes css html entities 1`] = `
 <div
   style={
     Object {
@@ -58,7 +82,7 @@ exports[`css html entities 1`] = `
 />
 `;
 
-exports[`css vendor prefixes 1`] = `
+exports[`attributes css vendor prefixes 1`] = `
 <div
   style={
     Object {
@@ -68,12 +92,174 @@ exports[`css vendor prefixes 1`] = `
   }
 >
   
-      prefix
-    
+        prefix
+      
 </div>
 `;
 
-exports[`custom component 1`] = `
+exports[`attributes ignore invalid style 1`] = `
+<div
+  className="component-overflow"
+  style={Object {}}
+>
+  Explore Categories
+</div>
+`;
+
+exports[`attributes ignore partially invalid style 1`] = `
+<div
+  className="component-overflow"
+  style={
+    Object {
+      "color": "\\"red\\"",
+    }
+  }
+>
+  Explore Categories
+</div>
+`;
+
+exports[`attributes preserve child of style tag 1`] = `
+<style
+  dangerouslySetInnerHTML={
+    Object {
+      "__html": "ul > li {
+          list-style: none
+        }
+  
+        div[data-id=\\"test\\"]:not(.y) {
+          display: none;
+        }",
+    }
+  }
+/>
+`;
+
+exports[`attributes style with url & protocol 1`] = `
+<div
+  className="tera-promo-card--header"
+  style={
+    Object {
+      "backgroundImage": "url(https://d1nabgopwop1kh.cloudfront.net/xx)",
+    }
+  }
+/>
+`;
+
+exports[`core element inside text node 1`] = `
+Array [
+  "what are ",
+  <strong>
+    you
+  </strong>,
+  " doing?",
+]
+`;
+
+exports[`core ignore comment 1`] = `
+<div>
+  no comment
+</div>
+`;
+
+exports[`core ignore multiline html comment 1`] = `
+<div>
+  no multiline comment
+</div>
+`;
+
+exports[`core it works 1`] = `
+<p>
+  This is cool
+</p>
+`;
+
+exports[`core multi children 1`] = `
+Array [
+  <p>
+    Multi
+  </p>,
+  <p>
+    Component
+  </p>,
+]
+`;
+
+exports[`core self closing component 1`] = `
+<div>
+  <img
+    src="https://www.google.com/logo.png"
+  />
+</div>
+`;
+
+exports[`encoding decode html attributes 1`] = `
+<a
+  href="https://www.google.com/?a=b&c=d"
+>
+  test
+</a>
+`;
+
+exports[`encoding decode html entities on defaultMap 1`] = `
+<p>
+  & and &
+</p>
+`;
+
+exports[`encoding unescape html entities 1`] = `
+<div
+  className="entities"
+>
+  & and &
+</div>
+`;
+
+exports[`options dangerouslySetChildren dangerously render empty script tag 1`] = `
+<script
+  type="text/javascript"
+/>
+`;
+
+exports[`options dangerouslySetChildren no dangerously render script tag 1`] = `
+<script
+  data-cfasync="false"
+  type="text/javascript"
+>
+  
+          var gtm4wp_datalayer_name = "dataLayer";
+          var dataLayer = dataLayer || [];
+          dataLayer.push({"pagePostType":"post","pagePostType2":"single-post","pageCategory":["kalender-cuti"],"pagePostAuthor":"Candra Alif Irawan"});
+        
+</script>
+`;
+
+exports[`options dangerouslySetChildren should dangerously set html for required tags 1`] = `
+<pre
+  dangerouslySetInnerHTML={
+    Object {
+      "__html": "&lt;a href=&quot;/&quot;&gt;Test&lt;/a&gt;",
+    }
+  }
+/>
+`;
+
+exports[`options preserveAttributes allow preserve some attributes 1`] = `
+<div
+  ng-if="x"
+>
+  
+          
+  <div
+    tv-abc="d"
+    tv-xxx="y"
+  />
+  
+        
+</div>
+`;
+
+exports[`options transform custom component 1`] = `
 <p
   className="css-x243s"
   data-custom="true"
@@ -82,40 +268,7 @@ exports[`custom component 1`] = `
 </p>
 `;
 
-exports[`dangerously render empty script tag 1`] = `
-<script
-  type="text/javascript"
-/>
-`;
-
-exports[`dangerously render script tag 1`] = `
-<script
-  data-cfasync="false"
-  type="text/javascript"
->
-  
-      var gtm4wp_datalayer_name = "dataLayer";
-      var dataLayer = dataLayer || [];
-      dataLayer.push({"pagePostType":"post","pagePostType2":"single-post","pageCategory":["kalender-cuti"],"pagePostAuthor":"Candra Alif Irawan"});
-    
-</script>
-`;
-
-exports[`decode html attributes 1`] = `
-<a
-  href="https://www.google.com/?a=b&c=d"
->
-  test
-</a>
-`;
-
-exports[`decode html entities on defaultMap 1`] = `
-<p>
-  & and &
-</p>
-`;
-
-exports[`default mapping 1`] = `
+exports[`options transform default mapping 1`] = `
 <div>
   <span>
      
@@ -131,62 +284,7 @@ exports[`default mapping 1`] = `
 </div>
 `;
 
-exports[`element inside text node 1`] = `
-Array [
-  "what are ",
-  <strong>
-    you
-  </strong>,
-  " doing?",
-]
-`;
-
-exports[`ignore comment 1`] = `
-<div>
-  no comment
-</div>
-`;
-
-exports[`ignore invalid style 1`] = `
-<div
-  className="component-overflow"
-  style={Object {}}
->
-  Explore Categories
-</div>
-`;
-
-exports[`ignore multiline html comment 1`] = `
-<div>
-  no multiline comment
-</div>
-`;
-
-exports[`ignore partially invalid style 1`] = `
-<div
-  className="component-overflow"
-  style={
-    Object {
-      "color": "\\"red\\"",
-    }
-  }
->
-  Explore Categories
-</div>
-`;
-
-exports[`multi children 1`] = `
-Array [
-  <p>
-    Multi
-  </p>,
-  <p>
-    Component
-  </p>,
-]
-`;
-
-exports[`newline between tags 1`] = `
+exports[`whitespace allow newline text node between tags 1`] = `
 <pre>
   <span>
     Hello
@@ -199,23 +297,19 @@ exports[`newline between tags 1`] = `
 </pre>
 `;
 
-exports[`preserve child of style tag 1`] = `
-<style
-  dangerouslySetInnerHTML={
-    Object {
-      "__html": "ul > li {
-        list-style: none
-      }
-
-      div[data-id=\\"test\\"]:not(.y) {
-        display: none;
-      }",
-    }
-  }
-/>
+exports[`whitespace allow whitespace only text nodes 1`] = `
+Array [
+  <span>
+    Hello
+  </span>,
+  " ",
+  <span>
+    World
+  </span>,
+]
 `;
 
-exports[`remove whitespace on table 1`] = `
+exports[`whitespace remove whitespace on table elements 1`] = `
 <table>
   <tbody>
     <tr>
@@ -230,89 +324,4 @@ exports[`remove whitespace on table 1`] = `
     </tr>
   </tbody>
 </table>
-`;
-
-exports[`self closing component 1`] = `
-<div>
-  <img
-    src="https://www.google.com/logo.png"
-  />
-  <iframe
-    src="https://www.youtube.com/embed/I2-_iLzmkVw"
-  />
-</div>
-`;
-
-exports[`should dangerously set html for required tags 1`] = `
-<pre
-  dangerouslySetInnerHTML={
-    Object {
-      "__html": "&lt;a href=&quot;/&quot;&gt;Test&lt;/a&gt;",
-    }
-  }
-/>
-`;
-
-exports[`style with url & protocol 1`] = `
-<div
-  className="tera-promo-card--header"
-  style={
-    Object {
-      "backgroundImage": "url(https://d1nabgopwop1kh.cloudfront.net/xx)",
-    }
-  }
-/>
-`;
-
-exports[`supports valid html attribute 1`] = `
-<div
-  aria-describedby="info"
-  data-type="calendar"
->
-  <link
-    xlinkActuate="other"
-    xmlLang="en"
-  />
-  <svg
-    colorInterpolationFilters="sRGB"
-    fillRule="evenodd"
-  >
-    <path
-      fill="#fa0"
-    />
-  </svg>
-</div>
-`;
-
-exports[`svg viewbox 1`] = `
-<svg
-  viewBox="0 0 24 24"
-/>
-`;
-
-exports[`unescape html entities 1`] = `
-<div
-  className="entities"
->
-  & and &
-</div>
-`;
-
-exports[`unsafe html attributes 1`] = `
-<label
-  className="input-text"
-  htmlFor="name"
-/>
-`;
-
-exports[`whitespace only text nodes 1`] = `
-Array [
-  <span>
-    Hello
-  </span>,
-  " ",
-  <span>
-    World
-  </span>,
-]
 `;
