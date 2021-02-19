@@ -3,8 +3,18 @@ import { parseDocument } from 'htmlparser2';
 import { Node } from 'domhandler';
 import { AllHtmlEntities as HtmlEntity } from 'html-entities';
 import mapAttribute from './mapAttribute';
-
+import getPropName from './getPropName';
 import { HtmrOptions, HTMLTags } from "./types";
+
+export default function htmrServer(html: string, options: Partial<HtmrOptions> = {}) {
+  if (typeof html !== 'string') {
+    throw new TypeError('Expected HTML string');
+  }
+
+  const doc = parseDocument(html.trim(), {});
+  const nodes = doc.childNodes.map((node, index) => toReactNode(node, index.toString(), options));
+  return nodes.length === 1 ? nodes[0] : nodes;
+}
 
 type HTMLNode = {
   type: 'tag' | 'style' | 'script',
@@ -23,8 +33,11 @@ type TextNode = {
 
 const TABLE_ELEMENTS = ['table', 'tbody', 'thead', 'tfoot', 'tr'];
 
-function transform(childNode: Node, key: string, options: HtmrOptions): ReactNode {
-  const defaultTransform = options.transform._;
+function toReactNode(childNode: Node, key: string, options: Partial<HtmrOptions>): ReactNode {
+  const transform = options.transform || {};
+  const preserveAttributes = options.preserveAttributes || [];
+  const dangerouslySetChildren = options.dangerouslySetChildren || ["style"];
+  const defaultTransform = transform._;
   switch (childNode.type) {
     case 'script':
     case 'style':
@@ -39,14 +52,14 @@ function transform(childNode: Node, key: string, options: HtmrOptions): ReactNod
 
       const props = Object.assign(
         {},
-        mapAttribute(attribs, options.preserveAttributes),
+        mapAttribute(name, attribs, preserveAttributes, getPropName),
         { key }
       );
 
-      const customElement = options.transform[name];
+      const customElement = transform[name];
 
       // if the tags children should be set dangerously
-      if (options.dangerouslySetChildren.indexOf(name) > -1) {
+      if (dangerouslySetChildren.indexOf(name) > -1) {
         // Tag can have empty children
         if (node.children.length > 0) {
           const childNode: TextNode = node.children[0] as any;
@@ -65,7 +78,7 @@ function transform(childNode: Node, key: string, options: HtmrOptions): ReactNod
       }
 
       const childNodes = node.children
-        .map((node, index) => transform(node, index.toString(), options))
+        .map((node, index) => toReactNode(node, index.toString(), options))
         .filter(Boolean);
 
       // self closing component doesn't have children
@@ -100,23 +113,3 @@ function transform(childNode: Node, key: string, options: HtmrOptions): ReactNod
   }
 }
 
-export default function convertServer(html: string, options: Partial<HtmrOptions> = {}) {
-  if (typeof html !== 'string') {
-    throw new TypeError('Expected HTML string');
-  }
-
-  const opts: HtmrOptions = {
-    transform: options.transform || {},
-    preserveAttributes: options.preserveAttributes || [],
-    dangerouslySetChildren: options.dangerouslySetChildren || ["style"],
-  };
-
-  const doc = parseDocument(html.trim(), {});
-  const components = doc.childNodes.map((node, index) => transform(node, index.toString(), opts));
-
-  if (components.length > 1) {
-    return components;
-  }
-
-  return components[0];
-}

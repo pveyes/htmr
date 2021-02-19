@@ -5,11 +5,11 @@ import json from 'rollup-plugin-json';
 export default [
   // browser-friendly UMD build
   {
-    input: 'src/browser.ts',
+    input: 'src/index.browser.ts',
     external: ['react'],
     output: {
       name: 'htmr',
-      file: 'lib/htmr.min.js',
+      file: 'lib/htmr.browser.js',
       format: 'umd',
       globals: {
         'react': 'React',
@@ -23,9 +23,9 @@ export default [
   },
   // commonJS		
   {
-    input: 'src/server.ts',
+    input: 'src/index.ts',
     external: ['htmlparser2', 'react', 'html-entities'],
-    output: [{ file: 'lib/index.js', format: 'cjs' }],
+    output: [{ file: 'lib/htmr.js', format: 'cjs' }],
     plugins: [
       typescript2(),
       json(),
