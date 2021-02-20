@@ -49,7 +49,7 @@
   },
   "homepage": "https://github.com/pveyes/htmr#readme",
   "dependencies": {
-    "html-entities": "^1.2.1",
+    "html-entities": "^2.1.0",
     "htmlparser2": "^6.0.0"
   },
   "peerDependencies": {

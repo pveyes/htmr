@@ -1,7 +1,7 @@
 import React, { ReactNode } from 'react';
 import { parseDocument } from 'htmlparser2';
 import { Node } from 'domhandler';
-import { AllHtmlEntities as HtmlEntity } from 'html-entities';
+import { encode, decode } from 'html-entities';
 import mapAttribute from './mapAttribute';
 import { HtmrOptions, HTMLTags } from './types';
 
@@ -55,7 +55,7 @@ function toReactNode(
 
       // decode all attribute value
       Object.keys(attribs).forEach((key) => {
-        attribs[key] = HtmlEntity.decode(attribs[key]);
+        attribs[key] = decode(attribs[key]);
       });
 
       const props = Object.assign(
@@ -75,7 +75,7 @@ function toReactNode(
             name === 'style'
               ? // preserve encoding on style tag
                 childNode.data.trim()
-              : HtmlEntity.encode(childNode.data.trim());
+              : encode(childNode.data.trim());
           props.dangerouslySetInnerHTML = { __html: html };
         }
 
@@ -114,7 +114,7 @@ function toReactNode(
         }
       }
 
-      str = HtmlEntity.decode(str);
+      str = decode(str);
       return defaultTransform ? defaultTransform(str) : str;
     }
   }
