@@ -6,18 +6,17 @@ import renderer from 'react-test-renderer';
 import { render } from '@testing-library/react';
 import snapshot from 'jest-snapshot';
 import diff from 'jest-diff';
-import { oneLineTrim } from 'common-tags';
+import { html, oneLineTrim } from 'common-tags';
 
 import htmrServer from '../src';
 import htmrBrowser from '../src/index.browser';
 
 describe('core', () => {
   test('it works', () => {
-    const html = '<p>This is cool</p>';
-    testRender(html);
+    testRender('<p>This is cool</p>');
   });
 
-  test('make sure HTML is string', () => {
+  test('throws if first argument is not a string', () => {
     const error = new Error('Expected HTML string');
     const fixtures = [null, [], {}, 1, true];
 
@@ -30,143 +29,94 @@ describe('core', () => {
     });
   });
 
-  test('self closing component', () => {
-    const html = oneLineTrim`
-    <div>
-      <img src="https://www.google.com/logo.png" />
-    </div>`;
-
-    testRender(html);
+  test('can render self closing component', () => {
+    testRender('<img src="https://www.google.com/logo.png" />');
+    testRender('<hr>');
+    testRender('<br />');
   });
 
-  test('multi children', () => {
-    const html = '<p>Multi</p><p>Component</p>';
-
-    testRender(html);
+  test('can render sibling element as multiple children', () => {
+    testRender('<p>Multi</p><p>Component</p>');
   });
 
-  test('element inside text node', () => {
-    const html = 'what are <strong>you</strong> doing?';
-    testRender(html);
+  test('can render element inside text node', () => {
+    testRender('what are <strong>you</strong> doing?');
   });
 
   test('ignore comment', () => {
-    const html = '<!-- comment should be ignored--><div>no comment</div>';
-    testRender(html);
+    testRender('<!-- comment should be ignored--><div>no comment</div>');
   });
 
-  test('ignore multiline html comment', () => {
-    const html = [
-      '<!--<div>\n<p>multiline</p> \t</div>-->',
-      '<div>no multiline comment</div>',
-    ].join('');
-
-    testRender(html);
+  test('ignore multiline comment', () => {
+    testRender(oneLineTrim`
+      <!--<div>\n<p>multiline</p> \t</div>-->
+      <li>no multiline comment</li>
+    `);
   });
 });
 
 describe('attributes', () => {
   test('correctly map HTML attributes to react props', () => {
-    const html = oneLineTrim`
-    <div>
-      <label class="input-text" for="name"></label>
-      <div id="test" data-type="calendar" aria-describedby="info" spellcheck="true" contenteditable></div>
-      <link xml:lang="en" xlink:actuate="other" />
+    testRender('<label class="input-text" for="name"></label>');
+    testRender(
+      '<div id="test" data-type="calendar" aria-describedby="info" spellcheck="true" contenteditable></div>'
+    );
+    testRender('<link xml:lang="en" xlink:actuate="other" />');
+    testRender(oneLineTrim`
       <svg viewbox="0 0 24 24" fill-rule="evenodd" color-interpolation-filters="sRGB">
         <path fill="#ffa0"></path>
       </svg>
-      <img srcset="https://img.src" crossorigin="true"></img>
-      <iframe srcdoc="<p>html</p>" allowfullscreen></iframe>
-      <input autocomplete="on" autofocus readonly="readonly" maxlength="10" />
-      <button accesskey="s">Stress reliever</button>
-      <time datetime="2018-07-07">July 7</time>
-    </div>`;
-
-    testRender(html);
+    `);
+    testRender('<img srcset="https://img.src" crossorigin="true" />');
+    testRender('<iframe srcdoc="<p>html</p>" allowfullscreen></iframe>');
+    testRender(
+      '<input autocomplete="on" autofocus readonly="readonly" maxlength="10" />'
+    );
+    testRender('<button accesskey="s">Stress reliever</button>');
+    testRender('<time datetime="2018-07-07">July 7</time>');
   });
 
   // https://github.com/pveyes/htmr/issues/103
   test('correctly handle boolean attributes', () => {
-    const html = '<iframe allowfullscreen />';
-
-    const { container } = render(htmrBrowser(html));
+    const { container } = render(htmrBrowser('<iframe allowfullscreen />'));
     expect(
       container.querySelector('iframe').getAttribute('allowfullscreen')
     ).toEqual('');
   });
 
-  test('convert style values', () => {
-    const html = [
-      '<div style="margin: 0 auto; padding: 0 10px">',
-      '<span style="font-size: 12"></span>',
-      '</div>',
-    ].join('');
-
-    testRender(html);
+  test('correctly convert multiple style values', () => {
+    testRender('<ul style="margin: 0 auto; padding: 0 10px"></ul>');
+    testRender('<span style="font-size: 12"></span>');
+    testRender(
+      '<div style="background-image:url(https://d1nabgopwop1kh.cloudfront.net/xx);"></div>'
+    );
   });
 
-  test('css vendor prefixes', () => {
-    const html = `
-      <div style="-ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%">
-        prefix
-      </div>
-    `;
-
-    testRender(html);
+  test('can handle css vendor prefixes', () => {
+    testRender(
+      '<i style="-ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%">prefix</i>'
+    );
   });
 
-  test('css html entities', () => {
-    const html =
-      '<div style="font-family: Consolas, &quot;Liberation Mono &quot;"></div>';
-
-    testRender(html);
+  test('decode HTML entities inside style declaration', () => {
+    testRender(
+      '<em style="font-family: Consolas, &quot;Liberation Mono &quot;"></em>'
+    );
   });
 
   test('ignore invalid style', () => {
-    const html =
-      '<div class="component-overflow" style="TITLE_2">Explore Categories</div>';
-    testRender(html);
-  });
-
-  test('ignore partially invalid style', () => {
-    const html =
-      '<div class="component-overflow" style="TITLE_2; color:\'red\'">Explore Categories</div>';
-    testRender(html);
-  });
-
-  test('style with url & protocol', () => {
-    const html =
-      '<div class="tera-promo-card--header" style="background-image:url(https://d1nabgopwop1kh.cloudfront.net/xx);"></div>';
-
-    testRender(html);
-  });
-
-  test('preserve child of style tag', () => {
-    const html = `
-      <style>
-        ul > li {
-          list-style: none
-        }
-  
-        div[data-id="test"]:not(.y) {
-          display: none;
-        }
-      </style>
-    `;
-
-    testRender(html);
+    testRender('<div style="TITLE_2">Explore Categories</div>');
+    testRender('<div style="TITLE_2; color:\'red\'">Explore Categories</div>');
   });
 });
 
 describe('encoding', () => {
   test('unescape html entities', () => {
-    const html = '<div class="entities">&amp; and &</div>';
-    testRender(html);
+    testRender('<blockquote class="entities">&amp; and &</blockquote>');
   });
 
   test('decode html entities on defaultMap', () => {
-    const html = '<div class="entities">&amp; and &</div>';
-    testRender(html, {
+    testRender('<div class="entities">&amp; and &</div>', {
       transform: {
         _: (node, props, children) => {
           if (typeof props === 'undefined') {
@@ -180,27 +130,30 @@ describe('encoding', () => {
   });
 
   test('decode html attributes', () => {
-    const html = '<a href="https://www.google.com/?a=b&amp;c=d">test</a>';
-    testRender(html);
+    testRender('<a href="https://www.google.com/?a=b&amp;c=d">test</a>');
   });
 });
 
 describe('options', () => {
   describe('transform', () => {
     test('custom component', () => {
-      const html = '<p data-custom="true">Custom component</p>';
+      const Section = (props) => {
+        const { children, 'data-heading': heading, ...rest } = props;
+        return (
+          <section {...rest} className="css-x243s">
+            <h2>{heading}</h2>
+            {children}
+          </section>
+        );
+      };
 
-      const Paragraph = ({ children, ...props }) => (
-        <p {...props} className="css-x243s">
-          {children}
-        </p>
+      testRender(
+        '<p data-custom="true" data-heading="Recommended">Custom component</p>',
+        { transform: { p: Section } }
       );
-
-      testRender(html, { transform: { p: Paragraph } });
     });
 
     test('default mapping', () => {
-      const html = '<article> <p>Default mapping</p> </article>';
       let i = 0;
       const defaultMap = (node, props, children) => {
         if (typeof props === 'undefined') {
@@ -211,25 +164,42 @@ describe('options', () => {
         return <div {...props}>{children}</div>;
       };
 
-      testRender(html, { transform: { _: defaultMap } });
+      testRender('<article><p>Default mapping</p></article>', {
+        transform: { _: defaultMap },
+      });
     });
   });
 
   describe('preserveAttributes', () => {
     test('allow preserve some attributes', () => {
-      const html = `
-        <div ng-if="x">
-          <div tv-abc="d" tv-xxx="y"></div>
-        </div>
-      `;
-
-      testRender(html, { preserveAttributes: ['ng-if', new RegExp('tv-')] });
+      testRender(
+        html`
+          <div ng-if="x">
+            <div tv-abc="d" tv-xxx="y"></div>
+          </div>
+        `,
+        { preserveAttributes: ['ng-if', new RegExp('tv-')] }
+      );
     });
   });
 
   describe('dangerouslySetChildren', () => {
+    test('preserve the content of style tag by default', () => {
+      testRender(oneLineTrim`
+        <style>
+          ul > li {
+            list-style: none
+          }
+    
+          div[data-id="test"]:not(.y) {
+            display: none;
+          }
+        </style>
+      `);
+    });
+
     test('should dangerously set html for required tags', () => {
-      const html = `
+      const html = oneLineTrim`
         <pre>
           &lt;a href=&quot;/&quot;&gt;Test&lt;/a&gt;
         </pre>
@@ -239,51 +209,50 @@ describe('options', () => {
     });
 
     test('no dangerously render script tag', () => {
-      const html = `
+      testRender(html`
         <script data-cfasync="false" type="text/javascript">
-          var gtm4wp_datalayer_name = "dataLayer";
+          var gtm4wp_datalayer_name = 'dataLayer';
           var dataLayer = dataLayer || [];
-          dataLayer.push({"pagePostType":"post","pagePostType2":"single-post","pageCategory":["kalender-cuti"],"pagePostAuthor":"Candra Alif Irawan"});
+          dataLayer.push({
+            pagePostType: 'post',
+            pagePostType2: 'single-post',
+            pageCategory: ['kalender-cuti'],
+            pagePostAuthor: 'Candra Alif Irawan',
+          });
         </script>
-      `.trim();
-
-      testRender(html);
+      `);
     });
 
     test('dangerously render empty script tag', () => {
-      const html = `<script type="text/javascript"></script>`.trim();
-
-      testRender(html, { dangerouslySetChildren: ['script'] });
+      testRender('<script type="text/javascript"></script>', {
+        dangerouslySetChildren: ['script'],
+      });
     });
   });
 });
 
 describe('whitespace', () => {
-  test('allow whitespace only text nodes', () => {
-    const html = '<span>Hello</span> <span>World</span>';
-    testRender(html);
+  test('allow whitespace only text nodes between elements', () => {
+    testRender('<span>Hello</span> <span>World</span>');
   });
 
-  test('allow newline text node between tags', () => {
-    const html = '<pre><span>Hello</span>\n<span>World</span></pre>';
-    testRender(html);
+  test('allow newline only text node between elements', () => {
+    testRender('<pre><span>Hello</span>\n<span>World</span></pre>');
   });
 
   test('remove whitespace on table elements', () => {
-    const html = `
+    testRender(html`
       <table>
         <tbody>
           <tr>
-            <th> title</th>
+            <th>title</th>
           </tr>
           <tr>
-            <td>entry </td>
+            <td>entry</td>
           </tr>
         </tbody>
       </table>
-    `.trim();
-
-    testRender(html);
+    `);
   });
 });
 
@@ -315,10 +284,10 @@ expect.extend({
       messageExpectation +
       '\n\n' +
       'Server render:\n' +
-      `  ${this.utils.printExpected(serverHtml)}\n` +
+      `  ${this.utils.printExpected(serverHtml)} \n` +
       'Browser render:\n' +
-      `  ${this.utils.printReceived(browserHtml)}\n` +
-      (diffString ? `\n\nDifference:\n\n${diffString}` : '');
+      `  ${this.utils.printReceived(browserHtml)} \n` +
+      (diffString ? `\n\nDifference: \n\n${diffString} ` : '');
 
     return { message, pass };
   },

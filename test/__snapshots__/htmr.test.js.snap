@@ -1,79 +1,126 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`attributes convert style values 1`] = `
-<div
+exports[`attributes can handle css vendor prefixes 1`] = `
+<i
+  style={
+    Object {
+      "WebkitTextSizeAdjust": "100%",
+      "msTextSizeAdjust": "100%",
+    }
+  }
+>
+  prefix
+</i>
+`;
+
+exports[`attributes correctly convert multiple style values 1`] = `
+<ul
   style={
     Object {
       "margin": "0 auto",
       "padding": "0 10px",
     }
   }
->
-  <span
-    style={
-      Object {
-        "fontSize": 12,
-      }
+/>
+`;
+
+exports[`attributes correctly convert multiple style values 2`] = `
+<span
+  style={
+    Object {
+      "fontSize": 12,
     }
-  />
-</div>
+  }
+/>
+`;
+
+exports[`attributes correctly convert multiple style values 3`] = `
+<div
+  style={
+    Object {
+      "backgroundImage": "url(https://d1nabgopwop1kh.cloudfront.net/xx)",
+    }
+  }
+/>
 `;
 
 exports[`attributes correctly map HTML attributes to react props 1`] = `
-<div>
-  <label
-    className="input-text"
-    htmlFor="name"
-  />
-  <div
-    aria-describedby="info"
-    contentEditable={true}
-    data-type="calendar"
-    id="test"
-    spellCheck="true"
-  />
-  <link
-    xlinkActuate="other"
-    xmlLang="en"
-  />
-  <svg
-    colorInterpolationFilters="sRGB"
-    fillRule="evenodd"
-    viewBox="0 0 24 24"
-  >
-    <path
-      fill="#ffa0"
-    />
-  </svg>
-  <img
-    crossOrigin="true"
-    srcSet="https://img.src"
-  />
-  <iframe
-    allowFullScreen={true}
-    srcDoc="<p>html</p>"
-  />
-  <input
-    autoComplete="on"
-    autoFocus={true}
-    maxLength="10"
-    readOnly={true}
-  />
-  <button
-    accessKey="s"
-  >
-    Stress reliever
-  </button>
-  <time
-    dateTime="2018-07-07"
-  >
-    July 7
-  </time>
-</div>
+<label
+  className="input-text"
+  htmlFor="name"
+/>
 `;
 
-exports[`attributes css html entities 1`] = `
+exports[`attributes correctly map HTML attributes to react props 2`] = `
 <div
+  aria-describedby="info"
+  contentEditable={true}
+  data-type="calendar"
+  id="test"
+  spellCheck="true"
+/>
+`;
+
+exports[`attributes correctly map HTML attributes to react props 3`] = `
+<link
+  xlinkActuate="other"
+  xmlLang="en"
+/>
+`;
+
+exports[`attributes correctly map HTML attributes to react props 4`] = `
+<svg
+  colorInterpolationFilters="sRGB"
+  fillRule="evenodd"
+  viewBox="0 0 24 24"
+>
+  <path
+    fill="#ffa0"
+  />
+</svg>
+`;
+
+exports[`attributes correctly map HTML attributes to react props 5`] = `
+<img
+  crossOrigin="true"
+  srcSet="https://img.src"
+/>
+`;
+
+exports[`attributes correctly map HTML attributes to react props 6`] = `
+<iframe
+  allowFullScreen={true}
+  srcDoc="<p>html</p>"
+/>
+`;
+
+exports[`attributes correctly map HTML attributes to react props 7`] = `
+<input
+  autoComplete="on"
+  autoFocus={true}
+  maxLength="10"
+  readOnly={true}
+/>
+`;
+
+exports[`attributes correctly map HTML attributes to react props 8`] = `
+<button
+  accessKey="s"
+>
+  Stress reliever
+</button>
+`;
+
+exports[`attributes correctly map HTML attributes to react props 9`] = `
+<time
+  dateTime="2018-07-07"
+>
+  July 7
+</time>
+`;
+
+exports[`attributes decode HTML entities inside style declaration 1`] = `
+<em
   style={
     Object {
       "fontFamily": "Consolas, \\"Liberation Mono \\"",
@@ -82,33 +129,16 @@ exports[`attributes css html entities 1`] = `
 />
 `;
 
-exports[`attributes css vendor prefixes 1`] = `
-<div
-  style={
-    Object {
-      "WebkitTextSizeAdjust": "100%",
-      "msTextSizeAdjust": "100%",
-    }
-  }
->
-  
-        prefix
-      
-</div>
-`;
-
 exports[`attributes ignore invalid style 1`] = `
 <div
-  className="component-overflow"
   style={Object {}}
 >
   Explore Categories
 </div>
 `;
 
-exports[`attributes ignore partially invalid style 1`] = `
+exports[`attributes ignore invalid style 2`] = `
 <div
-  className="component-overflow"
   style={
     Object {
       "color": "\\"red\\"",
@@ -119,34 +149,7 @@ exports[`attributes ignore partially invalid style 1`] = `
 </div>
 `;
 
-exports[`attributes preserve child of style tag 1`] = `
-<style
-  dangerouslySetInnerHTML={
-    Object {
-      "__html": "ul > li {
-          list-style: none
-        }
-  
-        div[data-id=\\"test\\"]:not(.y) {
-          display: none;
-        }",
-    }
-  }
-/>
-`;
-
-exports[`attributes style with url & protocol 1`] = `
-<div
-  className="tera-promo-card--header"
-  style={
-    Object {
-      "backgroundImage": "url(https://d1nabgopwop1kh.cloudfront.net/xx)",
-    }
-  }
-/>
-`;
-
-exports[`core element inside text node 1`] = `
+exports[`core can render element inside text node 1`] = `
 Array [
   "what are ",
   <strong>
@@ -156,25 +159,17 @@ Array [
 ]
 `;
 
-exports[`core ignore comment 1`] = `
-<div>
-  no comment
-</div>
+exports[`core can render self closing component 1`] = `
+<img
+  src="https://www.google.com/logo.png"
+/>
 `;
 
-exports[`core ignore multiline html comment 1`] = `
-<div>
-  no multiline comment
-</div>
-`;
+exports[`core can render self closing component 2`] = `<hr />`;
 
-exports[`core it works 1`] = `
-<p>
-  This is cool
-</p>
-`;
+exports[`core can render self closing component 3`] = `<br />`;
 
-exports[`core multi children 1`] = `
+exports[`core can render sibling element as multiple children 1`] = `
 Array [
   <p>
     Multi
@@ -185,12 +180,22 @@ Array [
 ]
 `;
 
-exports[`core self closing component 1`] = `
+exports[`core ignore comment 1`] = `
 <div>
-  <img
-    src="https://www.google.com/logo.png"
-  />
+  no comment
 </div>
+`;
+
+exports[`core ignore multiline comment 1`] = `
+<li>
+  no multiline comment
+</li>
+`;
+
+exports[`core it works 1`] = `
+<p>
+  This is cool
+</p>
 `;
 
 exports[`encoding decode html attributes 1`] = `
@@ -208,11 +213,11 @@ exports[`encoding decode html entities on defaultMap 1`] = `
 `;
 
 exports[`encoding unescape html entities 1`] = `
-<div
+<blockquote
   className="entities"
 >
   & and &
-</div>
+</blockquote>
 `;
 
 exports[`options dangerouslySetChildren dangerously render empty script tag 1`] = `
@@ -227,11 +232,21 @@ exports[`options dangerouslySetChildren no dangerously render script tag 1`] = `
   type="text/javascript"
 >
   
-          var gtm4wp_datalayer_name = "dataLayer";
-          var dataLayer = dataLayer || [];
-          dataLayer.push({"pagePostType":"post","pagePostType2":"single-post","pageCategory":["kalender-cuti"],"pagePostAuthor":"Candra Alif Irawan"});
-        
+  var gtm4wp_datalayer_name = "dataLayer";
+  var dataLayer = dataLayer || [];
+  dataLayer.push({"pagePostType":"post","pagePostType2":"single-post","pageCategory":["kalender-cuti"],"pagePostAuthor":"Candra Alif Irawan"});
+
 </script>
+`;
+
+exports[`options dangerouslySetChildren preserve the content of style tag by default 1`] = `
+<style
+  dangerouslySetInnerHTML={
+    Object {
+      "__html": "ul > li {list-style: none}div[data-id=\\"test\\"]:not(.y) {display: none;}",
+    }
+  }
+/>
 `;
 
 exports[`options dangerouslySetChildren should dangerously set html for required tags 1`] = `
@@ -249,42 +264,39 @@ exports[`options preserveAttributes allow preserve some attributes 1`] = `
   ng-if="x"
 >
   
-          
+  
   <div
     tv-abc="d"
     tv-xxx="y"
   />
   
-        
+
 </div>
 `;
 
 exports[`options transform custom component 1`] = `
-<p
+<section
   className="css-x243s"
   data-custom="true"
 >
+  <h2>
+    Recommended
+  </h2>
   Custom component
-</p>
+</section>
 `;
 
 exports[`options transform default mapping 1`] = `
 <div>
-  <span>
-     
-  </span>
   <div>
     <span>
       Default mapping
     </span>
   </div>
-  <span>
-     
-  </span>
 </div>
 `;
 
-exports[`whitespace allow newline text node between tags 1`] = `
+exports[`whitespace allow newline only text node between elements 1`] = `
 <pre>
   <span>
     Hello
@@ -297,7 +309,7 @@ exports[`whitespace allow newline text node between tags 1`] = `
 </pre>
 `;
 
-exports[`whitespace allow whitespace only text nodes 1`] = `
+exports[`whitespace allow whitespace only text nodes between elements 1`] = `
 Array [
   <span>
     Hello
