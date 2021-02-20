@@ -232,9 +232,14 @@ exports[`options dangerouslySetChildren no dangerously render script tag 1`] = `
   type="text/javascript"
 >
   
-  var gtm4wp_datalayer_name = "dataLayer";
+  var gtm4wp_datalayer_name = 'dataLayer';
   var dataLayer = dataLayer || [];
-  dataLayer.push({"pagePostType":"post","pagePostType2":"single-post","pageCategory":["kalender-cuti"],"pagePostAuthor":"Candra Alif Irawan"});
+  dataLayer.push({
+    pagePostType: 'post',
+    pagePostType2: 'single-post',
+    pageCategory: ['kalender-cuti'],
+    pagePostAuthor: 'Candra Alif Irawan',
+  });
 
 </script>
 `;
@@ -326,12 +331,12 @@ exports[`whitespace remove whitespace on table elements 1`] = `
   <tbody>
     <tr>
       <th>
-         title
+        title
       </th>
     </tr>
     <tr>
       <td>
-        entry 
+        entry
       </td>
     </tr>
   </tbody>
