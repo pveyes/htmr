@@ -2,7 +2,6 @@
 // Based on https://github.com/reactjs/react-magic/blob/master/src/htmltojsx.js
 import React, { ReactNode } from 'react';
 import mapAttribute, { RawAttributes } from './mapAttribute';
-import getPropName from './getPropName.browser';
 import { HtmrOptions, HTMLTags } from './types';
 
 export default function htmrBrowser(
@@ -107,6 +106,42 @@ function toReactNode(
   const reactChildren = children.length === 0 ? null : children;
 
   return reactCreateElement(tag, props, transform, reactChildren);
+}
+
+const specialPropsMap: Record<string, string> = {
+  for: 'htmlFor',
+  class: 'className',
+  allowfullscreen: 'allowFullScreen',
+  autocomplete: 'autoComplete',
+  autofocus: 'autoFocus',
+  contenteditable: 'contentEditable',
+  spellcheck: 'spellCheck',
+  srcdoc: 'srcDoc',
+  srcset: 'srcSet',
+};
+
+/**
+ * In browser we can get equivalent React props by creating a temporary DOM node,
+ * and iterating over its properties. This means we don't have to ship entire
+ * HTML attributes mapping to React props.
+ *
+ * For other edge cases we can use specialPropsMaps
+ */
+function getPropName(originalTag: HTMLTags, attributeName: string): string {
+  // handle edge cases first
+  if (specialPropsMap[attributeName]) {
+    return specialPropsMap[attributeName];
+  }
+
+  const el = document.createElement(originalTag);
+
+  for (let propName in el) {
+    if (propName.toLowerCase() === attributeName.toLowerCase()) {
+      return propName;
+    }
+  }
+
+  return attributeName;
 }
 
 function reactCreateElement(
