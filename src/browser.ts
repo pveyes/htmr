@@ -60,27 +60,25 @@ function transform(node: any, key: string, options: HtmrOptions): ReactNode {
 
   if (options.dangerouslySetChildren.indexOf(tag) > -1) {
     let html = node.innerHTML;
-    
+
     // Script tag can have empty children
     if (html) {
       // we need to preserve quote inside style declaration
-      if (tag !== 'style') {
+      if (tag !== 'style' && tag !== 'script') {
         html = html.replace(/"/g, '&quot;');
       }
       props.dangerouslySetInnerHTML = { __html: html.trim() };
     }
-    
+
     return customElement
       ? React.createElement(customElement as any, props, null)
       : defaultTransform
-        ? defaultTransform(tag, props, null)
-        : React.createElement(tag, props, null)
+      ? defaultTransform(tag, props, null)
+      : React.createElement(tag, props, null);
   }
 
   // self closing tag shouldn't have children
-  const reactChildren = children.length === 0
-    ? null
-    : children;
+  const reactChildren = children.length === 0 ? null : children;
 
   if (customElement) {
     return React.createElement(customElement as any, props, reactChildren);
@@ -93,10 +91,7 @@ function transform(node: any, key: string, options: HtmrOptions): ReactNode {
   return React.createElement(tag, props, reactChildren);
 }
 
-function convertBrowser(
-  html: string,
-  options: Partial<HtmrOptions> = {}
-) {
+function convertBrowser(html: string, options: Partial<HtmrOptions> = {}) {
   if (typeof html !== 'string') {
     throw new TypeError('Expected HTML string');
   }
@@ -104,7 +99,7 @@ function convertBrowser(
   const opts: HtmrOptions = {
     transform: options.transform || {},
     preserveAttributes: options.preserveAttributes || [],
-    dangerouslySetChildren: options.dangerouslySetChildren || ["style"]
+    dangerouslySetChildren: options.dangerouslySetChildren || ['style'],
   };
   const container = document.createElement('div');
   container.innerHTML = html.trim();
