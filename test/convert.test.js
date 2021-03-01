@@ -251,7 +251,9 @@ test('correctly handle boolean attributes', () => {
 
   // more test case just to make sure
   const { container } = render(htmrBrowser(html));
-  expect(container.querySelector('iframe').getAttribute('allowfullscreen')).toEqual('');
+  expect(
+    container.querySelector('iframe').getAttribute('allowfullscreen')
+  ).toEqual('');
 });
 
 test('dangerously render script tag', () => {
@@ -272,8 +274,20 @@ test('dangerously render empty script tag', () => {
   testRender(html, { dangerouslySetChildren: ['script'] });
 });
 
+test('dangerously rendered script tag is not encoded', () => {
+  const html = `
+    <script data-cfasync="false" type="application/json">
+      {
+        "key": "value"
+      }
+    </script>
+  `.trim();
+
+  testRender(html, { dangerouslySetChildren: ['script'] });
+});
+
 test('svg viewbox', () => {
-  const svg = `<svg viewbox="0 0 24 24"></svg>`
+  const svg = `<svg viewbox="0 0 24 24"></svg>`;
 
   testRender(svg);
 });
@@ -334,7 +348,7 @@ function testRender(html, options) {
   try {
     document.body.appendChild(el);
     expect(() => {
-      ReactDOM.render(browser, el)
+      ReactDOM.render(browser, el);
     }).not.toThrow();
   } finally {
     document.body.removeChild(el);

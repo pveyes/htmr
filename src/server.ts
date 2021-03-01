@@ -4,26 +4,30 @@ import { Node } from 'domhandler';
 import { AllHtmlEntities as HtmlEntity } from 'html-entities';
 import mapAttribute from './mapAttribute';
 
-import { HtmrOptions, HTMLTags } from "./types";
+import { HtmrOptions, HTMLTags } from './types';
 
 type HTMLNode = {
-  type: 'tag' | 'style' | 'script',
-  name: HTMLTags,
+  type: 'tag' | 'style' | 'script';
+  name: HTMLTags;
   attribs: {
-    [key: string]: any
-  }
-  children: Array<Node>
-}
+    [key: string]: any;
+  };
+  children: Array<Node>;
+};
 
 type TextNode = {
-  type: 'text',
-  data: string,
-  parent?: HTMLNode
-}
+  type: 'text';
+  data: string;
+  parent?: HTMLNode;
+};
 
 const TABLE_ELEMENTS = ['table', 'tbody', 'thead', 'tfoot', 'tr'];
 
-function transform(childNode: Node, key: string, options: HtmrOptions): ReactNode {
+function transform(
+  childNode: Node,
+  key: string,
+  options: HtmrOptions
+): ReactNode {
   const defaultTransform = options.transform._;
   switch (childNode.type) {
     case 'script':
@@ -50,18 +54,19 @@ function transform(childNode: Node, key: string, options: HtmrOptions): ReactNod
         // Tag can have empty children
         if (node.children.length > 0) {
           const childNode: TextNode = node.children[0] as any;
-          const html = name === 'style'
-            // preserve encoding on style tag
-            ? childNode.data.trim()
-            : HtmlEntity.encode(childNode.data.trim());
+          const html =
+            name === 'style' || name === 'script'
+              ? // preserve encoding on style tag
+                childNode.data.trim()
+              : HtmlEntity.encode(childNode.data.trim());
           props.dangerouslySetInnerHTML = { __html: html };
         }
 
         return customElement
           ? React.createElement(customElement as any, props, null)
           : defaultTransform
-            ? defaultTransform(name, props, null)
-            : React.createElement(name, props, null)
+          ? defaultTransform(name, props, null)
+          : React.createElement(name, props, null);
       }
 
       const childNodes = node.children
@@ -69,9 +74,7 @@ function transform(childNode: Node, key: string, options: HtmrOptions): ReactNod
         .filter(Boolean);
 
       // self closing component doesn't have children
-      const children = childNodes.length === 0
-        ? null
-        : childNodes;
+      const children = childNodes.length === 0 ? null : childNodes;
 
       if (customElement) {
         return React.createElement(customElement as any, props, children);
@@ -100,7 +103,10 @@ function transform(childNode: Node, key: string, options: HtmrOptions): ReactNod
   }
 }
 
-export default function convertServer(html: string, options: Partial<HtmrOptions> = {}) {
+export default function convertServer(
+  html: string,
+  options: Partial<HtmrOptions> = {}
+) {
   if (typeof html !== 'string') {
     throw new TypeError('Expected HTML string');
   }
@@ -108,11 +114,13 @@ export default function convertServer(html: string, options: Partial<HtmrOptions
   const opts: HtmrOptions = {
     transform: options.transform || {},
     preserveAttributes: options.preserveAttributes || [],
-    dangerouslySetChildren: options.dangerouslySetChildren || ["style"],
+    dangerouslySetChildren: options.dangerouslySetChildren || ['style'],
   };
 
   const doc = parseDocument(html.trim(), {});
-  const components = doc.childNodes.map((node, index) => transform(node, index.toString(), opts));
+  const components = doc.childNodes.map((node, index) =>
+    transform(node, index.toString(), opts)
+  );
 
   if (components.length > 1) {
     return components;

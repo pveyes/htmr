@@ -101,6 +101,20 @@ exports[`dangerously render script tag 1`] = `
 </script>
 `;
 
+exports[`dangerously rendered script tag is not encoded 1`] = `
+<script
+  dangerouslySetInnerHTML={
+    Object {
+      "__html": "{
+        \\"key\\": \\"value\\"
+      }",
+    }
+  }
+  data-cfasync="false"
+  type="application/json"
+/>
+`;
+
 exports[`decode html attributes 1`] = `
 <a
   href="https://www.google.com/?a=b&c=d"
