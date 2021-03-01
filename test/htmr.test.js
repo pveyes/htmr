@@ -132,6 +132,18 @@ describe('encoding', () => {
   test('decode html attributes', () => {
     testRender('<a href="https://www.google.com/?a=b&amp;c=d">test</a>');
   });
+
+  test('dangerously rendered script tag is not encoded', () => {
+    const html = `
+      <script data-cfasync="false" type="application/json">
+        {
+          "key": "value"
+        }
+      </script>
+    `.trim();
+
+    testRender(html, { dangerouslySetChildren: ['script'] });
+  });
 });
 
 describe('options', () => {
@@ -227,18 +239,6 @@ describe('options', () => {
       testRender('<script type="text/javascript"></script>', {
         dangerouslySetChildren: ['script'],
       });
-    });
-
-    test('dangerously rendered script tag is not encoded', () => {
-      const html = `
-        <script data-cfasync="false" type="application/json">
-          {
-            "key": "value"
-          }
-        </script>
-      `.trim();
-
-      testRender(html, { dangerouslySetChildren: ['script'] });
     });
   });
 });

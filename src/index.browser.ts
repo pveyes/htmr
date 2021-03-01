@@ -92,7 +92,7 @@ function toReactNode(
 
     // Tag can have empty children
     if (html) {
-      // we need to preserve quote inside style declaration
+      // we need to preserve quote inside style & script tag
       if (tag !== 'style' && tag !== 'script') {
         html = html.replace(/"/g, '&quot;');
       }
