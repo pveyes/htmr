@@ -12,23 +12,16 @@ export default [
       file: 'lib/htmr.min.js',
       format: 'umd',
       globals: {
-        'react': 'React',
-      }
+        react: 'React',
+      },
     },
-    plugins: [
-      typescript2(),
-      terser(),
-      json(),
-    ],
+    plugins: [typescript2(), terser(), json()],
   },
-  // commonJS		
+  // commonJS
   {
     input: 'src/server.ts',
     external: ['htmlparser2', 'react', 'html-entities'],
     output: [{ file: 'lib/index.js', format: 'cjs' }],
-    plugins: [
-      typescript2(),
-      json(),
-    ],
+    plugins: [typescript2(), json()],
   },
 ];
