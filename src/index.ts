@@ -72,8 +72,8 @@ function toReactNode(
         if (node.children.length > 0) {
           const childNode: TextNode = node.children[0] as any;
           const html =
-            name === 'style'
-              ? // preserve encoding on style tag
+            name === 'style' || name === 'script'
+              ? // preserve encoding on style & script tag
                 childNode.data.trim()
               : encode(childNode.data.trim());
           props.dangerouslySetInnerHTML = { __html: html };
