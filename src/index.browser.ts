@@ -93,7 +93,7 @@ function toReactNode(
     // Tag can have empty children
     if (html) {
       // we need to preserve quote inside style declaration
-      if (tag !== 'style') {
+      if (tag !== 'style' && tag !== 'script') {
         html = html.replace(/"/g, '&quot;');
       }
       props.dangerouslySetInnerHTML = { __html: html.trim() };

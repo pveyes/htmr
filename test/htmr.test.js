@@ -228,6 +228,18 @@ describe('options', () => {
         dangerouslySetChildren: ['script'],
       });
     });
+
+    test('dangerously rendered script tag is not encoded', () => {
+      const html = `
+        <script data-cfasync="false" type="application/json">
+          {
+            "key": "value"
+          }
+        </script>
+      `.trim();
+
+      testRender(html, { dangerouslySetChildren: ['script'] });
+    });
   });
 });
 

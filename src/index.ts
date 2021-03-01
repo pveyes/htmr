@@ -72,7 +72,7 @@ function toReactNode(
         if (node.children.length > 0) {
           const childNode: TextNode = node.children[0] as any;
           const html =
-            name === 'style'
+            name === 'style' || name === 'script'
               ? // preserve encoding on style tag
                 childNode.data.trim()
               : encode(childNode.data.trim());
