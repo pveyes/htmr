@@ -108,6 +108,13 @@ describe('attributes', () => {
     testRender('<div style="TITLE_2">Explore Categories</div>');
     testRender('<div style="TITLE_2; color:\'red\'">Explore Categories</div>');
   });
+
+  test('handle CSS custom properties correctly', () => {
+    testRender('<div style="--color: red">Explore Categories</div>');
+    testRender(
+      '<div style="--color: var(--syntax-text)">Explore Categories</div>'
+    );
+  });
 });
 
 describe('encoding', () => {

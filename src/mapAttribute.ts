@@ -1,12 +1,12 @@
-import { HTMLTags } from "./types";
+import { HTMLTags } from './types';
 
 export type RawAttributes = {
-  [key: string]: string | number,
+  [key: string]: string | number;
 } & {
-  style?: string
+  style?: string;
 };
 
-type Attributes = Record<string, number | string | boolean | StyleObject>
+type Attributes = Record<string, number | string | boolean | StyleObject>;
 
 // convert attr to valid react props
 export default function mapAttribute(
@@ -26,7 +26,7 @@ export default function mapAttribute(
     let attributeName = attr;
     if (!/^(data|aria)-/.test(attr)) {
       // Allow preserving non-standard attribute, e.g: `ng-if`
-      const preserved = preserveAttributes.filter(at => {
+      const preserved = preserveAttributes.filter((at) => {
         if (at instanceof RegExp) {
           return at.test(attr);
         }
@@ -45,10 +45,12 @@ export default function mapAttribute(
       // even if it's an empty string
       result[name] = convertStyle(attrs.style!);
     } else {
-      const value = attrs[attr]
+      const value = attrs[attr];
       // Convert attribute value to boolean attribute if needed
       // https://html.spec.whatwg.org/multipage/common-microsyntaxes.html#boolean-attributes
-      const isBooleanAttribute = value === '' || String(value).toLowerCase() === attributeName.toLowerCase();
+      const isBooleanAttribute =
+        value === '' ||
+        String(value).toLowerCase() === attributeName.toLowerCase();
       result[name] = isBooleanAttribute ? true : value;
     }
 
@@ -62,6 +64,11 @@ function convertProperty(prop: string): string {
   if (/^-ms-/.test(prop)) {
     // eslint-disable-next-line no-param-reassign
     prop = prop.substr(1);
+  }
+
+  // keep CSS custom properties as is
+  if (prop.startsWith('--')) {
+    return prop;
   }
 
   return hypenColonToCamelCase(prop);
@@ -82,18 +89,13 @@ function convertStyle(styleStr: string): StyleObject {
   styleStr
     .split(';')
     // non-empty declaration
-    .filter(style => style.trim() !== '')
-    .forEach(declaration => {
+    .filter((style) => style.trim() !== '')
+    .forEach((declaration) => {
       const rules = declaration.split(':');
       if (rules.length > 1) {
         const prop = convertProperty(rules[0].trim());
         // handle url: attribute on style
-        const val = convertValue(
-          rules
-            .slice(1)
-            .join(':')
-            .trim()
-        );
+        const val = convertValue(rules.slice(1).join(':').trim());
         style[prop] = val;
       }
     });
