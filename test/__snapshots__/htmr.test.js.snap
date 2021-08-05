@@ -122,6 +122,7 @@ exports[`attributes correctly map HTML attributes to react props 9`] = `
 exports[`attributes correctly map HTML attributes to react props 10`] = `
 <img
   alt="true"
+  className={true}
 />
 `;
 

@@ -74,7 +74,7 @@ describe('attributes', () => {
     );
     testRender('<button accesskey="s">Stress reliever</button>');
     testRender('<time datetime="2018-07-07">July 7</time>');
-    testRender('<img alt="true" />');
+    testRender('<img alt="true" class="" />');
   });
 
   // https://github.com/pveyes/htmr/issues/103
