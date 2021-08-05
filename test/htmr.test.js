@@ -74,6 +74,7 @@ describe('attributes', () => {
     );
     testRender('<button accesskey="s">Stress reliever</button>');
     testRender('<time datetime="2018-07-07">July 7</time>');
+    testRender('<img alt="true" />');
   });
 
   // https://github.com/pveyes/htmr/issues/103
@@ -82,6 +83,11 @@ describe('attributes', () => {
     expect(
       container.querySelector('iframe').getAttribute('allowfullscreen')
     ).toEqual('');
+  });
+
+  test('can pass boolean string as is', () => {
+    const { container } = render(htmrBrowser('<img alt="true" />'));
+    expect(container.querySelector('img').getAttribute('alt')).toEqual('true');
   });
 
   test('correctly convert multiple style values', () => {
