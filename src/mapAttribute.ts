@@ -40,6 +40,7 @@ export default function mapAttribute(
     }
 
     const name = getPropName(originalTag, attributeName);
+    const isBooleanAttribute = BOOLEAN_ATTRIBUTES.includes(name);
     if (name === 'style') {
       // if there's an attribute called style, this means that the value must be exists
       // even if it's an empty string
@@ -48,10 +49,10 @@ export default function mapAttribute(
       const value = attrs[attr];
       // Convert attribute value to boolean attribute if needed
       // https://html.spec.whatwg.org/multipage/common-microsyntaxes.html#boolean-attributes
-      const isBooleanAttribute =
+      const booleanAttrributeValue =
         value === '' ||
         String(value).toLowerCase() === attributeName.toLowerCase();
-      result[name] = isBooleanAttribute ? true : value;
+      result[name] = isBooleanAttribute ? booleanAttrributeValue : value;
     }
 
     return result;
@@ -111,3 +112,33 @@ function hypenColonToCamelCase(str: string): string {
     return char.toUpperCase();
   });
 }
+
+const BOOLEAN_ATTRIBUTES = [
+  // https://github.com/facebook/react/blob/cae635054e17a6f107a39d328649137b83f25972/packages/react-dom/src/shared/DOMProperty.js#L319
+  'allowFullScreen',
+  'async',
+  // Note: there is a special case that prevents it from being written to the DOM
+  // on the client side because the browsers are inconsistent. Instead we call focus().
+  'autoFocus',
+  'autoPlay',
+  'controls',
+  'default',
+  'defer',
+  'disabled',
+  'disablePictureInPicture',
+  'disableRemotePlayback',
+  'formNoValidate',
+  'hidden',
+  'loop',
+  'noModule',
+  'noValidate',
+  'open',
+  'playsInline',
+  'readOnly',
+  'required',
+  'reversed',
+  'scoped',
+  'seamless',
+  // Microdata
+  'itemScope',
+];
