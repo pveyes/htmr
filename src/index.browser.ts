@@ -72,7 +72,7 @@ function toReactNode(
   attrs.key = key.toString();
 
   const tag = node.tagName.toLowerCase() as HTMLTags;
-  const props = mapAttribute(tag, attrs, preserveAttributes, getPropName);
+  const props = mapAttribute(tag, attrs, preserveAttributes, getPropInfo);
 
   const children = Array.from(node.childNodes)
     .map((childNode, i) => {
@@ -108,12 +108,15 @@ function toReactNode(
   return reactCreateElement(tag, props, transform, reactChildren);
 }
 
-const specialPropsMap: Record<string, string> = {
+// map HTML attribute to react props, and optionally DOM prop by using array
+// if DOM prop is same as attribute name, use single item array
+const attributePropMap: Record<string, string | string[]> = {
   for: 'htmlFor',
   class: 'className',
-  allowfullscreen: 'allowFullScreen',
+  // react prop and DOM prop have different casing
+  allowfullscreen: ['allowFullScreen', 'allowFullscreen'],
   autocomplete: 'autoComplete',
-  autofocus: 'autoFocus',
+  autofocus: ['autoFocus'],
   contenteditable: 'contentEditable',
   spellcheck: 'spellCheck',
   srcdoc: 'srcDoc',
@@ -127,21 +130,35 @@ const specialPropsMap: Record<string, string> = {
  *
  * For other edge cases we can use specialPropsMaps
  */
-function getPropName(originalTag: HTMLTags, attributeName: string): string {
-  // handle edge cases first
-  if (specialPropsMap[attributeName]) {
-    return specialPropsMap[attributeName];
-  }
+function getPropInfo(tagName: HTMLTags, attributeName: string) {
+  const propName = attributePropMap[attributeName];
+  const el = document.createElement(tagName);
 
-  const el = document.createElement(originalTag);
+  // handle edge cases first
+  if (propName) {
+    const reactProp = Array.isArray(propName) ? propName[0] : propName;
+    const domProp = Array.isArray(propName)
+      ? propName[1] || attributeName
+      : propName;
+    return { name: reactProp, isBoolean: checkBooleanAttribute(el, domProp) };
+  }
 
   for (let propName in el) {
     if (propName.toLowerCase() === attributeName.toLowerCase()) {
-      return propName;
+      return { name: propName, isBoolean: checkBooleanAttribute(el, propName) };
     }
   }
 
-  return attributeName;
+  return {
+    name: attributeName,
+    isBoolean: checkBooleanAttribute(el, attributeName),
+  };
+}
+
+function checkBooleanAttribute(el: HTMLElement, prop: any) {
+  el.setAttribute(prop, '');
+  // @ts-ignore
+  return el[prop] === true;
 }
 
 function reactCreateElement(
