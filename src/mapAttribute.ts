@@ -13,7 +13,10 @@ export default function mapAttribute(
   originalTag: HTMLTags,
   attrs = {} as RawAttributes,
   preserveAttributes: Array<String | RegExp>,
-  getPropName: (originalTag: HTMLTags, attributeName: string) => string
+  getPropInfo: (
+    originalTag: HTMLTags,
+    attributeName: string
+  ) => { name: string; isBoolean: boolean }
 ): Attributes {
   return Object.keys(attrs).reduce((result, attr) => {
     // ignore inline event attribute
@@ -39,19 +42,19 @@ export default function mapAttribute(
       }
     }
 
-    const name = getPropName(originalTag, attributeName);
-    if (name === 'style') {
+    const prop = getPropInfo(originalTag, attributeName);
+    if (prop.name === 'style') {
       // if there's an attribute called style, this means that the value must be exists
       // even if it's an empty string
-      result[name] = convertStyle(attrs.style!);
+      result[prop.name] = convertStyle(attrs.style!);
     } else {
       const value = attrs[attr];
       // Convert attribute value to boolean attribute if needed
       // https://html.spec.whatwg.org/multipage/common-microsyntaxes.html#boolean-attributes
-      const isBooleanAttribute =
+      const booleanAttrributeValue =
         value === '' ||
         String(value).toLowerCase() === attributeName.toLowerCase();
-      result[name] = isBooleanAttribute ? true : value;
+      result[prop.name] = prop.isBoolean ? booleanAttrributeValue : value;
     }
 
     return result;

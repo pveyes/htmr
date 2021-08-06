@@ -59,7 +59,7 @@ describe('attributes', () => {
   test('correctly map HTML attributes to react props', () => {
     testRender('<label class="input-text" for="name"></label>');
     testRender(
-      '<div id="test" data-type="calendar" aria-describedby="info" spellcheck="true" contenteditable></div>'
+      '<div id="test" data-type="calendar" aria-describedby="info" spellcheck="true" contenteditable="true"></div>'
     );
     testRender('<link xml:lang="en" xlink:actuate="other" />');
     testRender(oneLineTrim`
@@ -74,14 +74,20 @@ describe('attributes', () => {
     );
     testRender('<button accesskey="s">Stress reliever</button>');
     testRender('<time datetime="2018-07-07">July 7</time>');
+    testRender('<img alt="alt" class="" />');
   });
 
   // https://github.com/pveyes/htmr/issues/103
   test('correctly handle boolean attributes', () => {
     const { container } = render(htmrBrowser('<iframe allowfullscreen />'));
-    expect(
-      container.querySelector('iframe').getAttribute('allowfullscreen')
-    ).toEqual('');
+    expect(container.querySelector('iframe').allowFullscreen).toBe(true);
+  });
+
+  // https://github.com/pveyes/htmr/issues/137
+  test('pass non-boolean attributes as is', () => {
+    const { container } = render(htmrBrowser('<img alt="alt" class="" />'));
+    expect(container.querySelector('img').alt).toEqual('alt');
+    expect(container.querySelector('img').className).toEqual('');
   });
 
   test('correctly convert multiple style values', () => {

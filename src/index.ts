@@ -60,7 +60,7 @@ function toReactNode(
 
       const props = Object.assign(
         {},
-        mapAttribute(name, attribs, preserveAttributes, getPropName),
+        mapAttribute(name, attribs, preserveAttributes, getPropInfo),
         { key }
       );
 
@@ -125,6 +125,40 @@ import attributes from './attribute.json';
 type AttributeMap = Record<string, string>;
 const attrs = <AttributeMap>attributes;
 
-function getPropName(_originalTag: HTMLTags, attributeName: string) {
-  return attrs[attributeName] || attributeName;
+function getPropInfo(_originalTag: HTMLTags, attributeName: string) {
+  const propName = attrs[attributeName] || attributeName;
+  return {
+    name: propName,
+    isBoolean: BOOLEAN_ATTRIBUTES.includes(propName),
+  };
 }
+
+const BOOLEAN_ATTRIBUTES = [
+  // https://github.com/facebook/react/blob/cae635054e17a6f107a39d328649137b83f25972/packages/react-dom/src/shared/DOMProperty.js#L319
+  'allowFullScreen',
+  'async',
+  // Note: there is a special case that prevents it from being written to the DOM
+  // on the client side because the browsers are inconsistent. Instead we call focus().
+  'autoFocus',
+  'autoPlay',
+  'controls',
+  'default',
+  'defer',
+  'disabled',
+  'disablePictureInPicture',
+  'disableRemotePlayback',
+  'formNoValidate',
+  'hidden',
+  'loop',
+  'noModule',
+  'noValidate',
+  'open',
+  'playsInline',
+  'readOnly',
+  'required',
+  'reversed',
+  'scoped',
+  'seamless',
+  // Microdata
+  'itemScope',
+];

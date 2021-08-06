@@ -54,7 +54,7 @@ exports[`attributes correctly map HTML attributes to react props 1`] = `
 exports[`attributes correctly map HTML attributes to react props 2`] = `
 <div
   aria-describedby="info"
-  contentEditable={true}
+  contentEditable="true"
   data-type="calendar"
   id="test"
   spellCheck="true"
@@ -117,6 +117,13 @@ exports[`attributes correctly map HTML attributes to react props 9`] = `
 >
   July 7
 </time>
+`;
+
+exports[`attributes correctly map HTML attributes to react props 10`] = `
+<img
+  alt="alt"
+  className=""
+/>
 `;
 
 exports[`attributes decode HTML entities inside style declaration 1`] = `
