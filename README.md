@@ -1,4 +1,4 @@
-# htmr [![Actions Status](https://github.com/pveyes/htmr/workflows/test/badge.svg)](https://github.com/pveyes/htmr/actions) [![bundle size](http://img.badgesize.io/https://unpkg.com/htmr/lib/htmr.min.js?compression=gzip)](https://unpkg.com/htmr/lib/htmr.min.js)
+# htmr [![Actions Status](https://github.com/pveyes/htmr/workflows/test/badge.svg)](https://github.com/pveyes/htmr/actions) [![bundle size](http://img.badgesize.io/https://unpkg.com/htmr/lib/htmr.browser.js?compression=gzip)](https://unpkg.com/htmr/lib/htmr.browser.js)
 
 > Simple and lightweight (< 2kB) HTML string to react element conversion library
 
