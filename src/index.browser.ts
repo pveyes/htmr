@@ -121,6 +121,9 @@ const attributePropMap: Record<string, string | string[]> = {
   spellcheck: 'spellCheck',
   srcdoc: 'srcDoc',
   srcset: 'srcSet',
+  itemscope: 'itemScope',
+  itemprop: 'itemProp',
+  itemtype: 'itemType',
 };
 
 /**
@@ -158,8 +161,12 @@ function getPropInfo(tagName: HTMLTags, attributeName: string) {
 function checkBooleanAttribute(el: HTMLElement, prop: any) {
   el.setAttribute(prop, '');
   // @ts-ignore
-  return el[prop] === true;
+  return el[prop] === true || SPECIAL_BOOLEAN_ATTRIBUTES.indexOf(prop) > -1;
 }
+
+// some attribute can't be checked whether it's a boolean attribute
+// or not by using setAttribute trick
+const SPECIAL_BOOLEAN_ATTRIBUTES: string[] = ['itemScope'];
 
 function reactCreateElement(
   tag: HTMLTags,
