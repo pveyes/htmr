@@ -139,28 +139,6 @@ function ComponentWithSibling() {
 }
 ```
 
-## Typescript, htmr transform and Web Components
-
-If you're using `htmr` to transform custom elements in a typescript code, you'll get type error because custom element is not defined as valid property. To work around this, you can define the mapping in a separate object, and typecast as `any` while spreading in transform object:
-
-```ts
-import { ElementType } from 'react';
-import { HtmrOptions } from 'htmr';
-
-const customElementTransform: Record<string, ElementType> = {
-  'virtual-scroller': VirtualScroller,
-};
-
-const options: HtmrOptions = {
-  transform: {
-    a: Anchor,
-    ...(customElementTransform as any),
-  },
-};
-
-htmr(html, options);
-```
-
 ## Use Cases
 
 This library was initially built to provides easy component mapping between HTML

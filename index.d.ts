@@ -1,6 +1,8 @@
 import { HtmrOptions as Options } from './src/types';
-import { ReactNode } from 'react';
 
-export default function htmr(html: string, options?: Partial<Options>): ReactNode
+export default function htmr(
+  html: string,
+  options?: Partial<Options>
+): JSX.Element;
 
-export type HtmrOptions = Partial<Options>
+export type HtmrOptions = Partial<Options>;

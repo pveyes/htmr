@@ -58,7 +58,7 @@ function toReactNode(
         attribs[key] = decode(attribs[key]);
       });
 
-      const props = Object.assign(
+      const props: any = Object.assign(
         {},
         mapAttribute(name, attribs, preserveAttributes, getPropInfo),
         { key }
