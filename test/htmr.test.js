@@ -75,6 +75,11 @@ describe('attributes', () => {
     testRender('<button accesskey="s">Stress reliever</button>');
     testRender('<time datetime="2018-07-07">July 7</time>');
     testRender('<img alt="alt" class="" />');
+    testRender(html`
+      <div itemscope itemtype="https://schema.org/Movie">
+        <h1 itemprop="name">Avatar</h1>
+      </div>
+    `);
   });
 
   // https://github.com/pveyes/htmr/issues/103

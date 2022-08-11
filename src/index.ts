@@ -120,11 +120,6 @@ function toReactNode(
   }
 }
 
-import attributes from './attribute.json';
-
-type AttributeMap = Record<string, string>;
-const attrs = <AttributeMap>attributes;
-
 function getPropInfo(_originalTag: HTMLTags, attributeName: string) {
   const propName = attrs[attributeName] || attributeName;
   return {
@@ -132,6 +127,60 @@ function getPropInfo(_originalTag: HTMLTags, attributeName: string) {
     isBoolean: BOOLEAN_ATTRIBUTES.includes(propName),
   };
 }
+
+type AttributeMap = Record<string, string>;
+const attrs: AttributeMap = {
+  for: 'htmlFor',
+  class: 'className',
+  acceptcharset: 'acceptCharset',
+  accesskey: 'accessKey',
+  allowfullscreen: 'allowFullScreen',
+  autocomplete: 'autoComplete',
+  autofocus: 'autoFocus',
+  autoplay: 'autoPlay',
+  cellpadding: 'cellPadding',
+  cellspacing: 'cellSpacing',
+  charset: 'charSet',
+  classid: 'classID',
+  classname: 'className',
+  colspan: 'colSpan',
+  contenteditable: 'contentEditable',
+  contextmenu: 'contextMenu',
+  crossorigin: 'crossOrigin',
+  datetime: 'dateTime',
+  enctype: 'encType',
+  formaction: 'formAction',
+  formenctype: 'formEncType',
+  formmethod: 'formMethod',
+  formnovalidate: 'formNoValidate',
+  formtarget: 'formTarget',
+  frameborder: 'frameBorder',
+  hreflang: 'hrefLang',
+  htmlfor: 'htmlFor',
+  httpequiv: 'httpEquiv',
+  inputmode: 'inputMode',
+  itemscope: 'itemScope',
+  itemprop: 'itemProp',
+  itemtype: 'itemType',
+  keyparams: 'keyParams',
+  keytype: 'keyType',
+  marginheight: 'marginHeight',
+  marginwidth: 'marginWidth',
+  maxlength: 'maxLength',
+  mediagroup: 'mediaGroup',
+  minlength: 'minLength',
+  novalidate: 'noValidate',
+  radiogroup: 'radioGroup',
+  readonly: 'readOnly',
+  rowspan: 'rowSpan',
+  spellcheck: 'spellCheck',
+  srcdoc: 'srcDoc',
+  srclang: 'srcLang',
+  srcset: 'srcSet',
+  tabindex: 'tabIndex',
+  usemap: 'useMap',
+  viewbox: 'viewBox',
+};
 
 const BOOLEAN_ATTRIBUTES = [
   // https://github.com/facebook/react/blob/cae635054e17a6f107a39d328649137b83f25972/packages/react-dom/src/shared/DOMProperty.js#L319

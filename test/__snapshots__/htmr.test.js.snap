@@ -126,6 +126,23 @@ exports[`attributes correctly map HTML attributes to react props 10`] = `
 />
 `;
 
+exports[`attributes correctly map HTML attributes to react props 11`] = `
+<div
+  itemScope={true}
+  itemType="https://schema.org/Movie"
+>
+  
+  
+  <h1
+    itemProp="name"
+  >
+    Avatar
+  </h1>
+  
+
+</div>
+`;
+
 exports[`attributes decode HTML entities inside style declaration 1`] = `
 <em
   style={
