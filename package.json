@@ -4,6 +4,7 @@
   "description": "Simple and lightweight (< 2kB) HTML to React converter that works in server and browser",
   "main": "lib/htmr.js",
   "browser": "lib/htmr.browser.js",
+  "react-native": "lib/htmr.js",
   "types": "index.d.ts",
   "files": [
     "lib",

@@ -72,17 +72,15 @@ This can be useful if you want to do string preprocessing (like removing all whi
 import React from 'react';
 import { Text, View } from 'react-native';
 
-let i = 0;
-
 const transform = {
   div: View,
   _: (node, props, children) => {
     // react-native can't render string without <Text> component
     // we can test text node by checking component props, text node won't have them
     if (typeof props === 'undefined') {
-      // we use auto incrementing key because it's possible that <Text>
-      // is rendered inside array as sibling
-      return <Text key={i++}>{node}</Text>;
+      // use `key` because it's possible that <Text> is rendered
+      // inside array as sibling
+      return <Text key={node}>{node}</Text>;
     }
 
     // render unknown tag using <View>
