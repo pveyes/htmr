@@ -1,10 +1,10 @@
 import {
-  ReactHTML,
-  ReactSVG,
-  ReactNode,
-  ComponentType,
-  ComponentProps,
-  AllHTMLAttributes,
+  type ReactHTML,
+  type ReactSVG,
+  type ReactNode,
+  type ComponentType,
+  type ComponentProps,
+  type AllHTMLAttributes,
 } from 'react';
 
 export type HTMLTags = keyof ReactHTML;
