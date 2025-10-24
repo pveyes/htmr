@@ -1,77 +1,57 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`attributes can handle css vendor prefixes 1`] = `
-<i
-  style={
-    Object {
-      "WebkitTextSizeAdjust": "100%",
-      "msTextSizeAdjust": "100%",
-    }
-  }
->
+<i>
   prefix
 </i>
 `;
 
 exports[`attributes correctly convert multiple style values 1`] = `
 <ul
-  style={
-    Object {
-      "margin": "0 auto",
-      "padding": "0 10px",
-    }
-  }
+  style="margin: 0px auto; padding: 0px 10px;"
 />
 `;
 
 exports[`attributes correctly convert multiple style values 2`] = `
 <span
-  style={
-    Object {
-      "fontSize": 12,
-    }
-  }
+  style="font-size: 12px;"
 />
 `;
 
 exports[`attributes correctly convert multiple style values 3`] = `
 <div
-  style={
-    Object {
-      "backgroundImage": "url(https://d1nabgopwop1kh.cloudfront.net/xx)",
-    }
-  }
+  style="background-image: url(https://d1nabgopwop1kh.cloudfront.net/xx);"
 />
 `;
 
 exports[`attributes correctly map HTML attributes to react props 1`] = `
 <label
-  className="input-text"
-  htmlFor="name"
+  class="input-text"
+  for="name"
 />
 `;
 
 exports[`attributes correctly map HTML attributes to react props 2`] = `
 <div
   aria-describedby="info"
-  contentEditable="true"
+  contenteditable="true"
   data-type="calendar"
   id="test"
-  spellCheck="true"
+  spellcheck="true"
 />
 `;
 
 exports[`attributes correctly map HTML attributes to react props 3`] = `
 <link
-  xlinkActuate="other"
-  xmlLang="en"
+  xlink:actuate="other"
+  xml:lang="en"
 />
 `;
 
 exports[`attributes correctly map HTML attributes to react props 4`] = `
 <svg
-  colorInterpolationFilters="sRGB"
-  fillRule="evenodd"
+  color-interpolation-filters="sRGB"
+  fill-rule="evenodd"
   viewBox="0 0 24 24"
 >
   <path
@@ -82,30 +62,29 @@ exports[`attributes correctly map HTML attributes to react props 4`] = `
 
 exports[`attributes correctly map HTML attributes to react props 5`] = `
 <img
-  crossOrigin="true"
-  srcSet="https://img.src"
+  crossorigin="true"
+  srcset="https://img.src"
 />
 `;
 
 exports[`attributes correctly map HTML attributes to react props 6`] = `
 <iframe
-  allowFullScreen={true}
-  srcDoc="<p>html</p>"
+  allowfullscreen=""
+  srcdoc="<p>html</p>"
 />
 `;
 
 exports[`attributes correctly map HTML attributes to react props 7`] = `
 <input
-  autoComplete="on"
-  autoFocus={true}
-  maxLength="10"
-  readOnly={true}
+  autocomplete="on"
+  maxlength="10"
+  readonly=""
 />
 `;
 
 exports[`attributes correctly map HTML attributes to react props 8`] = `
 <button
-  accessKey="s"
+  accesskey="s"
 >
   Stress reliever
 </button>
@@ -113,7 +92,7 @@ exports[`attributes correctly map HTML attributes to react props 8`] = `
 
 exports[`attributes correctly map HTML attributes to react props 9`] = `
 <time
-  dateTime="2018-07-07"
+  datetime="2018-07-07"
 >
   July 7
 </time>
@@ -122,19 +101,19 @@ exports[`attributes correctly map HTML attributes to react props 9`] = `
 exports[`attributes correctly map HTML attributes to react props 10`] = `
 <img
   alt="alt"
-  className=""
+  class=""
 />
 `;
 
 exports[`attributes correctly map HTML attributes to react props 11`] = `
 <div
-  itemScope={true}
-  itemType="https://schema.org/Movie"
+  itemscope=""
+  itemtype="https://schema.org/Movie"
 >
   
   
   <h1
-    itemProp="name"
+    itemprop="name"
   >
     Avatar
   </h1>
@@ -145,21 +124,13 @@ exports[`attributes correctly map HTML attributes to react props 11`] = `
 
 exports[`attributes decode HTML entities inside style declaration 1`] = `
 <em
-  style={
-    Object {
-      "fontFamily": "Consolas, \\"Liberation Mono \\"",
-    }
-  }
+  style="font-family: Consolas, \\"Liberation Mono \\";"
 />
 `;
 
 exports[`attributes handle CSS custom properties correctly 1`] = `
 <div
-  style={
-    Object {
-      "--color": "red",
-    }
-  }
+  style="--color: red;"
 >
   Explore Categories
 </div>
@@ -167,45 +138,25 @@ exports[`attributes handle CSS custom properties correctly 1`] = `
 
 exports[`attributes handle CSS custom properties correctly 2`] = `
 <div
-  style={
-    Object {
-      "--color": "var(--syntax-text)",
-    }
-  }
+  style="--color: var(--syntax-text);"
 >
   Explore Categories
 </div>
 `;
 
 exports[`attributes ignore invalid style 1`] = `
-<div
-  style={Object {}}
->
+<div>
   Explore Categories
 </div>
 `;
 
 exports[`attributes ignore invalid style 2`] = `
-<div
-  style={
-    Object {
-      "color": "\\"red\\"",
-    }
-  }
->
+<div>
   Explore Categories
 </div>
 `;
 
-exports[`core can render element inside text node 1`] = `
-Array [
-  "what are ",
-  <strong>
-    you
-  </strong>,
-  " doing?",
-]
-`;
+exports[`core can render element inside text node 1`] = `what are `;
 
 exports[`core can render self closing component 1`] = `
 <img
@@ -218,14 +169,9 @@ exports[`core can render self closing component 2`] = `<hr />`;
 exports[`core can render self closing component 3`] = `<br />`;
 
 exports[`core can render sibling element as multiple children 1`] = `
-Array [
-  <p>
-    Multi
-  </p>,
-  <p>
-    Component
-  </p>,
-]
+<p>
+  Multi
+</p>
 `;
 
 exports[`core ignore comment 1`] = `
@@ -248,16 +194,13 @@ exports[`core it works 1`] = `
 
 exports[`encoding dangerously rendered script tag is not encoded 1`] = `
 <script
-  dangerouslySetInnerHTML={
-    Object {
-      "__html": "{
-          \\"key\\": \\"value\\"
-        }",
-    }
-  }
   data-cfasync="false"
   type="application/json"
-/>
+>
+  {
+          "key": "value"
+        }
+</script>
 `;
 
 exports[`encoding decode html attributes 1`] = `
@@ -276,7 +219,7 @@ exports[`encoding decode html entities on defaultMap 1`] = `
 
 exports[`encoding unescape html entities 1`] = `
 <blockquote
-  className="entities"
+  class="entities"
 >
   & and &
 </blockquote>
@@ -307,23 +250,15 @@ exports[`options dangerouslySetChildren no dangerously render script tag 1`] = `
 `;
 
 exports[`options dangerouslySetChildren preserve the content of style tag by default 1`] = `
-<style
-  dangerouslySetInnerHTML={
-    Object {
-      "__html": "ul > li {list-style: none}div[data-id=\\"test\\"]:not(.y) {display: none;}",
-    }
-  }
-/>
+<style>
+  ul &gt; li {list-style: none}div[data-id="test"]:not(.y) {display: none;}
+</style>
 `;
 
 exports[`options dangerouslySetChildren should dangerously set html for required tags 1`] = `
-<pre
-  dangerouslySetInnerHTML={
-    Object {
-      "__html": "&lt;a href=&quot;/&quot;&gt;Test&lt;/a&gt;",
-    }
-  }
-/>
+<pre>
+  &lt;a href="/"&gt;Test&lt;/a&gt;
+</pre>
 `;
 
 exports[`options preserveAttributes allow preserve some attributes 1`] = `
@@ -343,7 +278,7 @@ exports[`options preserveAttributes allow preserve some attributes 1`] = `
 
 exports[`options transform custom component 1`] = `
 <section
-  className="css-x243s"
+  class="css-x243s"
   data-custom="true"
 >
   <h2>
@@ -377,15 +312,9 @@ exports[`whitespace allow newline only text node between elements 1`] = `
 `;
 
 exports[`whitespace allow whitespace only text nodes between elements 1`] = `
-Array [
-  <span>
-    Hello
-  </span>,
-  " ",
-  <span>
-    World
-  </span>,
-]
+<span>
+  Hello
+</span>
 `;
 
 exports[`whitespace remove whitespace on table elements 1`] = `

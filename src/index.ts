@@ -91,7 +91,23 @@ function toReactNode(
         .filter(Boolean);
 
       // self closing component doesn't have children
-      const children = childNodes.length === 0 ? null : childNodes;
+      let children: ReactNode | null =
+        childNodes.length === 0 ? null : childNodes;
+
+      // React requires script and style elements to have a single string child
+      // instead of an array of children
+      if (
+        (name === 'script' || name === 'style') &&
+        children &&
+        Array.isArray(children)
+      ) {
+        // Join all text content into a single string
+        const textContent = node.children
+          .filter((child: any) => child.type === 'text')
+          .map((child: any) => child.data)
+          .join('');
+        children = textContent || null;
+      }
 
       if (customElement) {
         return React.createElement(customElement as any, props, children);

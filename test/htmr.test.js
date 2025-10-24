@@ -1,9 +1,8 @@
 /* eslint-env jest */
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import { renderToStaticMarkup, renderToString } from 'react-dom/server';
-import renderer from 'react-test-renderer';
-import { render } from '@testing-library/react';
+import { render, act } from '@testing-library/react';
 import snapshot from 'jest-snapshot';
 import diff from 'jest-diff';
 import { html, oneLineTrim } from 'common-tags';
@@ -288,11 +287,11 @@ describe('whitespace', () => {
 
 expect.extend({
   toRenderConsistently({ server, browser }, html) {
-    const serverRender = renderer.create(server);
-    const browserRender = renderer.create(browser);
+    const { container: serverContainer } = render(server);
+    const { container: browserContainer } = render(browser);
 
-    const serverHtml = snapshot.utils.serialize(serverRender);
-    const browserHtml = snapshot.utils.serialize(browserRender);
+    const serverHtml = snapshot.utils.serialize(serverContainer.firstChild);
+    const browserHtml = snapshot.utils.serialize(browserContainer.firstChild);
 
     const diffString = diff(serverHtml, browserHtml, {
       expand: this.expand,
@@ -342,7 +341,10 @@ function testRender(html, options) {
   try {
     document.body.appendChild(el);
     expect(() => {
-      ReactDOM.render(browser, el);
+      const root = createRoot(el);
+      act(() => {
+        root.render(browser);
+      });
     }).not.toThrow();
   } finally {
     document.body.removeChild(el);
@@ -350,5 +352,6 @@ function testRender(html, options) {
 
   // assert snapshot, doesn't matter from server or browser
   // because we've already done assert equal between them
-  expect(renderer.create(server)).toMatchSnapshot();
+  const { container } = render(server);
+  expect(container.firstChild).toMatchSnapshot();
 }

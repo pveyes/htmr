@@ -174,7 +174,7 @@ function reactCreateElement(
   transform: HtmrOptions['transform'],
   children: any = null
 ) {
-  const customElement = transform[tag];
+  const customElement = transform[tag as keyof typeof transform];
   const defaultTransform = transform._;
 
   return customElement

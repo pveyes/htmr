@@ -1,15 +1,14 @@
 import {
-  ReactHTML,
-  ReactSVG,
   ReactNode,
   ComponentType,
   ComponentProps,
   AllHTMLAttributes,
+  JSX,
 } from 'react';
 
-export type HTMLTags = keyof ReactHTML;
-export type SVGTags = keyof ReactSVG;
-type AllTags = HTMLTags | SVGTags;
+export type HTMLTags = keyof JSX.IntrinsicElements;
+export type SVGTags = keyof JSX.IntrinsicElements;
+type AllTags = keyof JSX.IntrinsicElements;
 
 type HTMLTransform = {
   [tag in AllTags]: AllTags | ComponentType<Omit<ComponentProps<tag>, 'ref'>>;
