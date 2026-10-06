@@ -14,8 +14,11 @@ export default function htmrServer(
   }
 
   const doc = parseDocument(html.trim(), {});
+  // A lone root doesn't need a key. A generic key like "0" can collide with
+  // other keys in the same tree, e.g. next/head dedupes children by key.
+  const single = doc.childNodes.length === 1;
   const nodes = doc.childNodes.map((node, index) =>
-    toReactNode(node, index.toString(), options)
+    toReactNode(node, single ? undefined : index.toString(), options)
   );
   return nodes.length === 1 ? nodes[0] : nodes;
 }
@@ -39,7 +42,7 @@ const TABLE_ELEMENTS = ['table', 'tbody', 'thead', 'tfoot', 'tr'];
 
 function toReactNode(
   childNode: Node,
-  key: string,
+  key: string | undefined,
   options: Partial<HtmrOptions>
 ): ReactNode {
   const transform = options.transform || {};
@@ -61,7 +64,7 @@ function toReactNode(
       const props: any = Object.assign(
         {},
         mapAttribute(name, attribs, preserveAttributes, getPropInfo),
-        { key }
+        key === undefined ? {} : { key }
       );
 
       const customElement = transform[name];

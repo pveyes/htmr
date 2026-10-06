@@ -17,6 +17,27 @@ describe('core', () => {
     testRender('<p>This is cool</p>');
   });
 
+  // https://github.com/pveyes/htmr/issues/156
+  test('does not set generic key on a single root node', () => {
+    ['<style>a{}</style>', '<!--c--><p>a</p>', '<p>a<b>b</b></p>'].forEach(
+      (fixture) => {
+        const nodes = [htmrServer(fixture), htmrBrowser(fixture)];
+        nodes.forEach((node) => {
+          const root = Array.isArray(node) ? node.filter(Boolean)[0] : node;
+          expect(root.key).not.toBe('0');
+        });
+      }
+    );
+    expect(htmrServer('<style>a{}</style>').key).toBeNull();
+    expect(htmrBrowser('<style>a{}</style>').key).toBeNull();
+  });
+
+  test('keeps keys on multiple root nodes', () => {
+    [htmrServer, htmrBrowser].forEach((htmr) => {
+      expect(htmr('<p>a</p><p>b</p>').map((n) => n.key)).toEqual(['0', '1']);
+    });
+  });
+
   test('throws if first argument is not a string', () => {
     const error = new Error('Expected HTML string');
     const fixtures = [null, [], {}, 1, true];
