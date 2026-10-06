@@ -65,7 +65,7 @@
     "@testing-library/react": "^16",
     "@types/react": "^19",
     "benchmark": "^2.1.4",
-    "bundlesize": "^0.17.1",
+    "bundlesize": "^0.18.2",
     "common-tags": "^1.8.0",
     "domhandler": "^4.0.0",
     "husky": "^5.0.9",
@@ -89,5 +89,8 @@
       "path": "./lib/htmr.browser.js",
       "maxSize": "2 kB"
     }
-  ]
+  ],
+  "resolutions": {
+    "brotli-size": "4.0.0"
+  }
 }
