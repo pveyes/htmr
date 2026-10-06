@@ -15,9 +15,16 @@ export default function htmrBrowser(
   const container = document.createElement('div');
   container.innerHTML = html.trim();
 
+  // A lone root doesn't need a key. A generic key like "0" can collide with
+  // other keys in the same tree, e.g. next/head dedupes children by key.
+  const single = container.childNodes.length === 1;
   const nodes = Array.from(container.childNodes)
     .map((childNode, index) => {
-      return toReactNode(childNode as any, String(index), options);
+      return toReactNode(
+        childNode as any,
+        single ? undefined : String(index),
+        options
+      );
     })
     .filter(Boolean);
 
@@ -48,7 +55,7 @@ const TABLE_ELEMENTS = ['table', 'tbody', 'thead', 'tfoot', 'tr'];
 
 function toReactNode(
   node: DOMNode,
-  key: string,
+  key: string | undefined,
   options: Partial<HtmrOptions>
 ): ReactNode {
   const transform = options.transform || {};
@@ -69,7 +76,9 @@ function toReactNode(
     attrs[nodeAttributes[i].name] = nodeAttributes[i].value;
   }
 
-  attrs.key = key.toString();
+  if (key !== undefined) {
+    attrs.key = key;
+  }
 
   const tag = node.tagName.toLowerCase() as HTMLTags;
   const props = mapAttribute(tag, attrs, preserveAttributes, getPropInfo);
@@ -83,7 +92,11 @@ function toReactNode(
         }
       }
 
-      return toReactNode(childNode, key + '.' + i, options);
+      return toReactNode(
+        childNode,
+        (key === undefined ? '' : key + '.') + i,
+        options
+      );
     })
     .filter(Boolean);
 
