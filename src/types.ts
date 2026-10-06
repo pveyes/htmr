@@ -1,15 +1,15 @@
 import {
-  ReactHTML,
-  ReactSVG,
+  JSX,
   ReactNode,
   ComponentType,
   ComponentProps,
   AllHTMLAttributes,
 } from 'react';
 
-export type HTMLTags = keyof ReactHTML;
-export type SVGTags = keyof ReactSVG;
-type AllTags = HTMLTags | SVGTags;
+// ReactHTML & ReactSVG are removed in @types/react 19, intrinsic elements work everywhere
+type AllTags = Extract<keyof JSX.IntrinsicElements, string>;
+export type HTMLTags = AllTags;
+export type SVGTags = AllTags;
 
 type HTMLTransform = {
   [tag in AllTags]: AllTags | ComponentType<Omit<ComponentProps<tag>, 'ref'>>;

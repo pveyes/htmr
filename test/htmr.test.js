@@ -1,6 +1,7 @@
 /* eslint-env jest */
-import React from 'react';
-import ReactDOM from 'react-dom';
+globalThis.IS_REACT_ACT_ENVIRONMENT = true;
+import React, { act } from 'react';
+import { createRoot } from 'react-dom/client';
 import { renderToStaticMarkup, renderToString } from 'react-dom/server';
 import renderer from 'react-test-renderer';
 import { render } from '@testing-library/react';
@@ -288,8 +289,8 @@ describe('whitespace', () => {
 
 expect.extend({
   toRenderConsistently({ server, browser }, html) {
-    const serverRender = renderer.create(server);
-    const browserRender = renderer.create(browser);
+    const serverRender = create(server);
+    const browserRender = create(browser);
 
     const serverHtml = snapshot.utils.serialize(serverRender);
     const browserHtml = snapshot.utils.serialize(browserRender);
@@ -327,6 +328,15 @@ expect.extend({
  * Test utilities
  */
 
+// react-test-renderer renders asynchronously on React 18+ unless wrapped in act
+function create(element) {
+  let root;
+  act(() => {
+    root = renderer.create(element);
+  });
+  return root;
+}
+
 function testRender(html, options) {
   const server = htmrServer(html, options);
   const browser = htmrBrowser(html, options);
@@ -342,7 +352,9 @@ function testRender(html, options) {
   try {
     document.body.appendChild(el);
     expect(() => {
-      ReactDOM.render(browser, el);
+      act(() => {
+        createRoot(el).render(browser);
+      });
     }).not.toThrow();
   } finally {
     document.body.removeChild(el);
@@ -350,5 +362,5 @@ function testRender(html, options) {
 
   // assert snapshot, doesn't matter from server or browser
   // because we've already done assert equal between them
-  expect(renderer.create(server)).toMatchSnapshot();
+  expect(create(server)).toMatchSnapshot();
 }

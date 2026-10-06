@@ -1,3 +1,4 @@
+import { JSX } from 'react';
 import { HtmrOptions as Options } from './src/types';
 
 export default function htmr(
