@@ -3,3 +3,4 @@ lib/
 coverage/
 *.log
 *cache*
+.claude/worktrees/

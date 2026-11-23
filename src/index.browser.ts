@@ -179,7 +179,8 @@ function checkBooleanAttribute(el: HTMLElement, prop: any) {
 
 // some attribute can't be checked whether it's a boolean attribute
 // or not by using setAttribute trick
-const SPECIAL_BOOLEAN_ATTRIBUTES: string[] = ['itemScope'];
+// - `muted` property doesn't reflect the attribute (`defaultMuted` does)
+const SPECIAL_BOOLEAN_ATTRIBUTES: string[] = ['itemScope', 'muted'];
 
 function reactCreateElement(
   tag: HTMLTags,

@@ -153,6 +153,32 @@ exports[`attributes decode HTML entities inside style declaration 1`] = `
 />
 `;
 
+exports[`attributes does not split style on semicolon inside url() or quotes 1`] = `
+<div
+  style={
+    Object {
+      "background": "url(data:image/png;base64,AAAA) no-repeat",
+      "color": "red",
+    }
+  }
+>
+  s
+</div>
+`;
+
+exports[`attributes does not split style on semicolon inside url() or quotes 2`] = `
+<div
+  style={
+    Object {
+      "color": "red",
+      "fontFamily": "\\"a;b\\"",
+    }
+  }
+>
+  s
+</div>
+`;
+
 exports[`attributes handle CSS custom properties correctly 1`] = `
 <div
   style={

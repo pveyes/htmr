@@ -142,6 +142,40 @@ describe('attributes', () => {
     testRender('<div style="TITLE_2; color:\'red\'">Explore Categories</div>');
   });
 
+  // https://github.com/pveyes/htmr/issues/163
+  test('handle property-backed boolean attributes on server', () => {
+    [
+      ['<input type="checkbox" checked>', 'checked'],
+      ['<option selected>a</option>', 'selected'],
+      ['<video muted controls></video>', 'muted'],
+      ['<input required multiple>', 'multiple'],
+    ].forEach(([fixture, attr]) => {
+      expect(htmrServer(fixture).props[attr]).toBe(true);
+      expect(htmrBrowser(fixture).props[attr]).toBe(true);
+      expect(renderToStaticMarkup(htmrServer(fixture))).toContain(
+        `${attr}=""`
+      );
+    });
+  });
+
+  // https://github.com/pveyes/htmr/issues/163
+  test('does not split style on semicolon inside url() or quotes', () => {
+    const dataUrl =
+      '<div style="background:url(data:image/png;base64,AAAA) no-repeat;color:red">s</div>';
+    expect(htmrServer(dataUrl).props.style).toEqual({
+      background: 'url(data:image/png;base64,AAAA) no-repeat',
+      color: 'red',
+    });
+    testRender(dataUrl);
+
+    const quoted = '<div style="font-family:&quot;a;b&quot;;color:red">s</div>';
+    expect(htmrServer(quoted).props.style).toEqual({
+      fontFamily: '"a;b"',
+      color: 'red',
+    });
+    testRender(quoted);
+  });
+
   test('handle CSS custom properties correctly', () => {
     testRender('<div style="--color: red">Explore Categories</div>');
     testRender(

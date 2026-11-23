@@ -211,6 +211,12 @@ const BOOLEAN_ATTRIBUTES = [
   'reversed',
   'scoped',
   'seamless',
+  // https://github.com/facebook/react/blob/cae635054e17a6f107a39d328649137b83f25972/packages/react-dom/src/shared/DOMProperty.js#L355
+  // boolean attributes that are also DOM properties
+  'checked',
+  'multiple',
+  'muted',
+  'selected',
   // Microdata
   'itemScope',
 ];
