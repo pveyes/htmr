@@ -89,7 +89,8 @@ function convertValue(value: string): number | string {
 function convertStyle(styleStr: string): StyleObject {
   const style = {} as StyleObject;
 
-  splitDeclarations(styleStr)
+  // split by `;`, except inside quotes or parentheses, e.g. `url(data:...;base64,...)`
+  (styleStr.match(/(?:[^;"'(]|"[^"]*"|'[^']*'|\([^)]*\)|["'(])+/g) || [])
     // non-empty declaration
     .filter((style) => style.trim() !== '')
     .forEach((declaration) => {
@@ -103,38 +104,6 @@ function convertStyle(styleStr: string): StyleObject {
     });
 
   return style;
-}
-
-// split style string by `;`, ignoring the ones inside parentheses
-// (e.g. `url(data:image/png;base64,...)`) or quoted strings
-function splitDeclarations(styleStr: string): string[] {
-  const declarations: string[] = [];
-  let depth = 0;
-  let quote = '';
-  let start = 0;
-
-  for (let i = 0; i < styleStr.length; i++) {
-    const char = styleStr[i];
-    if (quote) {
-      if (char === '\\') {
-        i++;
-      } else if (char === quote) {
-        quote = '';
-      }
-    } else if (char === '"' || char === "'") {
-      quote = char;
-    } else if (char === '(') {
-      depth++;
-    } else if (char === ')') {
-      if (depth > 0) depth--;
-    } else if (char === ';' && depth === 0) {
-      declarations.push(styleStr.slice(start, i));
-      start = i + 1;
-    }
-  }
-  declarations.push(styleStr.slice(start));
-
-  return declarations;
 }
 
 function hypenColonToCamelCase(str: string): string {
