@@ -89,8 +89,7 @@ function convertValue(value: string): number | string {
 function convertStyle(styleStr: string): StyleObject {
   const style = {} as StyleObject;
 
-  // split by `;`, except inside quotes or parentheses, e.g. `url(data:...;base64,...)`
-  (styleStr.match(/(?:[^;"'(]|"[^"]*"|'[^']*'|\([^)]*\)|["'(])+/g) || [])
+  splitDeclarations(styleStr)
     // non-empty declaration
     .filter((style) => style.trim() !== '')
     .forEach((declaration) => {
@@ -104,6 +103,29 @@ function convertStyle(styleStr: string): StyleObject {
     });
 
   return style;
+}
+
+// split by `;`, except inside quotes or parentheses, e.g. `url(data:...;base64,...)`
+function splitDeclarations(styleStr: string): string[] {
+  const declarations = [''];
+  let quote = '';
+  let depth = 0;
+  for (const char of styleStr) {
+    if (quote) {
+      if (char === quote) quote = '';
+    } else if (char === '"' || char === "'") {
+      quote = char;
+    } else if (char === '(') {
+      depth++;
+    } else if (char === ')' && depth) {
+      depth--;
+    } else if (char === ';' && !depth) {
+      declarations.push('');
+      continue;
+    }
+    declarations[declarations.length - 1] += char;
+  }
+  return declarations;
 }
 
 function hypenColonToCamelCase(str: string): string {
